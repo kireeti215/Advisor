@@ -3,1175 +3,628 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YVITY – Your Visibility. Your Credibility.</title>
+<title>YVITY — Your Visibility. Your Credibility.</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;
+  --navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;--gold-dk:#B8860B;
+  --bg:#EEF4F7;--muted:#5A7080;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:white;color:var(--navy);}
 
-:root {
-  --teal:    #0B7B7B;
-  --teal-dk: #065555;
-  --teal-lt: #E6F4F4;
-  --teal-md: #0D9494;
-  --navy:    #0D2B3E;
-  --green:   #1A7A4A;
-  --gold:    #C9A84C;
-  --bg:      #b2ced8;
-  --white:   #FFFFFF;
-  --border:  rgba(11,123,123,0.12);
-  --text:    #1A3040;
-  --muted:   #5A7080;
-}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,85,85,0.97);backdrop-filter:blur(10px);height:58px;display:flex;align-items:center;padding:0 32px;gap:20px;}
+.nav-logo{font-size:20px;font-weight:800;letter-spacing:2px;color:white;display:flex;align-items:center;gap:8px;}
+.nav-logo svg{width:20px;height:20px;stroke:white;fill:none;stroke-width:2.5;}
+.nav-links{display:flex;gap:4px;margin-left:20px;}
+.nav-links a{color:rgba(255,255,255,0.65);font-size:13.5px;font-weight:500;text-decoration:none;padding:6px 12px;border-radius:8px;transition:all .15s;}
+.nav-links a:hover{color:white;background:rgba(255,255,255,0.1);}
+.nav-right{margin-left:auto;display:flex;gap:10px;align-items:center;}
+.nav-btn{padding:8px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;transition:all .2s;text-decoration:none;}
+.nav-login{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);}
+.nav-signup{background:white;color:var(--teal-dk);}
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  background-image:
-    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(255,255,255,0.45) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 70% at 90% 80%, rgba(6,85,85,0.14) 0%, transparent 55%);
-  min-height: 100vh;
-}
+/* HERO */
+.hero{min-height:100vh;background:linear-gradient(160deg,#042E2E,#065555,#0A6E6E);display:flex;align-items:center;padding:80px 32px 60px;position:relative;overflow:hidden;}
+.hero-ring1{position:absolute;width:600px;height:600px;border-radius:50%;border:1px solid rgba(255,255,255,0.04);top:-200px;right:-150px;}
+.hero-ring2{position:absolute;width:400px;height:400px;border-radius:50%;border:1px solid rgba(255,255,255,0.05);bottom:-150px;left:50px;}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);border-radius:20px;padding:5px 14px;margin-bottom:18px;}
+.hero-tag-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-tag span{font-size:12px;font-weight:700;color:var(--gold);}
+.hero-title{font-family:'Playfair Display',serif;font-size:52px;font-weight:800;color:white;line-height:1.1;margin-bottom:18px;}
+.hero-title span{color:var(--gold);}
+.hero-sub{font-size:16px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:30px;max-width:480px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.hero-btn-primary{padding:14px 28px;background:white;color:var(--teal-dk);border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;border:none;font-family:'Inter',sans-serif;box-shadow:0 4px 20px rgba(0,0,0,0.15);transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.hero-btn-secondary{padding:14px 28px;background:rgba(255,255,255,0.1);color:white;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,0.25);font-family:'Inter',sans-serif;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.hero-stats{display:flex;gap:28px;margin-top:36px;padding-top:28px;border-top:1px solid rgba(255,255,255,0.1);}
+.hs-item{display:flex;flex-direction:column;gap:2px;}
+.hs-val{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:white;}
+.hs-lbl{font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.5px;}
 
-/* ══ NAV ══ */
-.nav {
-  background: var(--teal-dk);
-  padding: 0 48px;
-  height: 58px;
-  display: flex; align-items: center; gap: 0;
-  box-shadow: 0 2px 12px rgba(6,85,85,0.3);
-  position: sticky; top: 0; z-index: 100;
-}
-.logo { display: flex; align-items: center; gap: 9px; color: white; font-size: 20px; font-weight: 800; letter-spacing: 1.5px; margin-right: 48px; text-decoration: none; }
-.logo svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2.5; }
-.nav-links { display: flex; gap: 32px; flex: 1; }
-.nl { color: rgba(255,255,255,0.82); font-size: 14px; font-weight: 400; cursor: pointer; transition: color .15s; }
-.nl:hover { color: white; }
-.nav-right { display: flex; align-items: center; gap: 14px; }
-.nav-reg { color: rgba(255,255,255,0.85); font-size: 14px; cursor: pointer; }
-.nav-sep { color: rgba(255,255,255,0.3); }
-.nav-login { color: rgba(255,255,255,0.85); font-size: 14px; cursor: pointer; }
-.nav-avatar svg { width: 22px; height: 22px; stroke: rgba(255,255,255,0.7); fill: none; stroke-width: 1.8; cursor: pointer; }
+/* HERO RIGHT — sample profile card */
+.hero-right{display:flex;flex-direction:column;gap:14px;}
+.sample-card{background:white;border-radius:18px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,0.25);cursor:pointer;transition:all .2s;}
+.sample-card:hover{transform:translateY(-4px);box-shadow:0 28px 70px rgba(0,0,0,0.3);}
+.sc-top{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
+.sc-av{width:56px;height:56px;border-radius:50%;overflow:hidden;border:3px solid var(--teal-lt);flex-shrink:0;}
+.sc-av img{width:100%;height:100%;object-fit:cover;}
+.sc-info{}
+.sc-name{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:3px;}
+.sc-role{font-size:12px;color:var(--muted);margin-bottom:5px;}
+.sc-badges{display:flex;gap:5px;flex-wrap:wrap;}
+.sc-badge{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:8px;}
+.scb-green{background:rgba(26,122,74,0.1);color:var(--green);}
+.scb-gold{background:rgba(201,168,76,0.1);color:var(--gold-dk);}
+.scb-teal{background:var(--teal-lt);color:var(--teal-dk);}
+.sc-score{display:flex;align-items:center;justify-content:space-between;background:#F4F9FA;border-radius:10px;padding:10px 14px;margin-bottom:12px;}
+.scs-left{font-size:12px;color:var(--muted);}
+.scs-val{font-size:20px;font-weight:800;font-family:'Playfair Display',serif;color:var(--teal-dk);}
+.sc-stats{display:flex;gap:0;border-top:1px solid rgba(11,123,123,0.07);padding-top:12px;}
+.scs-stat{flex:1;text-align:center;border-right:1px solid rgba(11,123,123,0.07);}
+.scs-stat:last-child{border-right:none;}
+.scs-num{font-size:16px;font-weight:800;color:var(--navy);}
+.scs-lbl{font-size:10px;color:var(--muted);}
+.mini-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.mc-av{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;}
+.mc-av img{width:100%;height:100%;object-fit:cover;}
+.mc-info{}
+.mc-name{font-size:12.5px;font-weight:700;color:white;}
+.mc-role{font-size:11px;color:rgba(255,255,255,0.5);}
+.mc-score{margin-left:auto;font-size:13px;font-weight:800;color:var(--gold);}
 
-/* ══ HERO ══ */
-.hero {
-  padding: 72px 48px 64px;
-  max-width: 1100px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 48px; align-items: center;
-}
-.hero-left { }
-.hero-tag {
-  display: inline-flex; align-items: center; gap: 7px;
-  background: rgba(255,255,255,0.25);
-  border: 1px solid rgba(255,255,255,0.35);
-  border-radius: 20px; padding: 6px 16px;
-  font-size: 12px; font-weight: 700; color: var(--teal-dk);
-  margin-bottom: 20px;
-  backdrop-filter: blur(6px);
-}
-.hero-tag-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; box-shadow: 0 0 0 2px rgba(26,122,74,0.25); }
-.hero-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 52px; font-weight: 800;
-  color: var(--navy); line-height: 1.1;
-  letter-spacing: -0.5px; margin-bottom: 18px;
-}
-.hero-h1 span { color: var(--teal); }
-.hero-sub {
-  font-size: 16px; color: #3A5060; line-height: 1.75;
-  margin-bottom: 28px; max-width: 480px;
-}
-.hero-btns { display: flex; gap: 12px; align-items: center; margin-bottom: 28px; }
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: linear-gradient(135deg, var(--teal-dk), var(--teal));
-  color: white; border: none; border-radius: 12px;
-  padding: 14px 28px; font-size: 15px; font-weight: 700;
-  font-family: 'Inter', sans-serif; cursor: pointer;
-  box-shadow: 0 6px 20px rgba(11,123,123,0.35); transition: all .2s;
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(11,123,123,0.45); }
-.btn-secondary {
-  display: inline-flex; align-items: center; gap: 7px;
-  background: white; color: var(--teal-dk);
-  border: 1.5px solid rgba(11,123,123,0.2); border-radius: 12px;
-  padding: 13px 22px; font-size: 14px; font-weight: 600;
-  font-family: 'Inter', sans-serif; cursor: pointer; transition: all .2s;
-}
-.btn-secondary:hover { border-color: var(--teal); }
-.hero-trust {
-  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-}
-.ht-item { display: flex; align-items: center; gap: 7px; }
-.ht-ico { font-size: 16px; }
-.ht-val { font-size: 13.5px; font-weight: 700; color: var(--navy); }
-.ht-lbl { font-size: 12px; color: var(--muted); }
-.ht-sep { color: rgba(11,123,123,0.25); }
+/* SECTION */
+.section{padding:80px 32px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.sec-tag{font-size:11px;font-weight:800;color:var(--teal-dk);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:800;color:var(--navy);margin-bottom:12px;}
+.sec-sub{font-size:15px;color:var(--muted);max-width:540px;line-height:1.7;}
 
-/* Hero right — profile preview card */
-.hero-right { position: relative; }
-.hero-card {
-  background: rgba(255,255,255,0.96);
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(6,85,85,0.18), 0 0 0 1px rgba(11,123,123,0.07);
-  overflow: hidden;
-  transform: rotate(1deg);
-  transition: transform .3s;
+/* DISCOVER */
+#discover{background:var(--bg);}
+.discover-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:28px;flex-wrap:wrap;}
+.search-bar{display:flex;gap:10px;align-items:center;background:white;border:1.5px solid rgba(11,123,123,0.15);border-radius:14px;padding:10px 16px;min-width:320px;}
+.search-bar svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;}
+.search-bar input{border:none;outline:none;font-size:14px;font-family:'Inter',sans-serif;color:var(--navy);flex:1;background:none;}
+.filter-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.fchip{padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .15s;font-family:'Inter',sans-serif;}
+.fchip.on{background:var(--teal-dk);color:white;border-color:var(--teal-dk);}
+.fchip.off{background:white;color:var(--muted);border-color:rgba(11,123,123,0.15);}
+.advisors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.adv-card{background:white;border-radius:16px;padding:20px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 12px rgba(6,85,85,0.06);cursor:pointer;transition:all .2s;}
+.adv-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(6,85,85,0.12);border-color:rgba(11,123,123,0.2);}
+.ac-top{display:flex;gap:12px;align-items:center;margin-bottom:14px;}
+.ac-av{width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid var(--teal-lt);flex-shrink:0;}
+.ac-av img{width:100%;height:100%;object-fit:cover;}
+.ac-name{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.ac-role{font-size:11.5px;color:var(--muted);margin-bottom:6px;}
+.ac-badges{display:flex;gap:4px;flex-wrap:wrap;}
+.ac-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;}
+.acb-g{background:rgba(26,122,74,0.1);color:var(--green);}
+.acb-gold{background:rgba(201,168,76,0.1);color:var(--gold-dk);}
+.acb-t{background:var(--teal-lt);color:var(--teal-dk);}
+.ac-score-row{display:flex;align-items:center;justify-content:space-between;background:#F4F9FA;border-radius:8px;padding:8px 12px;margin-bottom:12px;}
+.acsr-label{font-size:11px;color:var(--muted);}
+.acsr-val{font-size:16px;font-weight:800;font-family:'Playfair Display',serif;color:var(--teal-dk);}
+.acsr-stars{font-size:11px;}
+.ac-stats{display:flex;gap:0;border-top:1px solid rgba(11,123,123,0.06);padding-top:12px;margin-bottom:14px;}
+.acs{flex:1;text-align:center;border-right:1px solid rgba(11,123,123,0.06);}
+.acs:last-child{border-right:none;}
+.acs-num{font-size:14px;font-weight:800;color:var(--navy);}
+.acs-lbl{font-size:10px;color:var(--muted);}
+.ac-btn{width:100%;padding:10px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.ac-city{font-size:11px;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:4px;}
+.ac-city svg{width:10px;height:10px;stroke:var(--muted);fill:none;stroke-width:2;}
+
+/* HOW IT WORKS */
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px;}
+.how-card{background:white;border-radius:16px;padding:24px;border:1px solid rgba(11,123,123,0.08);text-align:center;}
+.how-num{font-size:11px;font-weight:800;color:var(--teal-dk);background:var(--teal-lt);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.how-ico{font-size:32px;margin-bottom:12px;}
+.how-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.how-sub{font-size:12.5px;color:var(--muted);line-height:1.6;}
+
+/* ROLES */
+#roles{background:linear-gradient(160deg,#042E2E,#065555);}
+#roles .sec-title{color:white;}
+#roles .sec-sub{color:rgba(255,255,255,0.6);}
+#roles .sec-tag{color:var(--gold);}
+.roles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:36px;}
+.role-card{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;cursor:pointer;transition:all .2s;text-decoration:none;display:block;}
+.role-card:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);transform:translateY(-3px);}
+.rc-ico{font-size:32px;margin-bottom:12px;}
+.rc-title{font-size:16px;font-weight:800;color:white;margin-bottom:6px;}
+.rc-sub{font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:14px;line-height:1.5;}
+.rc-enter{font-size:13px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:5px;}
+.rc-enter svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:2;}
+
+/* PRICING */
+#pricing{background:var(--bg);}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;}
+.price-card{background:white;border-radius:18px;padding:28px;border:2px solid;}
+.pc-free{border-color:rgba(11,123,123,0.1);}
+.pc-silver{border-color:rgba(11,123,123,0.2);}
+.pc-gold{border-color:rgba(201,168,76,0.3);background:linear-gradient(160deg,#FFFBF0,#FFF8E6);}
+.pc-badge{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 12px;border-radius:20px;margin-bottom:14px;}
+.pcb-popular{background:linear-gradient(135deg,var(--gold-dk),var(--gold));color:white;}
+.pcb-free{background:#F0F4F8;color:#64748B;}
+.pcb-silver{background:var(--teal-lt);color:var(--teal-dk);}
+.pc-price{font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.pc-price span{font-size:14px;font-weight:400;color:var(--muted);font-family:'Inter',sans-serif;}
+.pc-name{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:16px;}
+.pc-features{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;}
+.pcf{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--navy);}
+.pcf svg{width:13px;height:13px;stroke:var(--green);fill:none;stroke-width:2.5;flex-shrink:0;}
+.pc-btn{width:100%;padding:12px;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;}
+.pcbtn-free{background:#F4F9FA;color:var(--muted);}
+.pcbtn-silver{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;}
+.pcbtn-gold{background:linear-gradient(135deg,var(--gold-dk),var(--gold));color:white;}
+
+/* FOOTER */
+footer{background:var(--navy);padding:48px 32px 28px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px;}
+.ft-logo{font-size:20px;font-weight:800;letter-spacing:2px;color:white;margin-bottom:10px;}
+.ft-sub{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;}
+.ft-col-title{font-size:12px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:14px;}
+.ft-link{display:block;font-size:13px;color:rgba(255,255,255,0.55);text-decoration:none;margin-bottom:8px;cursor:pointer;}
+.ft-link:hover{color:white;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.07);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.fb-copy{font-size:12.5px;color:rgba(255,255,255,0.3);}
+
+/* MOBILE */
+@media(max-width:768px){
+  nav{padding:0 16px;}
+  .nav-links{display:none;}
+  .hero{padding:80px 20px 50px;}
+  .hero-inner{grid-template-columns:1fr;gap:30px;}
+  .hero-title{font-size:32px;}
+  .hero-right .sample-card{display:none;}
+  .hero-right .mini-card:not(:first-child){display:none;}
+  .section{padding:50px 20px;}
+  .advisors-grid{grid-template-columns:1fr;}
+  .how-grid{grid-template-columns:1fr 1fr;}
+  .roles-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center;}
+  .discover-top{flex-direction:column;}
+  .search-bar{min-width:auto;width:100%;}
+  .sec-title{font-size:28px;}
+  .hero-stats{gap:16px;}
+  .hs-val{font-size:22px;}
 }
-.hero-card:hover { transform: rotate(0deg); }
-
-.hc-header {
-  background: var(--teal-dk);
-  padding: 12px 18px;
-  display: flex; align-items: center; gap: 8px;
-}
-.hc-logo { color: white; font-size: 14px; font-weight: 800; letter-spacing: 1px; display: flex; align-items: center; gap: 5px; }
-.hc-logo svg { width: 14px; height: 14px; stroke: white; fill: none; stroke-width: 2.5; }
-.hc-nav-dots { margin-left: auto; display: flex; gap: 5px; }
-.hc-dot { width: 7px; height: 7px; border-radius: 50%; }
-
-.hc-body { padding: 16px 18px; }
-.hc-id-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; font-size: 10px; font-weight: 600; color: var(--green); }
-.hc-id-bar svg { width: 10px; height: 10px; stroke: var(--green); fill: none; stroke-width: 2.5; }
-
-.hc-profile { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
-.hc-av { position: relative; width: 60px; height: 60px; flex-shrink: 0; }
-.hc-av-ring {
-  width: 60px; height: 60px; border-radius: 50%;
-  background: conic-gradient(var(--teal) 0deg, #14C8C8 90deg, var(--teal-dk) 180deg, var(--teal) 360deg);
-  padding: 2.5px; display: flex; align-items: center; justify-content: center;
-  animation: spin 8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.hc-av-inner { width: 100%; height: 100%; border-radius: 50%; background: white; padding: 2px; animation: spin 8s linear infinite reverse; }
-.hc-av-photo { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; }
-.hc-av-photo img { width: 100%; height: 100%; object-fit: cover; }
-.hc-av-tick { position: absolute; bottom: 0; right: 0; width: 16px; height: 16px; background: var(--green); border: 2px solid white; border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: spin 8s linear infinite reverse; }
-.hc-av-tick svg { width: 8px; height: 8px; stroke: white; fill: none; stroke-width: 3; }
-
-.hc-info { flex: 1; }
-.hc-name { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
-.hc-title { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-.hc-meta { font-size: 10.5px; color: #5A7080; display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-.hc-bdgs { display: flex; gap: 5px; flex-wrap: wrap; }
-.hc-bdg { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
-.hc-bdg-gold { background: linear-gradient(135deg, #B8860B, #DAA520); color: white; }
-.hc-bdg-teal { background: var(--teal-lt); color: var(--teal-dk); }
-
-.hc-stats { display: flex; gap: 0; background: #F4F9FA; border-radius: 10px; overflow: hidden; margin-bottom: 12px; border: 1px solid rgba(11,123,123,0.1); }
-.hc-stat { flex: 1; padding: 8px 10px; text-align: center; border-right: 1px solid rgba(11,123,123,0.08); }
-.hc-stat:last-child { border-right: none; }
-.hc-sv { font-size: 14px; font-weight: 700; color: var(--navy); }
-.hc-sl { font-size: 9.5px; color: var(--muted); }
-
-.hc-tabs { display: flex; gap: 0; border-top: 1px solid rgba(11,123,123,0.08); }
-.hc-tab { flex: 1; padding: 8px 4px; text-align: center; font-size: 9px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 1.5px solid transparent; }
-.hc-tab.on { color: var(--teal); border-bottom-color: var(--teal); font-weight: 700; }
-
-/* Floating badges on hero card */
-.float-badge {
-  position: absolute; background: white; border-radius: 12px;
-  padding: 8px 14px; box-shadow: 0 6px 20px rgba(6,85,85,0.16);
-  display: flex; align-items: center; gap: 8px;
-  font-size: 11px; font-weight: 600; color: var(--navy);
-  animation: float 3s ease-in-out infinite;
-}
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-.fb1 { top: -16px; right: 30px; animation-delay: 0s; }
-.fb2 { bottom: 50px; left: -20px; animation-delay: 1.5s; }
-.fb-ico { font-size: 16px; }
-.fb-green { color: var(--green); }
-
-/* ══ SECTION WRAPPER ══ */
-.section { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
-.section-gap { margin-top: 60px; }
-
-.sec-head { text-align: center; margin-bottom: 40px; }
-.sec-tag {
-  display: inline-block; background: var(--teal-lt);
-  color: var(--teal-dk); font-size: 11.5px; font-weight: 700;
-  padding: 5px 16px; border-radius: 20px; margin-bottom: 12px;
-  letter-spacing: 0.5px; text-transform: uppercase;
-}
-.sec-h2 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800; color: var(--navy); margin-bottom: 12px; line-height: 1.2; }
-.sec-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 520px; margin: 0 auto; }
-
-/* ══ WHAT IS YVITY ══ */
-.what-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-.what-card {
-  background: rgba(255,255,255,0.96);
-  border-radius: 16px; padding: 28px 24px;
-  border: 1px solid rgba(11,123,123,0.08);
-  box-shadow: 0 2px 12px rgba(6,85,85,0.08);
-  transition: all .2s;
-}
-.what-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(6,85,85,0.14); }
-.wc-ico {
-  width: 52px; height: 52px; border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; margin-bottom: 16px;
-}
-.wc-ico-1 { background: linear-gradient(135deg, var(--teal-lt), #D0ECEC); }
-.wc-ico-2 { background: linear-gradient(135deg, #FDF6E3, #FDE8C8); }
-.wc-ico-3 { background: linear-gradient(135deg, #E8F5EE, #D5F0E3); }
-.wc-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
-.wc-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
-
-/* ══ WHY CREDIBILITY ══ */
-.why-row { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-.why-left { }
-.why-point { display: flex; gap: 16px; margin-bottom: 24px; }
-.wp-ico { width: 44px; height: 44px; border-radius: 12px; background: var(--teal-lt); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.wp-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-.wp-text { font-size: 13px; color: var(--muted); line-height: 1.65; }
-.why-right {
-  background: rgba(255,255,255,0.96); border-radius: 20px;
-  padding: 28px; box-shadow: 0 8px 32px rgba(6,85,85,0.12);
-  border: 1px solid rgba(11,123,123,0.08);
-}
-.wr-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 18px; }
-.wr-vs { display: flex; gap: 14px; }
-.wr-col { flex: 1; }
-.wr-col-h { font-size: 12px; font-weight: 700; padding: 7px 12px; border-radius: 8px; margin-bottom: 10px; text-align: center; }
-.wr-col-h.bad { background: #FEE2E2; color: #B91C1C; }
-.wr-col-h.good { background: var(--teal-lt); color: var(--teal-dk); }
-.wr-item { display: flex; align-items: flex-start; gap: 7px; margin-bottom: 8px; font-size: 12px; color: var(--text); }
-.wr-item svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
-.wr-x { stroke: #B91C1C; fill: none; stroke-width: 2.5; }
-.wr-chk { stroke: var(--green); fill: none; stroke-width: 2.5; }
-
-/* ══ FEATURED ADVISORS ══ */
-.advisors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.adv-card {
-  background: rgba(255,255,255,0.96); border-radius: 16px;
-  overflow: hidden; box-shadow: 0 2px 12px rgba(6,85,85,0.08);
-  border: 1px solid rgba(11,123,123,0.08); transition: all .2s; cursor: pointer;
-}
-.adv-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(6,85,85,0.14); }
-.adv-top { padding: 20px 18px 16px; }
-.adv-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.adv-av { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2.5px solid var(--teal); flex-shrink: 0; }
-.adv-av img { width: 100%; height: 100%; object-fit: cover; }
-.adv-name { font-size: 14px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 5px; }
-.adv-v { width: 14px; height: 14px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-.adv-v svg { width: 8px; height: 8px; stroke: white; fill: none; stroke-width: 3; }
-.adv-title { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
-.adv-loc { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; }
-.adv-loc svg { width: 11px; height: 11px; stroke: var(--teal); fill: none; stroke-width: 2; }
-.adv-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
-.adv-tag { font-size: 10px; font-weight: 500; background: var(--teal-lt); color: var(--teal-dk); padding: 3px 9px; border-radius: 10px; }
-.adv-score-row { display: flex; align-items: center; justify-content: space-between; }
-.adv-score { display: flex; align-items: center; gap: 6px; }
-.adv-score-circle {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--teal-dk), var(--teal));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 800; color: white;
-}
-.adv-score-val { font-size: 12px; font-weight: 700; color: var(--navy); }
-.adv-score-lbl { font-size: 10px; color: var(--muted); }
-.adv-tests { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
-.adv-tests svg { width: 12px; height: 12px; stroke: #F59E0B; fill: #F59E0B; }
-.adv-footer { background: var(--teal-lt); padding: 10px 18px; text-align: center; font-size: 11.5px; font-weight: 600; color: var(--teal-dk); cursor: pointer; }
-.adv-footer:hover { background: rgba(11,123,123,0.15); }
-
-/* ══ HOW IT WORKS ══ */
-.steps-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; position: relative; }
-.steps-row::before {
-  content: ''; position: absolute; top: 28px; left: 10%; right: 10%;
-  height: 2px; background: linear-gradient(90deg, var(--teal-lt), var(--teal), var(--teal-lt));
-  z-index: 0;
-}
-.step-card {
-  background: rgba(255,255,255,0.96); border-radius: 16px; padding: 24px 18px;
-  text-align: center; border: 1px solid rgba(11,123,123,0.08);
-  box-shadow: 0 2px 10px rgba(6,85,85,0.07); position: relative; z-index: 1;
-  transition: all .2s;
-}
-.step-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(6,85,85,0.12); }
-.step-num {
-  width: 48px; height: 48px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--teal-dk), var(--teal));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 800; color: white; margin: 0 auto 14px;
-  box-shadow: 0 4px 14px rgba(11,123,123,0.3);
-}
-.step-ico { font-size: 24px; margin-bottom: 10px; }
-.step-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-.step-text { font-size: 12px; color: var(--muted); line-height: 1.65; }
-
-/* ══ PLANS SECTION ══ */
-.plans-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-.plan-card {
-  background: rgba(255,255,255,0.96); border-radius: 18px;
-  overflow: hidden; border: 1px solid rgba(11,123,123,0.1);
-  box-shadow: 0 4px 16px rgba(6,85,85,0.08); transition: all .2s;
-}
-.plan-card:hover { transform: translateY(-4px); }
-.plan-card.featured {
-  border-color: var(--teal); box-shadow: 0 8px 32px rgba(11,123,123,0.2);
-  transform: scale(1.03);
-}
-.plan-card.featured:hover { transform: scale(1.03) translateY(-4px); }
-.plan-header { padding: 24px 22px 18px; }
-.plan-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 10px; margin-bottom: 10px; }
-.plan-badge.pop { background: linear-gradient(135deg, var(--teal-dk), var(--teal)); color: white; }
-.plan-badge.gold { background: linear-gradient(135deg, #B8860B, #DAA520); color: white; }
-.plan-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
-.plan-price { font-size: 32px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
-.plan-price span { font-size: 14px; font-weight: 400; color: var(--muted); }
-.plan-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
-.plan-divider { height: 1px; background: rgba(11,123,123,0.08); margin: 0 22px; }
-.plan-features { padding: 18px 22px; }
-.pf-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 9px; font-size: 12.5px; color: var(--text); }
-.pf-item svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
-.pf-yes { stroke: var(--green); fill: none; stroke-width: 2.5; }
-.pf-no { stroke: #C0D0D8; fill: none; stroke-width: 2.5; }
-.plan-cta { padding: 0 22px 22px; }
-.plan-btn {
-  width: 100%; padding: 12px; border-radius: 12px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  font-family: 'Inter', sans-serif; transition: all .2s;
-}
-.plan-btn-free { background: #F0F6F6; color: var(--teal-dk); border: 1.5px solid rgba(11,123,123,0.2); }
-.plan-btn-silver { background: linear-gradient(135deg, var(--teal-dk), var(--teal)); color: white; border: none; box-shadow: 0 4px 14px rgba(11,123,123,0.3); }
-.plan-btn-gold { background: linear-gradient(135deg, #B8860B, #DAA520); color: white; border: none; box-shadow: 0 4px 14px rgba(184,134,11,0.28); }
-
-/* ══ CTA BANNER ══ */
-.cta-banner {
-  background: linear-gradient(135deg, var(--teal-dk), #0A6060, var(--teal));
-  border-radius: 24px; padding: 52px 48px;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 32px; margin: 60px 48px;
-  max-width: 1100px; margin: 60px auto;
-  box-shadow: 0 16px 48px rgba(6,85,85,0.28);
-  position: relative; overflow: hidden;
-}
-.cta-banner::before {
-  content: ''; position: absolute;
-  width: 400px; height: 400px; border-radius: 50%;
-  background: rgba(255,255,255,0.04); top: -100px; right: -100px;
-}
-.cta-banner::after {
-  content: ''; position: absolute;
-  width: 250px; height: 250px; border-radius: 50%;
-  background: rgba(255,255,255,0.03); bottom: -80px; left: 200px;
-}
-.cb-left { position: relative; z-index: 1; }
-.cb-h2 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 800; color: white; margin-bottom: 10px; line-height: 1.2; }
-.cb-sub { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.6; max-width: 480px; }
-.cb-right { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; position: relative; z-index: 1; flex-shrink: 0; }
-.cb-btn1 { background: white; color: var(--teal-dk); border: none; border-radius: 12px; padding: 14px 32px; font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.15); white-space: nowrap; }
-.cb-trust { display: flex; gap: 16px; }
-.cb-t { display: flex; align-items: center; gap: 5px; font-size: 12px; color: rgba(255,255,255,0.7); }
-.cb-t svg { width: 13px; height: 13px; stroke: rgba(255,255,255,0.7); fill: none; stroke-width: 2; }
-
-/* ══ FOOTER ══ */
-.footer {
-  background: var(--navy);
-  padding: 40px 48px 24px;
-}
-.footer-top { display: flex; gap: 48px; max-width: 1100px; margin: 0 auto 32px; }
-.footer-brand { flex: 1.5; }
-.footer-logo { display: flex; align-items: center; gap: 8px; color: white; font-size: 18px; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 10px; }
-.footer-logo svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2.5; }
-.footer-tagline { font-size: 12.5px; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 240px; margin-bottom: 16px; }
-.footer-socials { display: flex; gap: 8px; }
-.fs { width: 32px; height: 32px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.fs svg { width: 15px; height: 15px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
-.footer-col h4 { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
-.footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 7px; cursor: pointer; }
-.footer-col a:hover { color: white; }
-.footer-bottom { max-width: 1100px; margin: 0 auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; }
-.footer-copy { font-size: 12px; color: rgba(255,255,255,0.35); }
-.footer-irda { font-size: 11.5px; color: rgba(255,255,255,0.3); }
-
-/* ============================================================
-   YVITY RESPONSIVE — Mobile First (max-width: 768px)
-   ============================================================ */
-
-/* Viewport meta already in each file's <head> */
-
-/* ---- TOP NAV ---- */
-@media (max-width: 768px) {
-  .topnav {
-    padding: 0 12px !important;
-    height: 50px !important;
-  }
-  .tn-logo {
-    width: auto !important;
-    font-size: 16px !important;
-    border-right: none !important;
-    padding: 0 !important;
-    flex: 1;
-  }
-  .tn-mid { display: none !important; }
-  .tn-right { gap: 6px !important; }
-  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
-  .tn-name { font-size: 12px !important; }
-  .tn-plan, .tn-role { display: none !important; }
-  .tn-btn span, .ph-right .btn span { display: none; }
-  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
-}
-
-/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
-@media (max-width: 768px) {
-  .sidebar { display: none !important; }
-  .body-wrap { flex-direction: column !important; }
-}
-
-/* ---- BOTTOM NAV (mobile only) ---- */
-.mobile-bottom-nav {
-  display: none;
-}
-@media (max-width: 768px) {
-  .mobile-bottom-nav {
-    display: flex !important;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 58px;
-    background: var(--teal-dk, #065555);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    z-index: 999;
-    align-items: center;
-    justify-content: space-around;
-    padding: 0 4px;
-    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
-  }
-  .mbn-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: 6px 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    flex: 1;
-    max-width: 64px;
-  }
-  .mbn-item.on { background: rgba(255,255,255,0.12); }
-  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
-  .mbn-item.on svg { stroke: white; }
-  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
-  .mbn-item.on .mbn-label { color: white; }
-  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
-
-  /* push page content above bottom nav */
-  .main, .preview-area, body > .body-wrap > .main {
-    padding-bottom: 72px !important;
-  }
-}
-
-/* ---- ADMIN BOTTOM NAV — dark purple ---- */
-@media (max-width: 768px) {
-  .mobile-bottom-nav.admin-nav {
-    background: #1E0A38 !important;
-    border-top-color: rgba(139,92,246,0.2) !important;
-  }
-  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
-  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
-  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
-  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
-  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
-}
-
-/* ---- MAIN CONTENT PADDING ---- */
-@media (max-width: 768px) {
-  .main { padding: 16px !important; }
-  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
-  .page-hdr h1 { font-size: 18px !important; }
-  .ph-right { width: 100%; }
-  .ph-right .btn { flex: 1; justify-content: center; }
-}
-
-/* ---- GRIDS → SINGLE COLUMN ---- */
-@media (max-width: 768px) {
-  .main-grid,
-  .main-grid-3,
-  .detail-grid,
-  .detail-grid-3,
-  .home-grid,
-  .plan-cards,
-  .stats-grid,
-  .aa-grid,
-  .two-col,
-  .form-grid { 
-    grid-template-columns: 1fr !important; 
-  }
-  .preview-col,
-  .right-col,
-  .home-right,
-  .checklist-panel { 
-    position: static !important; 
-    width: 100% !important;
-  }
-}
-
-/* ---- CARDS ---- */
-@media (max-width: 768px) {
-  .form-card, .card, .usage-card, .score-widget,
-  .admin-actions, .advisor-hero { 
-    border-radius: 12px !important; 
-    padding: 16px !important; 
-  }
-}
-
-/* ---- HERO SECTIONS ---- */
-@media (max-width: 768px) {
-  /* Plan hero (D10) */
-  .plan-hero { 
-    flex-direction: column !important; 
-    padding: 18px !important; 
-    gap: 14px !important;
-  }
-  .ph-right-block { width: 100% !important; }
-  .ph-plan-name { font-size: 22px !important; }
-
-  /* Advisor hero (AD2) */
-  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
-  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
-  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
-
-  /* Profile header */
-  .prh-top { flex-direction: column !important; gap: 12px !important; }
-  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
-  .pss-right { flex-direction: column !important; gap: 6px !important; }
-  .pss-left { gap: 8px !important; }
-
-  /* Admin hero */
-  .advisor-hero { border-radius: 16px !important; }
-}
-
-/* ---- STATS GRID ---- */
-@media (max-width: 768px) {
-  .stats-grid { 
-    grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
-  }
-  .stat-card { padding: 14px !important; }
-  .sc-val { font-size: 22px !important; }
-}
-
-/* ---- TABLES → CARD-STYLE ---- */
-@media (max-width: 768px) {
-  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
-  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
-}
-.mobile-table-cards { display: none; }
-
-/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
-@media (max-width: 768px) {
-  .prof-tabs, .detail-tabs { 
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .prof-tabs::-webkit-scrollbar,
-  .detail-tabs::-webkit-scrollbar { display: none; }
-  .ptab, .dtab { 
-    padding: 11px 14px !important; 
-    font-size: 12px !important;
-    white-space: nowrap;
-  }
-}
-
-/* ---- PREVIEW TOOLBAR (D11) ---- */
-@media (max-width: 768px) {
-  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
-  .pt-url { display: none !important; }
-  .pt-spacer { display: none !important; }
-  .preview-area { padding: 12px !important; }
-  .preview-frame { border-radius: 14px !important; }
-  /* hide checklist panel on mobile — show as collapsible below */
-  .checklist-panel { display: none !important; }
-}
-
-/* ---- PLAN COMPARISON (D10) ---- */
-@media (max-width: 768px) {
-  .plan-cards { gap: 10px !important; }
-  .pc-name { font-size: 14px !important; }
-  .pc-price { font-size: 20px !important; }
-}
-
-/* ---- LOGIN SPLIT (A1) ---- */
-@media (max-width: 768px) {
-  .login-wrap { flex-direction: column !important; min-height: auto !important; }
-  .login-left { display: none !important; }
-  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
-}
-
-/* ---- SIGNUP STEPS (A2) ---- */
-@media (max-width: 768px) {
-  .signup-wrap { flex-direction: column !important; }
-  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
-  .signup-right { width: 100% !important; padding: 20px 16px !important; }
-  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
-}
-
-/* ---- DIRECTORY (P3) ---- */
-@media (max-width: 768px) {
-  .dir-layout { flex-direction: column !important; }
-  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
-  .dir-grid { grid-template-columns: 1fr !important; }
-}
-
-/* ---- LANDING PAGE (P1) ---- */
-@media (max-width: 768px) {
-  .hero-section { padding: 40px 20px 30px !important; }
-  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
-  .hero-subtitle { font-size: 14px !important; }
-  .hero-btns { flex-direction: column !important; gap: 10px !important; }
-  .features-grid { grid-template-columns: 1fr !important; }
-  .pricing-grid { grid-template-columns: 1fr !important; }
-  .lp-nav-links { display: none !important; }
-}
-
-/* ---- SCORE PAGE (D9) ---- */
-@media (max-width: 768px) {
-  .score-hero { padding: 20px !important; }
-  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
-}
-
-/* ---- GALLERY GRID (D6) ---- */
-@media (max-width: 768px) {
-  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
-}
-
-/* ---- MISC UTILITIES ---- */
-@media (max-width: 768px) {
-  .hide-mobile { display: none !important; }
-  .show-mobile { display: block !important; }
-  br.hide-mobile { display: none !important; }
-  .text-center-mobile { text-align: center !important; }
-}
-.show-mobile { display: none; }
-
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav class="nav">
-  <div class="logo">
+<nav>
+  <div class="nav-logo">
     <svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>
     YVITY
   </div>
   <div class="nav-links">
-    <span class="nl">For Advisors</span>
-    <span class="nl">Examples</span>
-    <span class="nl">Pricing</span>
+    <a href="#discover">Discover</a>
+    <a href="#how">How it Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#roles">Get Started</a>
   </div>
   <div class="nav-right">
-    <span class="nav-reg">Register</span>
-    <span class="nav-sep">|</span>
-    <span class="nav-login">Login</span>
-    <div class="nav-avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <a class="nav-btn nav-login" href="yvity-login.html">Login</a>
+    <a class="nav-btn nav-signup" href="yvity-login.html#signup">Register Free →</a>
   </div>
 </nav>
 
 <!-- HERO -->
-<div class="section" style="padding-top:0">
-  <div class="hero">
+<section class="hero">
+  <div class="hero-ring1"></div><div class="hero-ring2"></div>
+  <div class="hero-inner">
     <div class="hero-left">
-      <div class="hero-tag"><div class="hero-tag-dot"></div>India's #1 Insurance Advisor Credibility Platform</div>
-      <h1 class="hero-h1">Build Your<br><span>Professional</span><br>Credibility Showcase</h1>
-      <p class="hero-sub">Create a structured profile that builds trust and impresses clients. Share your achievements, services, and verified testimonials with YVITY.</p>
+      <div class="hero-tag"><div class="hero-tag-dot"></div><span>India's #1 Professional Credibility Platform</span></div>
+      <h1 class="hero-title">Your <span>Visibility.</span><br>Your Credibility.</h1>
+      <p class="hero-sub">Build your verified professional profile. Showcase IRDAI license, testimonials, achievements — and let clients find you with confidence.</p>
       <div class="hero-btns">
-        <button class="btn-primary">
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white;fill:none;stroke-width:2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-          Register Your Profile
-        </button>
-        <button class="btn-secondary">
-          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--teal-dk);fill:none;stroke-width:2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
-          See Example Profile
-        </button>
+        <a class="hero-btn-primary" href="yvity-login.html#signup">🚀 Create Free Profile</a>
+        <a class="hero-btn-secondary" href="#discover">🔍 Discover Advisors</a>
       </div>
-      <div class="hero-trust">
-        <div class="ht-item"><div class="ht-ico">✅</div><div><div class="ht-val">500+</div><div class="ht-lbl">Verified Profiles</div></div></div>
-        <span class="ht-sep">·</span>
-        <div class="ht-item"><div class="ht-ico">⭐</div><div><div class="ht-val">15,000+</div><div class="ht-lbl">Testimonials</div></div></div>
-        <span class="ht-sep">·</span>
-        <div class="ht-item"><div class="ht-ico">🛡️</div><div><div class="ht-val">IRDAI</div><div class="ht-lbl">License Verified</div></div></div>
+      <div class="hero-stats">
+        <div class="hs-item"><div class="hs-val">487</div><div class="hs-lbl">Advisors</div></div>
+        <div class="hs-item"><div class="hs-val">50+</div><div class="hs-lbl">Cities</div></div>
+        <div class="hs-item"><div class="hs-val">4.9★</div><div class="hs-lbl">Avg Rating</div></div>
+        <div class="hs-item"><div class="hs-val">12K+</div><div class="hs-lbl">Testimonials</div></div>
       </div>
     </div>
-
     <div class="hero-right">
-      <!-- Floating badges -->
-      <div class="float-badge fb1"><div class="fb-ico">✅</div><div><div style="font-weight:700;color:var(--green)">Identity Verified</div><div style="font-size:10px;color:var(--muted)">IRDAI Confirmed</div></div></div>
-      <div class="float-badge fb2"><div class="fb-ico">⭐</div><div><div style="font-weight:700">YVITY Score</div><div style="font-size:10px;color:var(--teal);font-weight:800">87 / 100</div></div></div>
-
-      <!-- Mini profile preview card -->
-      <div class="hero-card">
-        <div class="hc-header">
-          <div class="hc-logo">
-            <svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>
-            YVITY
-          </div>
-          <div class="hc-nav-dots">
-            <div class="hc-dot" style="background:rgba(255,255,255,0.3)"></div>
-            <div class="hc-dot" style="background:rgba(255,255,255,0.3)"></div>
-            <div class="hc-dot" style="background:rgba(255,255,255,0.3)"></div>
-          </div>
-        </div>
-        <div class="hc-body">
-          <div class="hc-id-bar">
-            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg>
-            Identity Verified · Verified Since 2024
-          </div>
-          <div class="hc-profile">
-            <div class="hc-av">
-              <div class="hc-av-ring">
-                <div class="hc-av-inner">
-                  <div class="hc-av-photo"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face" alt=""></div>
-                </div>
-              </div>
-              <div class="hc-av-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
-            </div>
-            <div class="hc-info">
-              <div class="hc-name">Krishna Mohan</div>
-              <div class="hc-title">Life & Health Insurance Advisor</div>
-              <div class="hc-meta">
-                <span>Since 2019</span>
-                <span>📍 Nellore</span>
-              </div>
-              <div class="hc-bdgs">
-                <span class="hc-bdg hc-bdg-gold">★ Founding Advisor</span>
-                <span class="hc-bdg hc-bdg-teal">◆ Gold</span>
-              </div>
+      <!-- Sample Profile Card -->
+      <div class="sample-card" onclick="window.location.href='yvity-profile.html'">
+        <div class="sc-top">
+          <div class="sc-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face" alt=""></div>
+          <div class="sc-info">
+            <div class="sc-name">Krishna Mohan</div>
+            <div class="sc-role">Senior LIC Advisor · Nellore</div>
+            <div class="sc-badges">
+              <span class="sc-badge scb-green">✓ Identity Verified</span>
+              <span class="sc-badge scb-gold">👑 Gold</span>
+              <span class="sc-badge scb-teal">🏛️ IRDAI</span>
             </div>
           </div>
-          <div class="hc-stats">
-            <div class="hc-stat"><div class="hc-sv">50</div><div class="hc-sl">Reviews</div></div>
-            <div class="hc-stat"><div class="hc-sv">87</div><div class="hc-sl">Score</div></div>
-            <div class="hc-stat"><div class="hc-sv">32</div><div class="hc-sl">Recomm.</div></div>
-            <div class="hc-stat"><div class="hc-sv">1.2K</div><div class="hc-sl">Views</div></div>
-          </div>
-          <div class="hc-tabs">
-            <div class="hc-tab on">Home</div>
-            <div class="hc-tab">Journey</div>
-            <div class="hc-tab">Services</div>
-            <div class="hc-tab">Gallery</div>
-          </div>
         </div>
+        <div class="sc-score">
+          <div class="scs-left">YVITY Credibility Score</div>
+          <div class="scs-val">87/100</div>
+        </div>
+        <div class="sc-stats">
+          <div class="scs-stat"><div class="scs-num">14+</div><div class="scs-lbl">Years</div></div>
+          <div class="scs-stat"><div class="scs-num">50</div><div class="scs-lbl">Reviews</div></div>
+          <div class="scs-stat"><div class="scs-num">32</div><div class="scs-lbl">Recs</div></div>
+          <div class="scs-stat"><div class="scs-num">500+</div><div class="scs-lbl">Clients</div></div>
+        </div>
+      </div>
+      <!-- Mini cards -->
+      <div class="mini-card" style="cursor:pointer;" onclick="window.location.href='yvity-profile.html'">
+        <div class="mc-av"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face" alt=""></div>
+        <div class="mc-info"><div class="mc-name">Priya Sharma</div><div class="mc-role">Gold Advisor · Hyderabad</div></div>
+        <div class="mc-score">92</div>
+      </div>
+      <div class="mini-card" style="cursor:pointer;" onclick="window.location.href='yvity-profile.html'">
+        <div class="mc-av"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face" alt=""></div>
+        <div class="mc-info"><div class="mc-name">Vikram Patel</div><div class="mc-role">Gold Advisor · Mumbai</div></div>
+        <div class="mc-score">88</div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- WHAT IS YVITY -->
-<div class="section section-gap">
-  <div class="sec-head">
-    <div class="sec-tag">What is YVITY?</div>
-    <h2 class="sec-h2">Not Social Media. Not LinkedIn.<br>Pure Professional Credibility.</h2>
-    <p class="sec-sub">YVITY is India's first structured, noise-free professional credibility layer for insurance advisors.</p>
-  </div>
-  <div class="what-grid">
-    <div class="what-card">
-      <div class="wc-ico wc-ico-1">🛡️</div>
-      <div class="wc-title">Verified Identity</div>
-      <div class="wc-text">IRDAI license verified by admin. Selfie + OTP verification. Your identity is confirmed before your profile goes live.</div>
+<!-- DISCOVER -->
+<section class="section" id="discover">
+  <div class="section-inner">
+    <div class="discover-top">
+      <div>
+        <div class="sec-tag">🔍 Discover</div>
+        <h2 class="sec-title">Find Trusted Advisors Near You</h2>
+        <p class="sec-sub">All profiles are IRDAI verified and identity checked. Browse by city, specialisation, or plan type.</p>
+      </div>
+      <div class="search-bar">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search by name, city, specialisation…">
+      </div>
     </div>
-    <div class="what-card">
-      <div class="wc-ico wc-ico-2">⭐</div>
-      <div class="wc-title">YVITY Score</div>
-      <div class="wc-text">A single 0–100 credibility score based on verifications, testimonials, recommendations and profile completeness.</div>
+    <div class="filter-chips">
+      <button class="fchip on">All</button>
+      <button class="fchip off">🛡️ Life Insurance</button>
+      <button class="fchip off">💊 Health Insurance</button>
+      <button class="fchip off">📈 Mutual Funds</button>
+      <button class="fchip off">🏠 Real Estate</button>
+      <button class="fchip off">📍 Nellore</button>
+      <button class="fchip off">📍 Hyderabad</button>
     </div>
-    <div class="what-card">
-      <div class="wc-ico wc-ico-3">✅</div>
-      <div class="wc-title">Verified Testimonials</div>
-      <div class="wc-text">Text, Audio & Video testimonials — all OTP verified from real clients. No fake reviews. Permanent record.</div>
-    </div>
-  </div>
-</div>
+    <div class="advisors-grid">
 
-<!-- WHY CREDIBILITY -->
-<div class="section section-gap">
-  <div class="sec-head">
-    <div class="sec-tag">Why Credibility Matters</div>
-    <h2 class="sec-h2">Your Clients Check Before They Trust</h2>
-  </div>
-  <div class="why-row">
-    <div class="why-left">
-      <div class="why-point">
-        <div class="wp-ico">📱</div>
-        <div><div class="wp-title">Clients Google you before calling</div><div class="wp-text">When a referral sends your name, the first thing they do is search online. Without a credibility profile, you're invisible or unverifiable.</div></div>
-      </div>
-      <div class="why-point">
-        <div class="wp-ico">🤝</div>
-        <div><div class="wp-title">Trust is earned, not assumed</div><div class="wp-text">A structured profile with verified testimonials, IRDAI license, and real achievements builds trust before the first meeting.</div></div>
-      </div>
-      <div class="why-point">
-        <div class="wp-ico">🚀</div>
-        <div><div class="wp-title">Stand out in a crowded market</div><div class="wp-text">Thousands of insurance advisors in India. YVITY gives you a premium, verifiable identity that sets you apart.</div></div>
-      </div>
-    </div>
-    <div class="why-right">
-      <div class="wr-title">YVITY vs. No Profile</div>
-      <div class="wr-vs">
-        <div class="wr-col">
-          <div class="wr-col-h bad">❌ Without YVITY</div>
-          <div class="wr-item"><svg class="wr-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>No online presence</div>
-          <div class="wr-item"><svg class="wr-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Unverifiable license</div>
-          <div class="wr-item"><svg class="wr-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Word of mouth only</div>
-          <div class="wr-item"><svg class="wr-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>No testimonials</div>
-          <div class="wr-item"><svg class="wr-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Lost to competition</div>
+      <!-- Card 1 -->
+      <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+        <div class="ac-top">
+          <div class="ac-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face" alt=""></div>
+          <div>
+            <div class="ac-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nellore, AP</div>
+            <div class="ac-name">Krishna Mohan</div>
+            <div class="ac-role">Senior LIC Advisor · 14 yrs exp</div>
+            <div class="ac-badges">
+              <span class="ac-badge acb-g">✓ Verified</span>
+              <span class="ac-badge acb-gold">👑 Gold</span>
+              <span class="ac-badge acb-t">🏛️ IRDAI</span>
+            </div>
+          </div>
         </div>
-        <div class="wr-col">
-          <div class="wr-col-h good">✅ With YVITY</div>
-          <div class="wr-item"><svg class="wr-chk" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Shareable profile link</div>
-          <div class="wr-item"><svg class="wr-chk" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>IRDAI admin verified</div>
-          <div class="wr-item"><svg class="wr-chk" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>WhatsApp sharable</div>
-          <div class="wr-item"><svg class="wr-chk" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>OTP verified reviews</div>
-          <div class="wr-item"><svg class="wr-chk" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>YVITY Score: 87/100</div>
+        <div class="ac-score-row">
+          <span class="acsr-label">YVITY Score</span>
+          <span class="acsr-val">87/100</span>
+          <span class="acsr-stars">⭐⭐⭐⭐⭐</span>
         </div>
+        <div class="ac-stats">
+          <div class="acs"><div class="acs-num">50</div><div class="acs-lbl">Reviews</div></div>
+          <div class="acs"><div class="acs-num">32</div><div class="acs-lbl">Recs</div></div>
+          <div class="acs"><div class="acs-num">500+</div><div class="acs-lbl">Clients</div></div>
+        </div>
+        <button class="ac-btn">View Profile →</button>
       </div>
+
+      <!-- Card 2 -->
+      <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+        <div class="ac-top">
+          <div class="ac-av"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face" alt=""></div>
+          <div>
+            <div class="ac-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Hyderabad, TS</div>
+            <div class="ac-name">Priya Sharma</div>
+            <div class="ac-role">Health Insurance Specialist · 9 yrs</div>
+            <div class="ac-badges">
+              <span class="ac-badge acb-g">✓ Verified</span>
+              <span class="ac-badge acb-gold">👑 Gold</span>
+              <span class="ac-badge acb-t">🏛️ IRDAI</span>
+            </div>
+          </div>
+        </div>
+        <div class="ac-score-row">
+          <span class="acsr-label">YVITY Score</span>
+          <span class="acsr-val">92/100</span>
+          <span class="acsr-stars">⭐⭐⭐⭐⭐</span>
+        </div>
+        <div class="ac-stats">
+          <div class="acs"><div class="acs-num">68</div><div class="acs-lbl">Reviews</div></div>
+          <div class="acs"><div class="acs-num">41</div><div class="acs-lbl">Recs</div></div>
+          <div class="acs"><div class="acs-num">300+</div><div class="acs-lbl">Clients</div></div>
+        </div>
+        <button class="ac-btn">View Profile →</button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+        <div class="ac-top">
+          <div class="ac-av"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face" alt=""></div>
+          <div>
+            <div class="ac-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Mumbai, MH</div>
+            <div class="ac-name">Vikram Patel</div>
+            <div class="ac-role">MDRT Advisor · LIC + HDFC · 12 yrs</div>
+            <div class="ac-badges">
+              <span class="ac-badge acb-g">✓ Verified</span>
+              <span class="ac-badge acb-gold">👑 Gold</span>
+              <span class="ac-badge acb-t">🏛️ IRDAI</span>
+            </div>
+          </div>
+        </div>
+        <div class="ac-score-row">
+          <span class="acsr-label">YVITY Score</span>
+          <span class="acsr-val">88/100</span>
+          <span class="acsr-stars">⭐⭐⭐⭐⭐</span>
+        </div>
+        <div class="ac-stats">
+          <div class="acs"><div class="acs-num">44</div><div class="acs-lbl">Reviews</div></div>
+          <div class="acs"><div class="acs-num">28</div><div class="acs-lbl">Recs</div></div>
+          <div class="acs"><div class="acs-num">700+</div><div class="acs-lbl">Clients</div></div>
+        </div>
+        <button class="ac-btn">View Profile →</button>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+        <div class="ac-top">
+          <div class="ac-av"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face" alt=""></div>
+          <div>
+            <div class="ac-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Vijayawada, AP</div>
+            <div class="ac-name">Ramesh Kumar</div>
+            <div class="ac-role">NRI Insurance · Term Plans · 8 yrs</div>
+            <div class="ac-badges">
+              <span class="ac-badge acb-g">✓ Verified</span>
+              <span class="ac-badge acb-t">🥈 Silver</span>
+              <span class="ac-badge acb-t">🏛️ IRDAI</span>
+            </div>
+          </div>
+        </div>
+        <div class="ac-score-row">
+          <span class="acsr-label">YVITY Score</span>
+          <span class="acsr-val">74/100</span>
+          <span class="acsr-stars">⭐⭐⭐⭐</span>
+        </div>
+        <div class="ac-stats">
+          <div class="acs"><div class="acs-num">28</div><div class="acs-lbl">Reviews</div></div>
+          <div class="acs"><div class="acs-num">12</div><div class="acs-lbl">Recs</div></div>
+          <div class="acs"><div class="acs-num">200+</div><div class="acs-lbl">Clients</div></div>
+        </div>
+        <button class="ac-btn">View Profile →</button>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+        <div class="ac-top">
+          <div class="ac-av"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face" alt=""></div>
+          <div>
+            <div class="ac-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Chennai, TN</div>
+            <div class="ac-name">Sunita Devi</div>
+            <div class="ac-role">Health + Life Insurance · 6 yrs</div>
+            <div class="ac-badges">
+              <span class="ac-badge acb-g">✓ Verified</span>
+              <span class="ac-badge acb-t">🥈 Silver</span>
+            </div>
+          </div>
+        </div>
+        <div class="ac-score-row">
+          <span class="acsr-label">YVITY Score</span>
+          <span class="acsr-val">68/100</span>
+          <span class="acsr-stars">⭐⭐⭐⭐</span>
+        </div>
+        <div class="ac-stats">
+          <div class="acs"><div class="acs-num">22</div><div class="acs-lbl">Reviews</div></div>
+          <div class="acs"><div class="acs-num">8</div><div class="acs-lbl">Recs</div></div>
+          <div class="acs"><div class="acs-num">150+</div><div class="acs-lbl">Clients</div></div>
+        </div>
+        <button class="ac-btn">View Profile →</button>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+        <div class="ac-top">
+          <div class="ac-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" alt=""></div>
+          <div>
+            <div class="ac-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Guntur, AP</div>
+            <div class="ac-name">Arjun Reddy</div>
+            <div class="ac-role">Mutual Funds + Insurance · 5 yrs</div>
+            <div class="ac-badges">
+              <span class="ac-badge acb-g">✓ Verified</span>
+              <span class="ac-badge acb-t">🥈 Silver</span>
+            </div>
+          </div>
+        </div>
+        <div class="ac-score-row">
+          <span class="acsr-label">YVITY Score</span>
+          <span class="acsr-val">61/100</span>
+          <span class="acsr-stars">⭐⭐⭐⭐</span>
+        </div>
+        <div class="ac-stats">
+          <div class="acs"><div class="acs-num">18</div><div class="acs-lbl">Reviews</div></div>
+          <div class="acs"><div class="acs-num">5</div><div class="acs-lbl">Recs</div></div>
+          <div class="acs"><div class="acs-num">80+</div><div class="acs-lbl">Clients</div></div>
+        </div>
+        <button class="ac-btn">View Profile →</button>
+      </div>
+
     </div>
   </div>
-</div>
+</section>
 
 <!-- HOW IT WORKS -->
-<div class="section section-gap">
-  <div class="sec-head">
-    <div class="sec-tag">How It Works</div>
-    <h2 class="sec-h2">Get Verified in 4 Simple Steps</h2>
+<section class="section" id="how" style="background:white;">
+  <div class="section-inner">
+    <div class="sec-tag">⚡ How It Works</div>
+    <h2 class="sec-title">Done in 4 Simple Steps</h2>
+    <p class="sec-sub">Create your verified profile in minutes. Let clients find you with confidence.</p>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <div class="how-ico">📝</div>
+        <div class="how-title">Create Free Profile</div>
+        <div class="how-sub">Register with mobile OTP. Fill your professional details in minutes.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <div class="how-ico">🏛️</div>
+        <div class="how-title">Get IRDAI Verified</div>
+        <div class="how-sub">Upload your license. YVITY verifies with IRDAI portal automatically.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <div class="how-ico">💬</div>
+        <div class="how-title">Collect Testimonials</div>
+        <div class="how-sub">Share your profile link. Clients give OTP-verified testimonials.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">04</div>
+        <div class="how-ico">📈</div>
+        <div class="how-title">Build Credibility</div>
+        <div class="how-sub">Your YVITY Score grows. Clients find you in directory. Business grows.</div>
+      </div>
+    </div>
   </div>
-  <div class="steps-row">
-    <div class="step-card">
-      <div class="step-num">1</div>
-      <div class="step-ico">📝</div>
-      <div class="step-title">Register & Verify</div>
-      <div class="step-text">Sign up with mobile OTP, email OTP, and selfie liveness check to get Identity Verified badge.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">2</div>
-      <div class="step-ico">🛡️</div>
-      <div class="step-title">IRDAI Verification</div>
-      <div class="step-text">Submit your IRDAI license number. Admin manually verifies within 24 hours and activates your badge.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">3</div>
-      <div class="step-ico">✍️</div>
-      <div class="step-title">Build Your Profile</div>
-      <div class="step-text">Add journey, education, services, achievements, gallery and collect verified testimonials from clients.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">4</div>
-      <div class="step-ico">📤</div>
-      <div class="step-title">Share & Grow</div>
-      <div class="step-text">Share your YVITY profile link on WhatsApp, visiting cards, and social media. Watch your credibility grow.</div>
-    </div>
-  </div>
-</div>
+</section>
 
-<!-- FEATURED ADVISORS -->
-<div class="section section-gap">
-  <div class="sec-head">
-    <div class="sec-tag">Featured Elite Advisors</div>
-    <h2 class="sec-h2">Meet India's Top Verified Advisors</h2>
-    <p class="sec-sub">Browse profiles of India's most credible insurance professionals — all IRDAI verified.</p>
+<!-- ROLES -->
+<section class="section" id="roles">
+  <div class="section-inner">
+    <div class="sec-tag">🚀 Get Started</div>
+    <h2 class="sec-title">Select Your Role</h2>
+    <p class="sec-sub" style="color:rgba(255,255,255,0.6);">Each role has a dedicated experience built for your needs.</p>
+    <div class="roles-grid">
+      <a class="role-card" href="yvity-login.html?role=advisor">
+        <div class="rc-ico">🛡️</div>
+        <div class="rc-title">Insurance Advisor</div>
+        <div class="rc-sub">Build your verified profile, showcase IRDAI license, collect testimonials and grow your client base.</div>
+        <div class="rc-enter">Enter as Advisor <svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div>
+      </a>
+      <a class="role-card" href="yvity-login.html?role=customer">
+        <div class="rc-ico">👤</div>
+        <div class="rc-title">Customer / Client</div>
+        <div class="rc-sub">Find trusted verified advisors near you. Compare profiles, read testimonials, connect directly.</div>
+        <div class="rc-enter">Enter as Customer <svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div>
+      </a>
+    </div>
   </div>
-  <div class="advisors-grid">
+</section>
 
-    <div class="adv-card">
-      <div class="adv-top">
-        <div class="adv-row">
-          <div class="adv-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face" alt=""></div>
-          <div>
-            <div class="adv-name">Krishna Mohan <div class="adv-v"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
-            <div class="adv-title">Life & Health Advisor</div>
-            <div class="adv-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nellore, AP</div>
-          </div>
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="section-inner">
+    <div class="sec-tag">💰 Pricing</div>
+    <h2 class="sec-title">Simple & Transparent</h2>
+    <p class="sec-sub">Start free. Upgrade when you're ready. No hidden charges.</p>
+    <div class="pricing-grid">
+      <div class="price-card pc-free">
+        <span class="pc-badge pcb-free">🆓 Free</span>
+        <div class="pc-price">₹0 <span>/ year</span></div>
+        <div class="pc-name">Free Plan</div>
+        <div class="pc-features">
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Public profile</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>3 achievements</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>5 text testimonials</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>3 gallery photos</div>
         </div>
-        <div class="adv-tags"><span class="adv-tag">Life Insurance</span><span class="adv-tag">NRI Plans</span><span class="adv-tag">Health</span></div>
-        <div class="adv-score-row">
-          <div class="adv-score"><div class="adv-score-circle">87</div><div><div class="adv-score-val">87/100</div><div class="adv-score-lbl">YVITY Score</div></div></div>
-          <div class="adv-tests"><svg viewBox="0 0 24 24"/></svg>⭐ 50 Reviews</div>
+        <button class="pc-btn pcbtn-free" onclick="window.location.href='yvity-login.html'">Start Free →</button>
+      </div>
+      <div class="price-card pc-silver">
+        <span class="pc-badge pcb-silver">🥈 Silver</span>
+        <div class="pc-price">₹999 <span>/ year</span></div>
+        <div class="pc-name">Silver Plan</div>
+        <div class="pc-features">
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>10 achievements</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Audio testimonials</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Identity Verified badge</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>QR code for visiting card</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>IRDAI license display</div>
         </div>
+        <button class="pc-btn pcbtn-silver" onclick="window.location.href='yvity-login.html'">Get Silver →</button>
       </div>
-      <div class="adv-footer">View Full Profile →</div>
-    </div>
-
-    <div class="adv-card">
-      <div class="adv-top">
-        <div class="adv-row">
-          <div class="adv-av"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face" alt=""></div>
-          <div>
-            <div class="adv-name">Vikram Patel <div class="adv-v"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
-            <div class="adv-title">Senior Insurance Advisor</div>
-            <div class="adv-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Mumbai, MH</div>
-          </div>
+      <div class="price-card pc-gold">
+        <span class="pc-badge pcb-popular">👑 Most Popular</span>
+        <div class="pc-price">₹2,999 <span>/ year</span></div>
+        <div class="pc-name">Gold Plan</div>
+        <div class="pc-features">
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Video testimonials</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Recommendations feature</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Intro video on profile</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited everything</div>
+          <div class="pcf"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Directory priority listing</div>
         </div>
-        <div class="adv-tags"><span class="adv-tag">MDRT Member</span><span class="adv-tag">Claims Expert</span></div>
-        <div class="adv-score-row">
-          <div class="adv-score"><div class="adv-score-circle">92</div><div><div class="adv-score-val">92/100</div><div class="adv-score-lbl">YVITY Score</div></div></div>
-          <div class="adv-tests">⭐ 78 Reviews</div>
-        </div>
-      </div>
-      <div class="adv-footer">View Full Profile →</div>
-    </div>
-
-    <div class="adv-card">
-      <div class="adv-top">
-        <div class="adv-row">
-          <div class="adv-av"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100&h=100&fit=crop&crop=face" alt=""></div>
-          <div>
-            <div class="adv-name">Priya Nair <div class="adv-v"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
-            <div class="adv-title">Health Insurance Specialist</div>
-            <div class="adv-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Bengaluru, KA</div>
-          </div>
-        </div>
-        <div class="adv-tags"><span class="adv-tag">Health Plans</span><span class="adv-tag">Family Cover</span></div>
-        <div class="adv-score-row">
-          <div class="adv-score"><div class="adv-score-circle">85</div><div><div class="adv-score-val">85/100</div><div class="adv-score-lbl">YVITY Score</div></div></div>
-          <div class="adv-tests">⭐ 42 Reviews</div>
-        </div>
-      </div>
-      <div class="adv-footer">View Full Profile →</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- PLANS PREVIEW -->
-<div class="section section-gap">
-  <div class="sec-head">
-    <div class="sec-tag">Simple Pricing</div>
-    <h2 class="sec-h2">Start Free. Upgrade When Ready.</h2>
-    <p class="sec-sub">No hidden charges. Cancel anytime. Powered by Razorpay.</p>
-  </div>
-  <div class="plans-grid">
-
-    <div class="plan-card">
-      <div class="plan-header">
-        <div class="plan-name">Free</div>
-        <div class="plan-price">₹0 <span>/ forever</span></div>
-        <div class="plan-desc">Start building your credibility profile with essential features.</div>
-      </div>
-      <div class="plan-divider"></div>
-      <div class="plan-features">
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Profile + Basic Public Page</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Education + Journey + Services</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>3 Achievements · 3 Gallery Photos</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>5 Text Testimonials</div>
-        <div class="pf-item"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg><span style="color:#9AAABB">Identity Verified Badge</span></div>
-        <div class="pf-item"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg><span style="color:#9AAABB">QR Code · Audio Reviews</span></div>
-      </div>
-      <div class="plan-cta"><button class="plan-btn plan-btn-free">Get Started Free</button></div>
-    </div>
-
-    <div class="plan-card featured">
-      <div class="plan-header">
-        <div class="plan-badge pop">MOST POPULAR</div>
-        <div class="plan-name">Silver</div>
-        <div class="plan-price">₹999 <span>/ year</span></div>
-        <div class="plan-desc">Look professional with verified badge, QR code and audio testimonials.</div>
-      </div>
-      <div class="plan-divider"></div>
-      <div class="plan-features">
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Everything in Free</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Identity Verified Badge</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>IRDA License Display</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>QR Code for Visiting Card</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Audio Testimonials · 10 Achievements</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited Text Testimonials</div>
-      </div>
-      <div class="plan-cta"><button class="plan-btn plan-btn-silver">Get Silver — ₹999/yr</button></div>
-    </div>
-
-    <div class="plan-card">
-      <div class="plan-header">
-        <div class="plan-badge gold">MOST POWERFUL</div>
-        <div class="plan-name">Gold</div>
-        <div class="plan-price">₹2,999 <span>/ year</span></div>
-        <div class="plan-desc">Look authoritative with recommendations, video testimonials and priority listing.</div>
-      </div>
-      <div class="plan-divider"></div>
-      <div class="plan-features">
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Everything in Silver</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Video Testimonials</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>'Recommend' Feature (Gold only)</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Intro Video on Profile</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Featured in Directory (Priority)</div>
-        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited Everything</div>
-      </div>
-      <div class="plan-cta"><button class="plan-btn plan-btn-gold">Get Gold — ₹2,999/yr</button></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- CTA BANNER -->
-<div class="section section-gap" style="padding-bottom:0">
-  <div class="cta-banner">
-    <div class="cb-left">
-      <div class="cb-h2">Your Visibility.<br>Your Credibility.</div>
-      <div class="cb-sub">Join India's first professional credibility platform for insurance advisors. Invite-only — limited spots available for founding advisors.</div>
-    </div>
-    <div class="cb-right">
-      <button class="cb-btn1">Register Your Profile Now →</button>
-      <div class="cb-trust">
-        <div class="cb-t"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>IRDAI Verified</div>
-        <div class="cb-t"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure Platform</div>
-        <div class="cb-t"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Free to Start</div>
+        <button class="pc-btn pcbtn-gold" onclick="window.location.href='yvity-login.html'">Get Gold →</button>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- FOOTER -->
-<div class="footer" style="margin-top:60px">
-  <div class="footer-top">
-    <div class="footer-brand">
-      <div class="footer-logo">
-        <svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>
-        YVITY
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="ft-logo">YVITY</div>
+        <div class="ft-sub">India's Professional Credibility Platform.<br>Your Visibility. Your Credibility.</div>
       </div>
-      <div class="footer-tagline">Your Visibility. Your Credibility.<br>India's premium professional credibility platform for insurance advisors.</div>
-      <div class="footer-socials">
-        <div class="fs"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
-        <div class="fs"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.71 3.41 2 2 0 0 1 3.68 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-        <div class="fs"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+      <div>
+        <div class="ft-col-title">Product</div>
+        <a class="ft-link" href="#discover">Discover Advisors</a>
+        <a class="ft-link" href="#pricing">Pricing</a>
+        <a class="ft-link" href="yvity-login.html">Login</a>
+      </div>
+      <div>
+        <div class="ft-col-title">Roles</div>
+        <a class="ft-link" href="yvity-login.html?role=advisor">Advisor Login</a>
+        <a class="ft-link" href="yvity-login.html?role=customer">Customer Login</a>
+        <a class="ft-link" href="yvity-login.html?role=admin">Admin</a>
+      </div>
+      <div>
+        <div class="ft-col-title">Company</div>
+        <a class="ft-link" href="#">About YVITY</a>
+        <a class="ft-link" href="#">Privacy Policy</a>
+        <a class="ft-link" href="#">Terms of Use</a>
       </div>
     </div>
-    <div class="footer-col">
-      <h4>Platform</h4>
-      <a>For Advisors</a>
-      <a>Example Profiles</a>
-      <a>Pricing</a>
-      <a>Directory</a>
-    </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <a>About YVITY</a>
-      <a>Privacy Policy</a>
-      <a>Terms of Use</a>
-      <a>Contact</a>
-    </div>
-    <div class="footer-col">
-      <h4>Support</h4>
-      <a>Help Center</a>
-      <a>IRDAI Verification</a>
-      <a>Report Issue</a>
+    <div class="footer-bottom">
+      <div class="fb-copy">© 2026 YVITY · All rights reserved · India</div>
+      <div class="fb-copy">* Demo version — Real backend coming soon</div>
     </div>
   </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 YVITY. All rights reserved. India.</div>
-    <div class="footer-irda">IRDAI Compliant Platform · Insurance Advisors Only · Phase 1</div>
-  </div>
-</div>
-
+</footer>
 
 <script>
-// YVITY Navigation — auto-link all nav buttons
-(function(){
-  var map = {
-    // Auth
-    'login':            'YVITY_A1_Login.html',
-    'sign in':          'YVITY_A1_Login.html',
-    'log in':           'YVITY_A1_Login.html',
-    'register':         'YVITY_A2_Signup.html',
-    'sign up':          'YVITY_A2_Signup.html',
-    'get started':      'YVITY_A2_Signup.html',
-    'join yvity':       'YVITY_A2_Signup.html',
-    'create profile':   'YVITY_A2_Signup.html',
-    'start free':       'YVITY_A2_Signup.html',
-    'claim your profile':'YVITY_A2_Signup.html',
-    'join free':        'YVITY_A2_Signup.html',
-
-    // Public pages
-    'pricing':          'YVITY_P4_Pricing.html',
-    'view pricing':     'YVITY_P4_Pricing.html',
-    'see pricing':      'YVITY_P4_Pricing.html',
-    'directory':        'YVITY_P3_Directory.html',
-    'find advisors':    'YVITY_P3_Directory.html',
-    'browse advisors':  'YVITY_P3_Directory.html',
-
-    // Dashboard
-    'dashboard':        'YVITY_D1_Dashboard.html',
-    'go to dashboard':  'YVITY_D1_Dashboard.html',
-    'edit profile':     'YVITY_D2_EditProfile.html',
-    'edit as admin':    'YVITY_AD2_AdvisorDetail.html',
-    'services':         'YVITY_D3_Services.html',
-    'professional journey': 'YVITY_D4_Journey.html',
-    'achievements':     'YVITY_D5_Achievements.html',
-    'gallery':          'YVITY_D6_Gallery.html',
-    'testimonials':     'YVITY_D7_Testimonials.html',
-    'recommendations':  'YVITY_D8_Recommendations.html',
-    'yvity score':      'YVITY_D9_Score.html',
-    'score details':    'YVITY_D9_Score.html',
-    'subscription':     'YVITY_D10_Subscription.html',
-    'billing':          'YVITY_D10_Subscription.html',
-    'profile preview':  'YVITY_D11_ProfilePreview.html',
-    'view profile':     'YVITY_P2_Public_Profile.html',
-    'view live profile':'YVITY_P2_Public_Profile.html',
-    'open live':        'YVITY_P2_Public_Profile.html',
-    'settings':         'YVITY_D10_Subscription.html',
-
-    // Admin
-    'admin':            'YVITY_AD1_AdminDashboard.html',
-    'all advisors':     'YVITY_AD2_AdvisorDetail.html',
-    'view all':         'YVITY_AD2_AdvisorDetail.html',
-
-    // Upgrade
-    'upgrade to gold':  'YVITY_D10_Subscription.html',
-    'upgrade':          'YVITY_D10_Subscription.html',
-  };
-
-  function navigate(el) {
-    var txt = el.innerText.trim().toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/,' ');
-    // exact match
-    if (map[txt]) { window.location.href = map[txt]; return; }
-    // partial match
-    for (var key in map) {
-      if (txt.indexOf(key) !== -1 || key.indexOf(txt) !== -1) {
-        if (txt.length > 2) { window.location.href = map[key]; return; }
-      }
-    }
-  }
-
-  // Fix all <a href="#"> links
-  document.querySelectorAll('a[href="#"], a[href=""]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      e.preventDefault();
-      navigate(a);
-    });
+// Filter chips
+document.querySelectorAll('.fchip').forEach(function(chip){
+  chip.addEventListener('click', function(){
+    document.querySelectorAll('.fchip').forEach(function(c){ c.className='fchip off'; });
+    chip.className='fchip on';
   });
-
-  // Fix sidebar items (div.sb-item)
-  document.querySelectorAll('.sb-item').forEach(function(el){
-    el.addEventListener('click', function(){ navigate(el); });
-  });
-
-  // Fix top nav items
-  document.querySelectorAll('.tn-btn, .topnav button').forEach(function(el){
-    el.addEventListener('click', function(){ navigate(el); });
-  });
-
-  // Fix mobile bottom nav items
-  document.querySelectorAll('.mbn-item').forEach(function(el){
-    el.addEventListener('click', function(){ navigate(el); });
-  });
-
-  // Fix all buttons with onclick=""
-  document.querySelectorAll('button[onclick=""], button:not([onclick])').forEach(function(el){
-    el.addEventListener('click', function(){ navigate(el); });
-  });
-
-  // Fix profile nav tabs
-  document.querySelectorAll('.ptab, .dtab').forEach(function(el){
-    el.addEventListener('click', function(){
-      document.querySelectorAll('.ptab, .dtab').forEach(function(t){ t.classList.remove('on'); });
-      el.classList.add('on');
-    });
-  });
-
-  // Back button
-  document.querySelectorAll('.back-row').forEach(function(el){
-    el.addEventListener('click', function(){ window.history.back(); });
-  });
-
-})();
+});
 </script>
-
 </body>
 </html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY — Customer Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;--navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;--gold-dk:#B8860B;--bg:#EEF4F7;--muted:#5A7080;}
+body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;}
+
+/* NAV */
+.topnav{background:var(--teal-dk);height:54px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(6,85,85,0.25);}
+.tn-logo{font-size:18px;font-weight:800;letter-spacing:1.5px;color:white;display:flex;align-items:center;gap:7px;}
+.tn-logo svg{width:17px;height:17px;stroke:white;fill:none;stroke-width:2.5;}
+.tn-spacer{flex:1;}
+.tn-search{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:7px 14px;min-width:260px;}
+.tn-search svg{width:14px;height:14px;stroke:rgba(255,255,255,0.6);fill:none;stroke-width:2;}
+.tn-search input{background:none;border:none;outline:none;color:white;font-size:13px;font-family:'Inter',sans-serif;width:100%;}
+.tn-search input::placeholder{color:rgba(255,255,255,0.45);}
+.tn-profile{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);}
+.tn-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dk),var(--gold));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white;}
+.tn-name{font-size:13px;font-weight:700;color:white;}
+
+.wrap{max-width:1100px;margin:0 auto;padding:24px;}
+
+/* WELCOME BANNER */
+.welcome-banner{background:linear-gradient(135deg,var(--teal-dk),#0A5050);border-radius:18px;padding:24px 28px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.wb-left h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:white;margin-bottom:4px;}
+.wb-left p{font-size:13px;color:rgba(255,255,255,0.6);}
+.wb-btn{padding:10px 20px;background:white;color:var(--teal-dk);border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;}
+
+/* QUICK SEARCH */
+.search-card{background:white;border-radius:16px;padding:20px 24px;margin-bottom:22px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);}
+.sc-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;}
+.search-row{display:flex;gap:10px;flex-wrap:wrap;}
+.search-inp{display:flex;align-items:center;gap:8px;background:#F4F9FA;border:1.5px solid rgba(11,123,123,0.12);border-radius:10px;padding:10px 14px;flex:1;min-width:200px;}
+.search-inp svg{width:15px;height:15px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;}
+.search-inp input{background:none;border:none;outline:none;font-size:13.5px;font-family:'Inter',sans-serif;color:var(--navy);width:100%;}
+.search-select{padding:10px 14px;background:#F4F9FA;border:1.5px solid rgba(11,123,123,0.12);border-radius:10px;font-size:13.5px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;min-width:150px;}
+.search-btn{padding:10px 22px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;border:none;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.filter-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.fchip{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid;font-family:'Inter',sans-serif;transition:all .15s;}
+.fchip.on{background:var(--teal-dk);color:white;border-color:var(--teal-dk);}
+.fchip.off{background:white;color:var(--muted);border-color:rgba(11,123,123,0.15);}
+
+/* GRID */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-hdr h3{font-size:15px;font-weight:700;color:var(--navy);}
+.section-hdr a{font-size:12.5px;font-weight:700;color:var(--teal-dk);cursor:pointer;text-decoration:none;}
+.advisors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+.adv-card{background:white;border-radius:14px;padding:18px;border:1px solid rgba(11,123,123,0.07);box-shadow:0 2px 8px rgba(6,85,85,0.05);cursor:pointer;transition:all .2s;}
+.adv-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(6,85,85,0.1);}
+.ac-top{display:flex;gap:12px;align-items:center;margin-bottom:12px;}
+.ac-av{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--teal-lt);flex-shrink:0;}
+.ac-av img{width:100%;height:100%;object-fit:cover;}
+.ac-name{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.ac-role{font-size:11.5px;color:var(--muted);margin-bottom:5px;}
+.ac-badges{display:flex;gap:4px;flex-wrap:wrap;}
+.ac-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;}
+.acb-g{background:rgba(26,122,74,0.1);color:var(--green);}
+.acb-gold{background:rgba(201,168,76,0.1);color:var(--gold-dk);}
+.acb-t{background:var(--teal-lt);color:var(--teal-dk);}
+.ac-score-row{display:flex;align-items:center;justify-content:space-between;background:#F4F9FA;border-radius:8px;padding:8px 12px;margin-bottom:10px;}
+.acsr-label{font-size:11px;color:var(--muted);}
+.acsr-val{font-size:15px;font-weight:800;font-family:'Playfair Display',serif;color:var(--teal-dk);}
+.ac-stats{display:flex;gap:0;border-top:1px solid rgba(11,123,123,0.06);padding-top:10px;margin-bottom:12px;}
+.acs{flex:1;text-align:center;border-right:1px solid rgba(11,123,123,0.06);}
+.acs:last-child{border-right:none;}
+.acs-num{font-size:13px;font-weight:800;color:var(--navy);}
+.acs-lbl{font-size:10px;color:var(--muted);}
+.ac-btn{width:100%;padding:9px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;border:none;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.ac-city{font-size:10.5px;color:var(--muted);margin-bottom:3px;}
+
+/* SAVED ADVISORS */
+.saved-list{display:flex;flex-direction:column;gap:10px;}
+.saved-item{background:white;border-radius:12px;padding:14px 16px;border:1px solid rgba(11,123,123,0.07);display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;}
+.saved-item:hover{border-color:rgba(11,123,123,0.2);box-shadow:0 3px 10px rgba(6,85,85,0.07);}
+.si-av{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid var(--teal-lt);flex-shrink:0;}
+.si-av img{width:100%;height:100%;object-fit:cover;}
+.si-name{font-size:13.5px;font-weight:700;color:var(--navy);}
+.si-role{font-size:11.5px;color:var(--muted);}
+.si-score{margin-left:auto;font-size:15px;font-weight:800;color:var(--teal-dk);font-family:'Playfair Display',serif;}
+.si-heart{font-size:16px;margin-left:8px;}
+
+/* BOTTOM NAV */
+.mobile-bottom-nav{display:none;}
+@media(max-width:768px){
+  .topnav .tn-search{display:none;}
+  .advisors-grid{grid-template-columns:1fr;}
+  .search-row{flex-direction:column;}
+  .mobile-bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;height:58px;background:var(--teal-dk);border-top:1px solid rgba(255,255,255,0.1);z-index:999;align-items:center;justify-content:space-around;}
+  .mbn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 10px;cursor:pointer;flex:1;}
+  .mbn-item.on{background:rgba(255,255,255,0.12);border-radius:10px;}
+  .mbn-item svg{width:20px;height:20px;stroke:rgba(255,255,255,0.6);fill:none;stroke-width:2;}
+  .mbn-item.on svg{stroke:white;}
+  .mbn-label{font-size:9.5px;font-weight:700;color:rgba(255,255,255,0.55);}
+  .mbn-item.on .mbn-label{color:white;}
+  .wrap{padding-bottom:72px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="tn-logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="tn-spacer"></div>
+  <div class="tn-search">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search advisors by name, city…">
+  </div>
+  <div class="tn-profile">
+    <div class="tn-av">R</div>
+    <div class="tn-name">Ramesh</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- WELCOME -->
+  <div class="welcome-banner">
+    <div class="wb-left">
+      <h2>👋 Welcome, Ramesh!</h2>
+      <p>Find verified insurance advisors near you. All profiles are IRDAI checked.</p>
+    </div>
+    <button class="wb-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-card">
+    <div class="sc-title">🔍 Find Your Advisor</div>
+    <div class="search-row">
+      <div class="search-inp">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Name, city, specialisation…">
+      </div>
+      <select class="search-select">
+        <option>All Specialisations</option>
+        <option>Life Insurance</option>
+        <option>Health Insurance</option>
+        <option>Mutual Funds</option>
+        <option>Real Estate</option>
+        <option>NRI Policies</option>
+      </select>
+      <select class="search-select">
+        <option>All Cities</option>
+        <option>Nellore</option>
+        <option>Hyderabad</option>
+        <option>Vijayawada</option>
+        <option>Chennai</option>
+        <option>Mumbai</option>
+      </select>
+      <button class="search-btn">Search</button>
+    </div>
+    <div class="filter-chips">
+      <button class="fchip on">All</button>
+      <button class="fchip off">👑 Gold Advisors</button>
+      <button class="fchip off">⭐ Top Rated</button>
+      <button class="fchip off">🏛️ IRDAI Verified</button>
+      <button class="fchip off">📍 Near Me</button>
+    </div>
+  </div>
+
+  <!-- ADVISORS -->
+  <div class="section-hdr">
+    <h3>🛡️ Verified Advisors Near You</h3>
+    <a href="#">View All 487 →</a>
+  </div>
+  <div class="advisors-grid">
+    <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+      <div class="ac-top">
+        <div class="ac-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face" alt=""></div>
+        <div><div class="ac-city">📍 Nellore, AP</div><div class="ac-name">Krishna Mohan</div><div class="ac-role">LIC Advisor · 14 yrs</div><div class="ac-badges"><span class="ac-badge acb-g">✓ Verified</span><span class="ac-badge acb-gold">👑 Gold</span><span class="ac-badge acb-t">🏛️ IRDAI</span></div></div>
+      </div>
+      <div class="ac-score-row"><span class="acsr-label">YVITY Score</span><span class="acsr-val">87/100</span><span>⭐⭐⭐⭐⭐</span></div>
+      <div class="ac-stats"><div class="acs"><div class="acs-num">50</div><div class="acs-lbl">Reviews</div></div><div class="acs"><div class="acs-num">32</div><div class="acs-lbl">Recs</div></div><div class="acs"><div class="acs-num">500+</div><div class="acs-lbl">Clients</div></div></div>
+      <button class="ac-btn">View Profile →</button>
+    </div>
+    <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+      <div class="ac-top">
+        <div class="ac-av"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face" alt=""></div>
+        <div><div class="ac-city">📍 Hyderabad, TS</div><div class="ac-name">Priya Sharma</div><div class="ac-role">Health Insurance · 9 yrs</div><div class="ac-badges"><span class="ac-badge acb-g">✓ Verified</span><span class="ac-badge acb-gold">👑 Gold</span></div></div>
+      </div>
+      <div class="ac-score-row"><span class="acsr-label">YVITY Score</span><span class="acsr-val">92/100</span><span>⭐⭐⭐⭐⭐</span></div>
+      <div class="ac-stats"><div class="acs"><div class="acs-num">68</div><div class="acs-lbl">Reviews</div></div><div class="acs"><div class="acs-num">41</div><div class="acs-lbl">Recs</div></div><div class="acs"><div class="acs-num">300+</div><div class="acs-lbl">Clients</div></div></div>
+      <button class="ac-btn">View Profile →</button>
+    </div>
+    <div class="adv-card" onclick="window.location.href='yvity-profile.html'">
+      <div class="ac-top">
+        <div class="ac-av"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face" alt=""></div>
+        <div><div class="ac-city">📍 Mumbai, MH</div><div class="ac-name">Vikram Patel</div><div class="ac-role">MDRT Advisor · 12 yrs</div><div class="ac-badges"><span class="ac-badge acb-g">✓ Verified</span><span class="ac-badge acb-gold">👑 Gold</span></div></div>
+      </div>
+      <div class="ac-score-row"><span class="acsr-label">YVITY Score</span><span class="acsr-val">88/100</span><span>⭐⭐⭐⭐⭐</span></div>
+      <div class="ac-stats"><div class="acs"><div class="acs-num">44</div><div class="acs-lbl">Reviews</div></div><div class="acs"><div class="acs-num">28</div><div class="acs-lbl">Recs</div></div><div class="acs"><div class="acs-num">700+</div><div class="acs-lbl">Clients</div></div></div>
+      <button class="ac-btn">View Profile →</button>
+    </div>
+  </div>
+
+  <!-- SAVED -->
+  <div class="section-hdr"><h3>❤️ Saved Advisors</h3><a href="#">Manage</a></div>
+  <div class="saved-list">
+    <div class="saved-item" onclick="window.location.href='yvity-profile.html'">
+      <div class="si-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face" alt=""></div>
+      <div><div class="si-name">Krishna Mohan</div><div class="si-role">LIC Advisor · Nellore</div></div>
+      <div class="si-score">87</div>
+      <div class="si-heart">❤️</div>
+    </div>
+    <div class="saved-item" onclick="window.location.href='yvity-profile.html'">
+      <div class="si-av"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face" alt=""></div>
+      <div><div class="si-name">Priya Sharma</div><div class="si-role">Health Insurance · Hyderabad</div></div>
+      <div class="si-score">92</div>
+      <div class="si-heart">❤️</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav">
+  <div class="mbn-item on"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="mbn-label">Home</span></div>
+  <div class="mbn-item" onclick="window.location.href='index.html#discover'"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="mbn-label">Search</span></div>
+  <div class="mbn-item"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="mbn-label">Saved</span></div>
+  <div class="mbn-item" onclick="window.location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10,17 15,12 10,7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span class="mbn-label">Logout</span></div>
+</nav>
+
+<script>
+document.querySelectorAll('.fchip').forEach(function(c){
+  c.addEventListener('click',function(){
+    document.querySelectorAll('.fchip').forEach(function(x){ x.className='fchip off'; });
+    c.className='fchip on';
+  });
+});
+</script>
+</body>
+</html>

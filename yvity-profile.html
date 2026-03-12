@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY – Public Profile View (P2 Mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal:        #0B7B7B;
+    --teal-dark:   #065555;
+    --teal-mid:    #0D9494;
+    --teal-light:  #E6F4F4;
+    --teal-soft:   #F0FAFA;
+    --white:       #FFFFFF;
+    --off-white:   #F8FAFA;
+    --grey-light:  #F2F4F4;
+    --grey-mid:    #D0D8D8;
+    --grey-text:   #6B8080;
+    --dark:        #1A2B2B;
+    --gold:        #B8860B;
+    --gold-light:  #FDF6E3;
+    --silver:      #607B7B;
+    --green:       #1A7A4A;
+    --green-light: #E8F5EE;
+    --shadow-sm:   0 2px 8px rgba(11,123,123,0.08);
+    --shadow-md:   0 4px 20px rgba(11,123,123,0.12);
+    --shadow-lg:   0 8px 40px rgba(11,123,123,0.16);
+    --radius:      16px;
+    --radius-sm:   10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ── DEVICE FRAME ── */
+  .device-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 16px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e8f4f4 0%, #f0fafa 50%, #e0eeee 100%);
+  }
+
+  .device-label {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .device-frame {
+    width: 390px;
+    background: var(--white);
+    border-radius: 40px;
+    box-shadow: 0 30px 80px rgba(6,85,85,0.2), 0 0 0 1px rgba(11,123,123,0.1);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Status bar */
+  .status-bar {
+    background: var(--teal-dark);
+    padding: 12px 24px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .status-bar .time {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+  }
+  .status-bar .icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .status-bar .icons span {
+    font-size: 11px;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* Top Nav */
+  .top-nav {
+    background: var(--teal-dark);
+    padding: 8px 20px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .top-nav .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: white;
+    letter-spacing: 1px;
+  }
+  .top-nav .logo span {
+    color: var(--teal-mid);
+    font-style: italic;
+  }
+  .top-nav .nav-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .top-nav .login-btn {
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── PROFILE SCROLL AREA ── */
+  .profile-scroll {
+    height: 780px;
+    overflow-y: auto;
+    background: var(--off-white);
+    scrollbar-width: none;
+  }
+  .profile-scroll::-webkit-scrollbar { display: none; }
+
+  /* ── PROFILE HEADER ── */
+  .profile-header {
+    background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal) 100%);
+    padding: 24px 20px 0;
+    position: relative;
+  }
+
+  .header-top {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #0D9494, #065555);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: white;
+    border: 3px solid rgba(255,255,255,0.3);
+    box-shadow: var(--shadow-md);
+  }
+  .verified-ring {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: var(--green);
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  .header-info { flex: 1; }
+  .advisor-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .advisor-title {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .badge-verified {
+    background: var(--green);
+    color: white;
+  }
+  .badge-founding {
+    background: var(--gold);
+    color: white;
+  }
+  .badge-gold {
+    background: rgba(184,134,11,0.2);
+    color: #FFD700;
+    border: 1px solid rgba(255,215,0,0.3);
+  }
+  .badge-irda {
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-size: 9px;
+  }
+
+  /* Meta info row */
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 0;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+  }
+  .meta-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+  }
+  .meta-label {
+    font-size: 9px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+  .meta-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,0.15);
+    align-self: center;
+  }
+
+  /* CTA Row */
+  .cta-row {
+    display: flex;
+    gap: 8px;
+    padding: 14px 0 0;
+  }
+  .btn-primary {
+    flex: 1;
+    background: white;
+    color: var(--teal-dark);
+    border: none;
+    border-radius: 12px;
+    padding: 11px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    letter-spacing: 0.3px;
+  }
+  .btn-secondary {
+    flex: 1;
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 11px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  /* ── TABS ── */
+  .tabs-wrapper {
+    background: white;
+    border-bottom: 1px solid var(--grey-mid);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .tabs {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 4px;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0;
+    padding: 12px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--grey-text);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  .tab.active {
+    color: var(--teal);
+    border-bottom-color: var(--teal);
+  }
+
+  /* ── CONTENT SECTIONS ── */
+  .content-area {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--teal-light);
+  }
+
+  /* About */
+  .about-text {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #3A4F4F;
+  }
+
+  /* YVITY Score */
+  .score-card {
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-md);
+  }
+  .score-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 3px solid rgba(255,255,255,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .score-number {
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+  }
+  .score-max {
+    font-size: 9px;
+    color: rgba(255,255,255,0.6);
+  }
+  .score-info { flex: 1; }
+  .score-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+  }
+  .score-bar-bg {
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .score-bar-fill {
+    height: 100%;
+    background: rgba(255,255,255,0.8);
+    border-radius: 10px;
+    width: 87%;
+  }
+  .score-sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* Journey card */
+  .journey-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--grey-light);
+  }
+  .journey-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .journey-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    margin-top: 4px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px var(--teal-light);
+  }
+  .journey-content {}
+  .journey-role {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .journey-company {
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 500;
+    margin: 1px 0;
+  }
+  .journey-period {
+    font-size: 10px;
+    color: var(--grey-text);
+  }
+
+  /* Services */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .service-chip {
+    background: var(--teal-soft);
+    border: 1px solid var(--teal-light);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--teal-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .service-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--teal);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .company-logos-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--grey-text);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .company-logos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .company-logo-chip {
+    background: var(--grey-light);
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--grey-text);
+  }
+
+  /* Achievements */
+  .achievements-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .achievement-card {
+    flex-shrink: 0;
+    width: 130px;
+    background: var(--teal-soft);
+    border: 1px solid var(--teal-light);
+    border-radius: 12px;
+    padding: 12px;
+  }
+  .achievement-icon {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .achievement-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+  .achievement-date {
+    font-size: 9px;
+    color: var(--grey-text);
+  }
+
+  /* Testimonials */
+  .testimonial-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .t-tab {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    border: 1px solid var(--grey-mid);
+    color: var(--grey-text);
+    cursor: pointer;
+  }
+  .t-tab.active {
+    background: var(--teal);
+    color: white;
+    border-color: var(--teal);
+  }
+  .testimonial-item {
+    background: var(--off-white);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--teal);
+  }
+  .testimonial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .testimonial-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .otp-badge {
+    background: var(--green-light);
+    color: var(--green);
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 4px;
+  }
+  .testimonial-stars {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .testimonial-text {
+    font-size: 12px;
+    color: #3A4F4F;
+    line-height: 1.6;
+  }
+  .testimonial-date {
+    font-size: 10px;
+    color: var(--grey-text);
+    margin-top: 6px;
+  }
+
+  /* Recommendation section */
+  .recommend-box {
+    background: var(--gold-light);
+    border: 1px solid rgba(184,134,11,0.2);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .recommend-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .recommend-info { flex: 1; }
+  .recommend-count {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--gold);
+  }
+  .recommend-label {
+    font-size: 11px;
+    color: #8B6914;
+    font-weight: 500;
+  }
+  .recommend-btn {
+    background: var(--gold);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* Footer */
+  .profile-footer {
+    background: var(--teal-dark);
+    padding: 16px 20px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: white;
+    margin-bottom: 4px;
+  }
+  .footer-tagline {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+  }
+
+  /* ── NOTES PANEL (Desktop only) ── */
+  @media (min-width: 900px) {
+    .device-wrapper {
+      gap: 40px;
+      align-items: flex-start;
+      padding: 40px;
+    }
+    .notes-panel {
+      width: 340px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 40px;
+    }
+  }
+  @media (max-width: 899px) {
+    .notes-panel { display: none; }
+    .device-wrapper { flex-direction: column; align-items: center; }
+  }
+
+  .notes-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--teal-dark);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--teal-light);
+  }
+  .note-section {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+    border-left: 3px solid var(--teal);
+  }
+  .note-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+  .note-item {
+    font-size: 12px;
+    color: #3A4F4F;
+    line-height: 1.6;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--grey-light);
+    display: flex;
+    gap: 6px;
+  }
+  .note-item:last-child { border-bottom: none; }
+  .note-item::before {
+    content: '→';
+    color: var(--teal);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .note-warning {
+    background: #FFF8E6;
+    border-left-color: var(--gold);
+  }
+  .note-warning .note-section-title { color: var(--gold); }
+  .note-warning .note-item::before { color: var(--gold); }
+
+/* ============================================================
+   YVITY RESPONSIVE — Mobile First (max-width: 768px)
+   ============================================================ */
+
+/* Viewport meta already in each file's <head> */
+
+/* ---- TOP NAV ---- */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 12px !important;
+    height: 50px !important;
+  }
+  .tn-logo {
+    width: auto !important;
+    font-size: 16px !important;
+    border-right: none !important;
+    padding: 0 !important;
+    flex: 1;
+  }
+  .tn-mid { display: none !important; }
+  .tn-right { gap: 6px !important; }
+  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
+  .tn-name { font-size: 12px !important; }
+  .tn-plan, .tn-role { display: none !important; }
+  .tn-btn span, .ph-right .btn span { display: none; }
+  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
+}
+
+/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .body-wrap { flex-direction: column !important; }
+}
+
+/* ---- BOTTOM NAV (mobile only) ---- */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 58px;
+    background: var(--teal-dk, #065555);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 64px;
+  }
+  .mbn-item.on { background: rgba(255,255,255,0.12); }
+  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
+  .mbn-item.on svg { stroke: white; }
+  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .mbn-item.on .mbn-label { color: white; }
+  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* push page content above bottom nav */
+  .main, .preview-area, body > .body-wrap > .main {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ---- ADMIN BOTTOM NAV — dark purple ---- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav.admin-nav {
+    background: #1E0A38 !important;
+    border-top-color: rgba(139,92,246,0.2) !important;
+  }
+  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
+  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
+  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
+  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
+  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
+}
+
+/* ---- MAIN CONTENT PADDING ---- */
+@media (max-width: 768px) {
+  .main { padding: 16px !important; }
+  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .page-hdr h1 { font-size: 18px !important; }
+  .ph-right { width: 100%; }
+  .ph-right .btn { flex: 1; justify-content: center; }
+}
+
+/* ---- GRIDS → SINGLE COLUMN ---- */
+@media (max-width: 768px) {
+  .main-grid,
+  .main-grid-3,
+  .detail-grid,
+  .detail-grid-3,
+  .home-grid,
+  .plan-cards,
+  .stats-grid,
+  .aa-grid,
+  .two-col,
+  .form-grid { 
+    grid-template-columns: 1fr !important; 
+  }
+  .preview-col,
+  .right-col,
+  .home-right,
+  .checklist-panel { 
+    position: static !important; 
+    width: 100% !important;
+  }
+}
+
+/* ---- CARDS ---- */
+@media (max-width: 768px) {
+  .form-card, .card, .usage-card, .score-widget,
+  .admin-actions, .advisor-hero { 
+    border-radius: 12px !important; 
+    padding: 16px !important; 
+  }
+}
+
+/* ---- HERO SECTIONS ---- */
+@media (max-width: 768px) {
+  /* Plan hero (D10) */
+  .plan-hero { 
+    flex-direction: column !important; 
+    padding: 18px !important; 
+    gap: 14px !important;
+  }
+  .ph-right-block { width: 100% !important; }
+  .ph-plan-name { font-size: 22px !important; }
+
+  /* Advisor hero (AD2) */
+  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
+  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
+  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
+
+  /* Profile header */
+  .prh-top { flex-direction: column !important; gap: 12px !important; }
+  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
+  .pss-right { flex-direction: column !important; gap: 6px !important; }
+  .pss-left { gap: 8px !important; }
+
+  /* Admin hero */
+  .advisor-hero { border-radius: 16px !important; }
+}
+
+/* ---- STATS GRID ---- */
+@media (max-width: 768px) {
+  .stats-grid { 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .stat-card { padding: 14px !important; }
+  .sc-val { font-size: 22px !important; }
+}
+
+/* ---- TABLES → CARD-STYLE ---- */
+@media (max-width: 768px) {
+  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
+  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+.mobile-table-cards { display: none; }
+
+/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
+@media (max-width: 768px) {
+  .prof-tabs, .detail-tabs { 
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .prof-tabs::-webkit-scrollbar,
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .ptab, .dtab { 
+    padding: 11px 14px !important; 
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ---- PREVIEW TOOLBAR (D11) ---- */
+@media (max-width: 768px) {
+  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
+  .pt-url { display: none !important; }
+  .pt-spacer { display: none !important; }
+  .preview-area { padding: 12px !important; }
+  .preview-frame { border-radius: 14px !important; }
+  /* hide checklist panel on mobile — show as collapsible below */
+  .checklist-panel { display: none !important; }
+}
+
+/* ---- PLAN COMPARISON (D10) ---- */
+@media (max-width: 768px) {
+  .plan-cards { gap: 10px !important; }
+  .pc-name { font-size: 14px !important; }
+  .pc-price { font-size: 20px !important; }
+}
+
+/* ---- LOGIN SPLIT (A1) ---- */
+@media (max-width: 768px) {
+  .login-wrap { flex-direction: column !important; min-height: auto !important; }
+  .login-left { display: none !important; }
+  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
+}
+
+/* ---- SIGNUP STEPS (A2) ---- */
+@media (max-width: 768px) {
+  .signup-wrap { flex-direction: column !important; }
+  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+  .signup-right { width: 100% !important; padding: 20px 16px !important; }
+  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
+}
+
+/* ---- DIRECTORY (P3) ---- */
+@media (max-width: 768px) {
+  .dir-layout { flex-direction: column !important; }
+  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
+  .dir-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---- LANDING PAGE (P1) ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 40px 20px 30px !important; }
+  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
+  .hero-subtitle { font-size: 14px !important; }
+  .hero-btns { flex-direction: column !important; gap: 10px !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  .pricing-grid { grid-template-columns: 1fr !important; }
+  .lp-nav-links { display: none !important; }
+}
+
+/* ---- SCORE PAGE (D9) ---- */
+@media (max-width: 768px) {
+  .score-hero { padding: 20px !important; }
+  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
+}
+
+/* ---- GALLERY GRID (D6) ---- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ---- MISC UTILITIES ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  br.hide-mobile { display: none !important; }
+  .text-center-mobile { text-align: center !important; }
+}
+.show-mobile { display: none; }
+
+</style>
+</head>
+<body>
+
+<div class="device-wrapper">
+
+  <!-- ── DEVICE ── -->
+  <div>
+    <div class="device-label">Screen P2 — Public Profile View (Mobile)</div>
+    <div class="device-frame">
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <span class="time">9:41</span>
+        <div class="icons">
+          <span>●●●●</span>
+          <span>WiFi</span>
+          <span>🔋</span>
+        </div>
+      </div>
+
+      <!-- Top Nav -->
+      <div class="top-nav">
+        <div class="logo">YV<span>ITY</span></div>
+        <div class="nav-right">
+          <div class="login-btn">Login</div>
+        </div>
+      </div>
+
+      <!-- Profile Scroll -->
+      <div class="profile-scroll">
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+          <div class="header-top">
+            <div class="avatar-wrap">
+              <div class="avatar">RK</div>
+              <div class="verified-ring">✓</div>
+            </div>
+            <div class="header-info">
+              <div class="advisor-name">Rajesh Kumar</div>
+              <div class="advisor-title">Senior Insurance Advisor · LIC of India</div>
+              <div class="badges-row">
+                <span class="badge badge-verified">✓ Identity Verified</span>
+                <span class="badge badge-founding">★ Founding Advisor 2026</span>
+              </div>
+              <div class="badges-row" style="margin-top:4px;">
+                <span class="badge badge-gold">◆ Gold Member</span>
+                <span class="badge badge-irda">IRDA: LI-123456789</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Meta Stats -->
+          <div class="meta-row">
+            <div class="meta-item">
+              <span class="meta-value">12</span>
+              <span class="meta-label">Years Exp.</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-value">1,240</span>
+              <span class="meta-label">Profile Views</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-value">48</span>
+              <span class="meta-label">Testimonials</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-value">32</span>
+              <span class="meta-label">Recommendations</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-value">87</span>
+              <span class="meta-label">YVITY Score</span>
+            </div>
+          </div>
+
+          <!-- CTAs -->
+          <div class="cta-row">
+            <button class="btn-primary">📞 Contact Advisor</button>
+            <button class="btn-secondary">↗ Share Profile</button>
+          </div>
+
+          <!-- Bottom curve -->
+          <div style="height:16px; background:var(--off-white); border-radius:20px 20px 0 0; margin-top:14px;"></div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-wrapper">
+          <div class="tabs">
+            <div class="tab active">Home</div>
+            <div class="tab">Journey</div>
+            <div class="tab">Education</div>
+            <div class="tab">Services</div>
+            <div class="tab">Achievements</div>
+            <div class="tab">Gallery</div>
+            <div class="tab">Testimonials</div>
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+
+          <!-- YVITY Score Card -->
+          <div class="score-card">
+            <div class="score-circle">
+              <div class="score-number">87</div>
+              <div class="score-max">/100</div>
+            </div>
+            <div class="score-info">
+              <div class="score-label">YVITY Credibility Score</div>
+              <div class="score-bar-bg">
+                <div class="score-bar-fill"></div>
+              </div>
+              <div class="score-sub">Identity · License · Testimonials · Recommendations</div>
+            </div>
+          </div>
+
+          <!-- About -->
+          <div class="card">
+            <div class="card-title">About</div>
+            <div class="about-text">
+              Insurance advisor with 12+ years of experience helping families and businesses secure their financial future. Specialised in life insurance planning, NRI policies, and claims assistance across Hyderabad.
+            </div>
+          </div>
+
+          <!-- Journey Snapshot -->
+          <div class="card">
+            <div class="card-title">Professional Journey</div>
+            <div class="journey-item">
+              <div class="journey-dot"></div>
+              <div class="journey-content">
+                <div class="journey-role">Senior Insurance Advisor</div>
+                <div class="journey-company">LIC of India</div>
+                <div class="journey-period">2018 – Present · Hyderabad</div>
+              </div>
+            </div>
+            <div class="journey-item">
+              <div class="journey-dot" style="background:var(--grey-mid); box-shadow:none;"></div>
+              <div class="journey-content">
+                <div class="journey-role">Insurance Advisor</div>
+                <div class="journey-company">HDFC Life Insurance</div>
+                <div class="journey-period">2014 – 2018 · Hyderabad</div>
+              </div>
+            </div>
+            <div class="journey-item">
+              <div class="journey-dot" style="background:var(--grey-mid); box-shadow:none;"></div>
+              <div class="journey-content">
+                <div class="journey-role">Junior Advisor</div>
+                <div class="journey-company">Max Life Insurance</div>
+                <div class="journey-period">2012 – 2014 · Secunderabad</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services -->
+          <div class="card">
+            <div class="card-title">Services</div>
+            <div class="services-grid">
+              <div class="service-chip"><div class="service-icon">🛡️</div>Life Insurance</div>
+              <div class="service-chip"><div class="service-icon">🏥</div>Health Insurance</div>
+              <div class="service-chip"><div class="service-icon">✈️</div>NRI Policies</div>
+              <div class="service-chip"><div class="service-icon">📋</div>Claims Assist</div>
+            </div>
+            <div class="company-logos-label">Associated Companies</div>
+            <div class="company-logos">
+              <div class="company-logo-chip">LIC</div>
+              <div class="company-logo-chip">HDFC Life</div>
+              <div class="company-logo-chip">Max Life</div>
+              <div class="company-logo-chip">Star Health</div>
+            </div>
+          </div>
+
+          <!-- Achievements -->
+          <div class="card">
+            <div class="card-title">Achievements</div>
+            <div class="achievements-scroll">
+              <div class="achievement-card">
+                <div class="achievement-icon">🏆</div>
+                <div class="achievement-title">MDRT Member 2024</div>
+                <div class="achievement-date">March 2024</div>
+              </div>
+              <div class="achievement-card">
+                <div class="achievement-icon">⭐</div>
+                <div class="achievement-title">LIC Chairman's Club</div>
+                <div class="achievement-date">January 2023</div>
+              </div>
+              <div class="achievement-card">
+                <div class="achievement-icon">🎖️</div>
+                <div class="achievement-title">Top Advisor – South Zone</div>
+                <div class="achievement-date">December 2022</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations (Gold) -->
+          <div class="card">
+            <div class="card-title">Recommendations</div>
+            <div class="recommend-box">
+              <div class="recommend-icon">👍</div>
+              <div class="recommend-info">
+                <div class="recommend-count">32 people</div>
+                <div class="recommend-label">recommended this advisor</div>
+              </div>
+              <button class="recommend-btn">Recommend</button>
+            </div>
+            <div style="font-size:10px; color:var(--grey-text); margin-top:8px; text-align:center;">
+              Login required to recommend
+            </div>
+          </div>
+
+          <!-- Testimonials Preview -->
+          <div class="card">
+            <div class="card-title">Testimonials <span style="font-size:10px; color:var(--grey-text); font-weight:400; text-transform:none; letter-spacing:0;">48 verified</span></div>
+            <div class="testimonial-tabs">
+              <div class="t-tab active">Text</div>
+              <div class="t-tab">🎙 Audio</div>
+              <div class="t-tab">🎥 Video</div>
+            </div>
+            <div class="testimonial-item">
+              <div class="testimonial-header">
+                <div class="testimonial-name">
+                  Priya Sharma
+                  <span class="otp-badge">OTP Verified</span>
+                </div>
+                <div class="testimonial-stars">★★★★★</div>
+              </div>
+              <div class="testimonial-text">Rajesh garu helped our family get the right life insurance policy. His knowledge about NRI policies is exceptional. Highly trust him.</div>
+              <div class="testimonial-date">12 Jan 2026</div>
+            </div>
+            <div class="testimonial-item">
+              <div class="testimonial-header">
+                <div class="testimonial-name">
+                  Anil Reddy
+                  <span class="otp-badge">OTP Verified</span>
+                </div>
+                <div class="testimonial-stars">★★★★★</div>
+              </div>
+              <div class="testimonial-text">Assisted my father's claim within 3 weeks. Very professional and always responsive. YVITY verified profile gave me confidence to contact him.</div>
+              <div class="testimonial-date">05 Jan 2026</div>
+            </div>
+            <div style="text-align:center; padding:10px 0 4px;">
+              <span style="font-size:11px; font-weight:600; color:var(--teal); cursor:pointer;">View all 48 testimonials →</span>
+            </div>
+          </div>
+
+          <!-- Advisor Since & Last Active -->
+          <div class="card" style="display:flex; gap:0; padding:0; overflow:hidden;">
+            <div style="flex:1; padding:14px; text-align:center; border-right:1px solid var(--grey-light);">
+              <div style="font-size:18px; font-weight:800; color:var(--teal);">2012</div>
+              <div style="font-size:10px; color:var(--grey-text); margin-top:2px;">Advisor Since</div>
+            </div>
+            <div style="flex:1; padding:14px; text-align:center; border-right:1px solid var(--grey-light);">
+              <div style="font-size:18px; font-weight:800; color:var(--dark);">2d ago</div>
+              <div style="font-size:10px; color:var(--grey-text); margin-top:2px;">Last Active</div>
+            </div>
+            <div style="flex:1; padding:14px; text-align:center;">
+              <div style="font-size:18px; font-weight:800; color:var(--dark);">Jan 2026</div>
+              <div style="font-size:10px; color:var(--grey-text); margin-top:2px;">Profile Updated</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="profile-footer">
+          <div class="footer-logo">YVITY</div>
+          <div class="footer-tagline">YOUR VISIBILITY. YOUR CREDIBILITY.</div>
+        </div>
+
+      </div><!-- end profile-scroll -->
+    </div><!-- end device-frame -->
+  </div>
+
+  <!-- ── NOTES PANEL ── -->
+  <div class="notes-panel">
+    <div class="notes-title">P2 — Design Notes</div>
+
+    <div class="note-section">
+      <div class="note-section-title">Profile Header</div>
+      <div class="note-item">Avatar: 80×80px, rounded 20px, teal gradient bg</div>
+      <div class="note-item">Verified ring: green circle bottom-right of avatar</div>
+      <div class="note-item">Name: DM Serif Display, 20px, white</div>
+      <div class="note-item">Badges: max 3 visible — Verified, Founding, Gold</div>
+      <div class="note-item">IRDA tag: subtle, small, below other badges</div>
+    </div>
+
+    <div class="note-section">
+      <div class="note-section-title">Meta Stats Row</div>
+      <div class="note-item">5 stats: Years, Views, Testimonials, Recommendations, YVITY Score</div>
+      <div class="note-item">Recommendations shown only if Gold plan</div>
+      <div class="note-item">Dividers: 1px rgba white 0.15</div>
+      <div class="note-item">Values: 15px bold white / Labels: 9px muted</div>
+    </div>
+
+    <div class="note-section">
+      <div class="note-section-title">CTA Buttons</div>
+      <div class="note-item">Primary: Contact Advisor — white bg, teal text</div>
+      <div class="note-item">Secondary: Share Profile — transparent, white border</div>
+      <div class="note-item">Max 2 CTAs in header only</div>
+    </div>
+
+    <div class="note-section">
+      <div class="note-section-title">YVITY Score Card</div>
+      <div class="note-item">Full width teal gradient card</div>
+      <div class="note-item">Circular score display: number / 100</div>
+      <div class="note-item">Progress bar fills based on actual score %</div>
+      <div class="note-item">Sub-labels show what contributes to score</div>
+    </div>
+
+    <div class="note-section note-warning">
+      <div class="note-section-title">Plan-Gated Features</div>
+      <div class="note-item">Recommendations section: Gold only</div>
+      <div class="note-item">Video Testimonials tab: Gold only</div>
+      <div class="note-item">Audio Testimonials tab: Silver + Gold</div>
+      <div class="note-item">Intro Video: Gold only (on Home tab)</div>
+      <div class="note-item">QR Code: Silver + Gold (in dashboard, not public)</div>
+    </div>
+
+    <div class="note-section">
+      <div class="note-section-title">Testimonials</div>
+      <div class="note-item">OTP Verified badge on each testimonial (green)</div>
+      <div class="note-item">Advisor CANNOT delete testimonials</div>
+      <div class="note-item">Locked after 7 days — no edit</div>
+      <div class="note-item">3 format tabs: Text / Audio / Video</div>
+    </div>
+
+    <div class="note-section">
+      <div class="note-section-title">General Rules</div>
+      <div class="note-item">No login required to view this page</div>
+      <div class="note-item">Login required to Recommend</div>
+      <div class="note-item">Share Profile: free for all, no count shown</div>
+      <div class="note-item">Sticky tabs on scroll</div>
+      <div class="note-item">Mobile-first: 390px base width</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// YVITY Navigation — auto-link all nav buttons
+(function(){
+  var map = {
+    // Auth
+    'login':            'YVITY_A1_Login.html',
+    'sign in':          'YVITY_A1_Login.html',
+    'log in':           'YVITY_A1_Login.html',
+    'register':         'YVITY_A2_Signup.html',
+    'sign up':          'YVITY_A2_Signup.html',
+    'get started':      'YVITY_A2_Signup.html',
+    'join yvity':       'YVITY_A2_Signup.html',
+    'create profile':   'YVITY_A2_Signup.html',
+    'start free':       'YVITY_A2_Signup.html',
+    'claim your profile':'YVITY_A2_Signup.html',
+    'join free':        'YVITY_A2_Signup.html',
+
+    // Public pages
+    'pricing':          'YVITY_P4_Pricing.html',
+    'view pricing':     'YVITY_P4_Pricing.html',
+    'see pricing':      'YVITY_P4_Pricing.html',
+    'directory':        'YVITY_P3_Directory.html',
+    'find advisors':    'YVITY_P3_Directory.html',
+    'browse advisors':  'YVITY_P3_Directory.html',
+
+    // Dashboard
+    'dashboard':        'YVITY_D1_Dashboard.html',
+    'go to dashboard':  'YVITY_D1_Dashboard.html',
+    'edit profile':     'YVITY_D2_EditProfile.html',
+    'edit as admin':    'YVITY_AD2_AdvisorDetail.html',
+    'services':         'YVITY_D3_Services.html',
+    'professional journey': 'YVITY_D4_Journey.html',
+    'achievements':     'YVITY_D5_Achievements.html',
+    'gallery':          'YVITY_D6_Gallery.html',
+    'testimonials':     'YVITY_D7_Testimonials.html',
+    'recommendations':  'YVITY_D8_Recommendations.html',
+    'yvity score':      'YVITY_D9_Score.html',
+    'score details':    'YVITY_D9_Score.html',
+    'subscription':     'YVITY_D10_Subscription.html',
+    'billing':          'YVITY_D10_Subscription.html',
+    'profile preview':  'YVITY_D11_ProfilePreview.html',
+    'view profile':     'YVITY_P2_Public_Profile.html',
+    'view live profile':'YVITY_P2_Public_Profile.html',
+    'open live':        'YVITY_P2_Public_Profile.html',
+    'settings':         'YVITY_D10_Subscription.html',
+
+    // Admin
+    'admin':            'YVITY_AD1_AdminDashboard.html',
+    'all advisors':     'YVITY_AD2_AdvisorDetail.html',
+    'view all':         'YVITY_AD2_AdvisorDetail.html',
+
+    // Upgrade
+    'upgrade to gold':  'YVITY_D10_Subscription.html',
+    'upgrade':          'YVITY_D10_Subscription.html',
+  };
+
+  function navigate(el) {
+    var txt = el.innerText.trim().toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/,' ');
+    // exact match
+    if (map[txt]) { window.location.href = map[txt]; return; }
+    // partial match
+    for (var key in map) {
+      if (txt.indexOf(key) !== -1 || key.indexOf(txt) !== -1) {
+        if (txt.length > 2) { window.location.href = map[key]; return; }
+      }
+    }
+  }
+
+  // Fix all <a href="#"> links
+  document.querySelectorAll('a[href="#"], a[href=""]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      navigate(a);
+    });
+  });
+
+  // Fix sidebar items (div.sb-item)
+  document.querySelectorAll('.sb-item').forEach(function(el){
+    el.addEventListener('click', function(){ navigate(el); });
+  });
+
+  // Fix top nav items
+  document.querySelectorAll('.tn-btn, .topnav button').forEach(function(el){
+    el.addEventListener('click', function(){ navigate(el); });
+  });
+
+  // Fix mobile bottom nav items
+  document.querySelectorAll('.mbn-item').forEach(function(el){
+    el.addEventListener('click', function(){ navigate(el); });
+  });
+
+  // Fix all buttons with onclick=""
+  document.querySelectorAll('button[onclick=""], button:not([onclick])').forEach(function(el){
+    el.addEventListener('click', function(){ navigate(el); });
+  });
+
+  // Fix profile nav tabs
+  document.querySelectorAll('.ptab, .dtab').forEach(function(el){
+    el.addEventListener('click', function(){
+      document.querySelectorAll('.ptab, .dtab').forEach(function(t){ t.classList.remove('on'); });
+      el.classList.add('on');
+    });
+  });
+
+  // Back button
+  document.querySelectorAll('.back-row').forEach(function(el){
+    el.addEventListener('click', function(){ window.history.back(); });
+  });
+
+})();
+</script>
+
+</body>
+</html>

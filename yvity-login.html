@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY — Login / Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;--navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;--muted:#5A7080;}
+body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;display:flex;}
+.left-panel{width:420px;background:linear-gradient(160deg,#042E2E,#065555,#0A6E6E);display:flex;flex-direction:column;justify-content:center;padding:48px 40px;position:relative;overflow:hidden;flex-shrink:0;}
+.lp-ring{position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,0.05);}
+.lp-ring1{top:-100px;right:-80px;}
+.lp-ring2{bottom:-100px;left:-60px;}
+.lp-logo{font-size:22px;font-weight:800;letter-spacing:2px;color:white;margin-bottom:32px;display:flex;align-items:center;gap:8px;}
+.lp-logo svg{width:20px;height:20px;stroke:white;fill:none;stroke-width:2.5;}
+.lp-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:white;margin-bottom:10px;line-height:1.2;}
+.lp-sub{font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:32px;line-height:1.7;}
+.lp-stats{display:flex;flex-direction:column;gap:10px;}
+.lp-stat{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(255,255,255,0.07);border-radius:10px;}
+.lps-ico{font-size:18px;}
+.lps-val{font-size:16px;font-weight:800;color:white;}
+.lps-lbl{font-size:11px;color:rgba(255,255,255,0.45);}
+
+.right-panel{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;background:#F4F8FA;}
+.form-box{background:white;border-radius:20px;padding:36px;width:100%;max-width:420px;box-shadow:0 4px 24px rgba(6,85,85,0.08);}
+.fb-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:20px;}
+.fb-back svg{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;}
+
+/* Role selector */
+.role-selector{display:flex;gap:10px;margin-bottom:24px;}
+.role-btn{flex:1;padding:14px 10px;border-radius:12px;border:2px solid rgba(11,123,123,0.15);background:white;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;transition:all .2s;}
+.role-btn.on{border-color:var(--teal-dk);background:var(--teal-lt);}
+.rb-ico{font-size:24px;margin-bottom:6px;}
+.rb-label{font-size:12.5px;font-weight:700;color:var(--navy);}
+.rb-sub{font-size:10.5px;color:var(--muted);}
+
+/* Tabs */
+.auth-tabs{display:flex;background:#F0F6F6;border-radius:10px;padding:4px;margin-bottom:22px;}
+.auth-tab{flex:1;padding:8px;border-radius:8px;font-size:12.5px;font-weight:600;text-align:center;cursor:pointer;font-family:'Inter',sans-serif;border:none;background:none;color:var(--muted);transition:all .15s;}
+.auth-tab.on{background:white;color:var(--teal-dk);font-weight:700;box-shadow:0 1px 4px rgba(6,85,85,0.1);}
+
+.form-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.form-sub{font-size:13px;color:var(--muted);margin-bottom:22px;}
+
+.inp-wrap{margin-bottom:14px;}
+.inp-label{font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:5px;display:block;}
+.inp{width:100%;padding:12px 14px;border:1.5px solid rgba(11,123,123,0.15);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;transition:all .2s;background:#FAFCFC;}
+.inp:focus{border-color:var(--teal);background:white;}
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+.otp-boxes{display:flex;gap:8px;margin-top:6px;}
+.otp-box{flex:1;height:52px;border:1.5px solid rgba(11,123,123,0.15);border-radius:10px;font-size:20px;font-weight:700;text-align:center;font-family:'Inter',sans-serif;outline:none;background:#FAFCFC;}
+.otp-box:focus{border-color:var(--teal);background:white;}
+.otp-box.filled{border-color:var(--teal);background:var(--teal-lt);color:var(--teal-dk);}
+
+.submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:6px;margin-bottom:14px;}
+.submit-btn.gold{background:linear-gradient(135deg,#B8860B,#C9A84C);}
+.form-switch{text-align:center;font-size:13px;color:var(--muted);}
+.form-switch a{color:var(--teal-dk);font-weight:700;cursor:pointer;text-decoration:none;}
+
+.step-indicator{display:flex;gap:6px;margin-bottom:20px;}
+.si-dot{height:4px;border-radius:4px;background:#E0ECF0;flex:1;transition:all .3s;}
+.si-dot.done{background:var(--teal-dk);}
+.si-dot.active{background:var(--teal);}
+
+.select-inp{width:100%;padding:12px 14px;border:1.5px solid rgba(11,123,123,0.15);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;background:#FAFCFC;appearance:none;}
+
+/* screen management */
+.screen{display:none;}
+.screen.active{display:block;}
+
+@media(max-width:768px){
+  body{flex-direction:column;}
+  .left-panel{display:none;}
+  .right-panel{padding:24px 16px;align-items:flex-start;padding-top:40px;}
+  .form-box{box-shadow:none;padding:24px 16px;background:transparent;}
+}
+</style>
+</head>
+<body>
+
+<div class="left-panel">
+  <div class="lp-ring lp-ring1"></div><div class="lp-ring lp-ring2"></div>
+  <div class="lp-logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="lp-title">Your Visibility.<br>Your Credibility.</div>
+  <div class="lp-sub">India's Professional Credibility Platform for Insurance Advisors and beyond.</div>
+  <div class="lp-stats">
+    <div class="lp-stat"><div class="lps-ico">👥</div><div><div class="lps-val">487</div><div class="lps-lbl">Verified Advisors</div></div></div>
+    <div class="lp-stat"><div class="lps-ico">🏛️</div><div><div class="lps-val">100%</div><div class="lps-lbl">IRDAI Verified</div></div></div>
+    <div class="lp-stat"><div class="lps-ico">⭐</div><div><div class="lps-val">4.9/5</div><div class="lps-lbl">Average Rating</div></div></div>
+    <div class="lp-stat"><div class="lps-ico">🌟</div><div><div class="lps-val">Founding</div><div class="lps-lbl">Advisor Badge Available</div></div></div>
+  </div>
+</div>
+
+<div class="right-panel">
+  <div class="form-box">
+
+    <!-- SCREEN 0: Role selector -->
+    <div class="screen active" id="screen-role">
+      <div class="fb-back" onclick="window.location.href='index.html'">
+        <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg> Back to Home
+      </div>
+      <div class="form-title">Welcome to YVITY</div>
+      <div class="form-sub">Who are you? Select your role to continue.</div>
+      <div class="role-selector">
+        <div class="role-btn on" id="role-advisor" onclick="selectRole('advisor')">
+          <div class="rb-ico">🛡️</div>
+          <div class="rb-label">Advisor</div>
+          <div class="rb-sub">Insurance, MF, RE</div>
+        </div>
+        <div class="role-btn" id="role-customer" onclick="selectRole('customer')">
+          <div class="rb-ico">👤</div>
+          <div class="rb-label">Customer</div>
+          <div class="rb-sub">Find advisors</div>
+        </div>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab on" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Register Free</button>
+      </div>
+      <!-- LOGIN FORM -->
+      <div id="login-form">
+        <div class="inp-wrap">
+          <label class="inp-label">Mobile Number</label>
+          <input class="inp" id="mobile-inp" type="tel" placeholder="Enter your 10-digit mobile number" maxlength="10">
+        </div>
+        <button class="submit-btn" onclick="sendOTP()">Send OTP →</button>
+      </div>
+      <!-- SIGNUP FORM (hidden initially) -->
+      <div id="signup-form" style="display:none;">
+        <div class="inp-row">
+          <div class="inp-wrap"><label class="inp-label">First Name</label><input class="inp" placeholder="Krishna"></div>
+          <div class="inp-wrap"><label class="inp-label">Last Name</label><input class="inp" placeholder="Mohan"></div>
+        </div>
+        <div class="inp-wrap"><label class="inp-label">Mobile Number</label><input class="inp" type="tel" placeholder="10-digit mobile" maxlength="10"></div>
+        <div class="inp-wrap"><label class="inp-label">Email ID</label><input class="inp" type="email" placeholder="yourname@gmail.com"></div>
+        <div class="inp-wrap"><label class="inp-label">City</label><input class="inp" placeholder="Nellore"></div>
+        <div class="inp-wrap">
+          <label class="inp-label">Profession</label>
+          <select class="select-inp">
+            <option>Insurance Advisor</option>
+            <option>Mutual Fund Advisor</option>
+            <option>Real Estate Agent</option>
+            <option>Student</option>
+            <option>Employee</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <button class="submit-btn" onclick="doSignup()">Create My Profile →</button>
+      </div>
+      <div class="form-switch" id="form-switch-text">
+        New to YVITY? <a onclick="switchTab('signup')">Register Free →</a>
+      </div>
+    </div>
+
+    <!-- SCREEN 1: OTP -->
+    <div class="screen" id="screen-otp">
+      <div class="step-indicator">
+        <div class="si-dot done"></div>
+        <div class="si-dot active"></div>
+        <div class="si-dot"></div>
+      </div>
+      <div class="form-title">Enter OTP</div>
+      <div class="form-sub" id="otp-sub">OTP sent to your mobile number</div>
+      <div class="inp-wrap">
+        <label class="inp-label">6-digit OTP</label>
+        <div class="otp-boxes">
+          <input class="otp-box" maxlength="1" type="text">
+          <input class="otp-box" maxlength="1" type="text">
+          <input class="otp-box" maxlength="1" type="text">
+          <input class="otp-box" maxlength="1" type="text">
+          <input class="otp-box" maxlength="1" type="text">
+          <input class="otp-box" maxlength="1" type="text">
+        </div>
+      </div>
+      <button class="submit-btn" onclick="verifyOTP()">Verify & Continue →</button>
+      <div class="form-switch"><a onclick="showScreen('screen-role')">← Change number</a></div>
+    </div>
+
+    <!-- SCREEN 2: Success → redirect -->
+    <div class="screen" id="screen-success">
+      <div style="text-align:center;padding:20px 0;">
+        <div style="font-size:56px;margin-bottom:16px;">✅</div>
+        <div class="form-title" style="text-align:center;">Welcome to YVITY!</div>
+        <div class="form-sub" style="text-align:center;margin-bottom:24px;">Taking you to your dashboard…</div>
+        <div style="width:100%;height:4px;background:#E0ECF0;border-radius:4px;overflow:hidden;">
+          <div id="progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#065555,#0B7B7B);border-radius:4px;transition:width 1.5s ease;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var currentRole = 'advisor';
+var currentTab  = 'login';
+
+// Read URL params
+var params = new URLSearchParams(window.location.search);
+if(params.get('role') === 'customer'){ selectRole('customer'); }
+if(window.location.hash === '#signup'){ switchTab('signup'); }
+
+function selectRole(role){
+  currentRole = role;
+  document.getElementById('role-advisor').className  = 'role-btn' + (role==='advisor' ? ' on' : '');
+  document.getElementById('role-customer').className = 'role-btn' + (role==='customer' ? ' on' : '');
+}
+
+function switchTab(tab){
+  currentTab = tab;
+  document.getElementById('tab-login').className  = 'auth-tab' + (tab==='login' ? ' on' : '');
+  document.getElementById('tab-signup').className = 'auth-tab' + (tab==='signup' ? ' on' : '');
+  document.getElementById('login-form').style.display  = tab==='login'  ? 'block' : 'none';
+  document.getElementById('signup-form').style.display = tab==='signup' ? 'block' : 'none';
+  document.getElementById('form-switch-text').innerHTML = tab==='login'
+    ? 'New to YVITY? <a onclick="switchTab(\'signup\')">Register Free →</a>'
+    : 'Already have account? <a onclick="switchTab(\'login\')">Login</a>';
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
+
+function sendOTP(){
+  var mob = document.getElementById('mobile-inp').value.trim();
+  document.getElementById('otp-sub').innerText = 'OTP sent to +91 ' + (mob || 'your number') + ' (demo — enter any 6 digits)';
+  showScreen('screen-otp');
+  // auto-fill OTP boxes for demo
+  setTimeout(function(){
+    document.querySelectorAll('.otp-box').forEach(function(b,i){
+      b.value = i+1; b.classList.add('filled');
+    });
+  }, 600);
+}
+
+function doSignup(){
+  showScreen('screen-otp');
+  setTimeout(function(){
+    document.querySelectorAll('.otp-box').forEach(function(b,i){
+      b.value = i+1; b.classList.add('filled');
+    });
+  }, 600);
+}
+
+function verifyOTP(){
+  showScreen('screen-success');
+  // animate progress bar then redirect
+  setTimeout(function(){
+    document.getElementById('progress-bar').style.width = '100%';
+  }, 100);
+  setTimeout(function(){
+    if(currentRole === 'customer'){
+      window.location.href = 'yvity-customer.html';
+    } else {
+      window.location.href = 'YVITY_D1_Dashboard.html';
+    }
+  }, 1800);
+}
+
+// OTP box auto-advance
+document.querySelectorAll('.otp-box').forEach(function(box, idx, boxes){
+  box.addEventListener('input', function(){
+    box.classList.add('filled');
+    if(idx < boxes.length - 1) boxes[idx+1].focus();
+    var all = true;
+    boxes.forEach(function(b){ if(!b.value) all=false; });
+    if(all) setTimeout(verifyOTP, 400);
+  });
+});
+
+// Enter key
+document.querySelectorAll('.inp').forEach(function(inp){
+  inp.addEventListener('keydown', function(e){
+    if(e.key==='Enter') sendOTP();
+  });
+});
+</script>
+</body>
+</html>
