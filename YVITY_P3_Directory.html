@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY – Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --teal:#0B7B7B; --teal-dk:#065555; --teal-lt:#E6F4F4;
+  --navy:#0D2B3E; --green:#1A7A4A; --gold:#C9A84C;
+  --bg:#b2ced8; --border:rgba(11,123,123,0.12); --muted:#5A7080;
+}
+body { font-family:'Inter',sans-serif; background:var(--bg); background-image:radial-gradient(ellipse 80% 60% at 10% 20%,rgba(255,255,255,0.45) 0%,transparent 55%),radial-gradient(ellipse 60% 70% at 90% 80%,rgba(6,85,85,0.14) 0%,transparent 55%); min-height:100vh; }
+
+/* NAV */
+.nav { background:var(--teal-dk); padding:0 48px; height:56px; display:flex; align-items:center; gap:0; box-shadow:0 2px 12px rgba(6,85,85,0.3); position:sticky; top:0; z-index:100; }
+.logo { display:flex; align-items:center; gap:8px; color:white; font-size:20px; font-weight:800; letter-spacing:1.5px; margin-right:48px; }
+.logo svg { width:20px; height:20px; stroke:white; fill:none; stroke-width:2.5; }
+.nav-links { display:flex; gap:32px; flex:1; }
+.nl { color:rgba(255,255,255,0.82); font-size:14px; cursor:pointer; }
+.nl:hover { color:white; }
+.nav-right { display:flex; align-items:center; gap:12px; }
+.nr { color:rgba(255,255,255,0.82); font-size:14px; cursor:pointer; }
+.nr-sep { color:rgba(255,255,255,0.3); }
+.nav-icon svg { width:20px; height:20px; stroke:rgba(255,255,255,0.7); fill:none; stroke-width:1.8; cursor:pointer; }
+
+/* PAGE */
+.page { max-width:1100px; margin:0 auto; padding:32px 24px 60px; }
+
+/* HERO BAND */
+.dir-hero { background:rgba(255,255,255,0.96); border-radius:20px; padding:32px 36px; margin-bottom:24px; box-shadow:0 4px 20px rgba(6,85,85,0.1); border:1px solid rgba(11,123,123,0.08); }
+.dh-top { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:22px; gap:24px; }
+.dh-left h1 { font-family:'Playfair Display',serif; font-size:30px; font-weight:800; color:var(--navy); margin-bottom:5px; }
+.dh-left p { font-size:14px; color:var(--muted); line-height:1.6; max-width:460px; }
+.dh-stats { display:flex; gap:24px; flex-shrink:0; }
+.dst { text-align:center; }
+.dst-val { font-family:'Playfair Display',serif; font-size:22px; font-weight:800; color:var(--navy); }
+.dst-lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+
+/* Search bar */
+.search-bar { display:flex; gap:10px; margin-bottom:16px; }
+.search-input-wrap { flex:1; position:relative; display:flex; align-items:center; }
+.search-input-wrap svg { position:absolute; left:14px; width:18px; height:18px; stroke:#8AAABB; fill:none; stroke-width:2; }
+.search-input { width:100%; padding:12px 14px 12px 42px; border:1.5px solid rgba(11,123,123,0.18); border-radius:12px; font-size:14px; font-family:'Inter',sans-serif; color:var(--navy); outline:none; transition:border .2s; background:#FAFCFC; }
+.search-input:focus { border-color:var(--teal); background:white; }
+.search-btn { display:flex; align-items:center; gap:8px; background:linear-gradient(135deg,var(--teal-dk),var(--teal)); color:white; border:none; border-radius:12px; padding:12px 26px; font-size:14px; font-weight:700; font-family:'Inter',sans-serif; cursor:pointer; box-shadow:0 4px 14px rgba(11,123,123,0.3); white-space:nowrap; }
+.search-btn svg { width:16px; height:16px; stroke:white; fill:none; stroke-width:2; }
+
+/* Filter chips */
+.filter-chips { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.fc-label { font-size:12px; font-weight:600; color:var(--muted); }
+.fc { display:inline-flex; align-items:center; gap:5px; padding:6px 14px; border-radius:20px; font-size:12.5px; font-weight:500; cursor:pointer; border:1.5px solid transparent; font-family:'Inter',sans-serif; transition:all .15s; }
+.fc.on { background:linear-gradient(135deg,var(--teal-dk),var(--teal)); color:white; box-shadow:0 2px 8px rgba(11,123,123,0.25); }
+.fc.off { background:white; color:var(--muted); border-color:rgba(11,123,123,0.15); }
+.fc.off:hover { border-color:var(--teal); color:var(--teal-dk); }
+.fc svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; }
+
+/* LAYOUT */
+.dir-layout { display:grid; grid-template-columns:260px 1fr; gap:20px; align-items:start; }
+
+/* SIDEBAR FILTERS */
+.filter-panel { background:rgba(255,255,255,0.96); border-radius:16px; padding:22px; box-shadow:0 2px 12px rgba(6,85,85,0.08); border:1px solid rgba(11,123,123,0.08); position:sticky; top:76px; }
+.fp-title { font-size:14px; font-weight:700; color:var(--navy); margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+.fp-clear { font-size:11.5px; color:var(--teal); cursor:pointer; font-weight:600; }
+.fp-section { margin-bottom:20px; }
+.fp-section:last-child { margin-bottom:0; }
+.fp-sec-title { font-size:11.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; }
+.fp-option { display:flex; align-items:center; gap:9px; padding:7px 0; cursor:pointer; }
+.fp-check { width:16px; height:16px; border-radius:4px; border:1.5px solid rgba(11,123,123,0.25); display:flex; align-items:center; justify-content:center; flex-shrink:0; background:white; }
+.fp-check.on { background:var(--teal); border-color:var(--teal); }
+.fp-check.on::after { content:'✓'; font-size:10px; color:white; font-weight:800; }
+.fp-opt-label { font-size:13px; color:var(--navy); }
+.fp-opt-count { margin-left:auto; font-size:11px; color:var(--muted); background:#F0F5F5; padding:1px 7px; border-radius:8px; }
+.fp-divider { height:1px; background:rgba(11,123,123,0.07); margin:4px 0 14px; }
+
+/* Score filter slider visual */
+.score-range { display:flex; flex-direction:column; gap:8px; }
+.sr-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); }
+.sr-bar { height:5px; background:#E0EEEE; border-radius:10px; position:relative; }
+.sr-fill { position:absolute; left:20%; right:10%; top:0; height:100%; background:linear-gradient(90deg,var(--teal-dk),var(--teal)); border-radius:10px; }
+.sr-handles { position:relative; height:0; }
+.sr-h { position:absolute; width:14px; height:14px; background:white; border:2.5px solid var(--teal); border-radius:50%; top:-9px; transform:translateX(-50%); cursor:pointer; box-shadow:0 2px 6px rgba(11,123,123,0.2); }
+.sr-range-lbl { display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:var(--navy); }
+
+/* RESULTS AREA */
+.results-area { }
+.results-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.rh-left { font-size:13.5px; color:var(--navy); font-weight:500; }
+.rh-left strong { font-weight:700; }
+.rh-right { display:flex; align-items:center; gap:10px; }
+.sort-label { font-size:12.5px; color:var(--muted); }
+.sort-select { border:1.5px solid rgba(11,123,123,0.15); border-radius:8px; padding:6px 10px; font-size:12.5px; color:var(--navy); background:white; font-family:'Inter',sans-serif; outline:none; cursor:pointer; }
+.view-toggle { display:flex; gap:3px; }
+.vt-btn { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:1.5px solid transparent; }
+.vt-btn.on { background:var(--teal-lt); border-color:rgba(11,123,123,0.2); }
+.vt-btn svg { width:15px; height:15px; stroke:var(--teal); fill:none; stroke-width:2; }
+.vt-btn.off { background:white; border-color:rgba(11,123,123,0.12); }
+.vt-btn.off svg { stroke:var(--muted); }
+
+/* ADVISOR CARDS GRID */
+.cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+.adv-card {
+  background:rgba(255,255,255,0.97); border-radius:16px;
+  border:1px solid rgba(11,123,123,0.09);
+  box-shadow:0 2px 10px rgba(6,85,85,0.07);
+  overflow:hidden; transition:all .2s; cursor:pointer;
+}
+.adv-card:hover { transform:translateY(-3px); box-shadow:0 10px 28px rgba(6,85,85,0.13); border-color:rgba(11,123,123,0.18); }
+.adv-card.featured-card { border-color:rgba(11,123,123,0.22); box-shadow:0 4px 16px rgba(11,123,123,0.1); }
+
+.ac-top-bar { height:4px; }
+.ac-top-bar.gold-bar { background:linear-gradient(90deg,#B8860B,#DAA520); }
+.ac-top-bar.silver-bar { background:linear-gradient(90deg,#9AAABB,#B8C8D0); }
+.ac-top-bar.teal-bar { background:linear-gradient(90deg,var(--teal-dk),var(--teal)); }
+
+.ac-body { padding:18px 18px 14px; }
+.ac-row1 { display:flex; gap:14px; margin-bottom:14px; align-items:flex-start; }
+.ac-av { position:relative; width:62px; height:62px; flex-shrink:0; }
+.ac-av-img { width:62px; height:62px; border-radius:50%; overflow:hidden; border:2.5px solid var(--teal); }
+.ac-av-img img { width:100%; height:100%; object-fit:cover; }
+.ac-av-tick { position:absolute; bottom:0; right:0; width:18px; height:18px; background:var(--green); border:2px solid white; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.ac-av-tick svg { width:9px; height:9px; stroke:white; fill:none; stroke-width:3; }
+.ac-info { flex:1; }
+.ac-name { font-size:15px; font-weight:700; color:var(--navy); display:flex; align-items:center; gap:6px; margin-bottom:2px; }
+.ac-name-tick { width:15px; height:15px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.ac-name-tick svg { width:8px; height:8px; stroke:white; fill:none; stroke-width:3; }
+.ac-title { font-size:12px; color:var(--muted); margin-bottom:5px; }
+.ac-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.ac-meta-item { display:flex; align-items:center; gap:4px; font-size:11.5px; color:#3A5060; font-weight:500; }
+.ac-meta-item svg { width:12px; height:12px; stroke:var(--teal); fill:none; stroke-width:2; }
+.ac-score-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; flex-shrink:0; }
+.ac-score-ring { width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--teal-dk),var(--teal)); display:flex; align-items:center; justify-content:center; box-shadow:0 3px 10px rgba(11,123,123,0.25); }
+.ac-score-num { font-size:14px; font-weight:800; color:white; }
+.ac-score-lbl { font-size:9.5px; color:var(--muted); text-align:center; }
+
+.ac-tags { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px; }
+.ac-tag { font-size:10.5px; font-weight:500; background:var(--teal-lt); color:var(--teal-dk); padding:3px 9px; border-radius:10px; }
+.ac-tag-gold { background:rgba(201,168,76,0.12); color:#8B6914; }
+
+.ac-stats { display:flex; gap:0; background:#F4F9FA; border-radius:10px; overflow:hidden; border:1px solid rgba(11,123,123,0.08); margin-bottom:14px; }
+.acs { flex:1; padding:8px 0; text-align:center; border-right:1px solid rgba(11,123,123,0.07); }
+.acs:last-child { border-right:none; }
+.acs-val { font-size:14px; font-weight:700; color:var(--navy); }
+.acs-lbl { font-size:9.5px; color:var(--muted); margin-top:1px; }
+
+.ac-footer { display:flex; align-items:center; gap:8px; }
+.ac-view-btn { flex:1; background:linear-gradient(135deg,var(--teal-dk),var(--teal)); color:white; border:none; border-radius:10px; padding:9px; font-size:12.5px; font-weight:700; font-family:'Inter',sans-serif; cursor:pointer; box-shadow:0 3px 10px rgba(11,123,123,0.25); transition:all .2s; }
+.ac-view-btn:hover { box-shadow:0 6px 18px rgba(11,123,123,0.35); }
+.ac-contact-btn { width:36px; height:36px; background:white; border:1.5px solid rgba(11,123,123,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; flex-shrink:0; }
+.ac-contact-btn:hover { border-color:var(--teal); background:var(--teal-lt); }
+.ac-contact-btn svg { width:15px; height:15px; stroke:var(--teal); fill:none; stroke-width:2; }
+
+/* LOGIN OVERLAY card */
+.login-overlay-card {
+  background:rgba(255,255,255,0.97); border-radius:16px;
+  border:1.5px dashed rgba(11,123,123,0.25);
+  padding:28px 22px; text-align:center;
+  box-shadow:0 2px 10px rgba(6,85,85,0.06);
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+}
+.loc-lock { font-size:36px; }
+.loc-title { font-size:15px; font-weight:700; color:var(--navy); }
+.loc-sub { font-size:12.5px; color:var(--muted); line-height:1.6; max-width:220px; }
+.loc-btn { background:linear-gradient(135deg,var(--teal-dk),var(--teal)); color:white; border:none; border-radius:10px; padding:10px 24px; font-size:13px; font-weight:700; font-family:'Inter',sans-serif; cursor:pointer; }
+.loc-count { font-size:11px; color:var(--muted); }
+
+/* PAGINATION */
+.pagination { display:flex; justify-content:center; align-items:center; gap:6px; margin-top:28px; }
+.pg-btn { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:13.5px; font-weight:600; cursor:pointer; border:1.5px solid transparent; transition:all .15s; }
+.pg-btn.on { background:linear-gradient(135deg,var(--teal-dk),var(--teal)); color:white; box-shadow:0 3px 10px rgba(11,123,123,0.25); }
+.pg-btn.off { background:white; color:var(--muted); border-color:rgba(11,123,123,0.14); }
+.pg-btn.off:hover { border-color:var(--teal); color:var(--teal-dk); }
+.pg-arrow { width:36px; height:36px; border-radius:9px; background:white; border:1.5px solid rgba(11,123,123,0.14); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.pg-arrow svg { width:15px; height:15px; stroke:var(--muted); fill:none; stroke-width:2.5; }
+.pg-dots { color:var(--muted); font-size:14px; padding:0 4px; }
+
+/* ============================================================
+   YVITY RESPONSIVE — Mobile First (max-width: 768px)
+   ============================================================ */
+
+/* Viewport meta already in each file's <head> */
+
+/* ---- TOP NAV ---- */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 12px !important;
+    height: 50px !important;
+  }
+  .tn-logo {
+    width: auto !important;
+    font-size: 16px !important;
+    border-right: none !important;
+    padding: 0 !important;
+    flex: 1;
+  }
+  .tn-mid { display: none !important; }
+  .tn-right { gap: 6px !important; }
+  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
+  .tn-name { font-size: 12px !important; }
+  .tn-plan, .tn-role { display: none !important; }
+  .tn-btn span, .ph-right .btn span { display: none; }
+  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
+}
+
+/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .body-wrap { flex-direction: column !important; }
+}
+
+/* ---- BOTTOM NAV (mobile only) ---- */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 58px;
+    background: var(--teal-dk, #065555);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 64px;
+  }
+  .mbn-item.on { background: rgba(255,255,255,0.12); }
+  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
+  .mbn-item.on svg { stroke: white; }
+  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .mbn-item.on .mbn-label { color: white; }
+  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* push page content above bottom nav */
+  .main, .preview-area, body > .body-wrap > .main {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ---- ADMIN BOTTOM NAV — dark purple ---- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav.admin-nav {
+    background: #1E0A38 !important;
+    border-top-color: rgba(139,92,246,0.2) !important;
+  }
+  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
+  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
+  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
+  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
+  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
+}
+
+/* ---- MAIN CONTENT PADDING ---- */
+@media (max-width: 768px) {
+  .main { padding: 16px !important; }
+  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .page-hdr h1 { font-size: 18px !important; }
+  .ph-right { width: 100%; }
+  .ph-right .btn { flex: 1; justify-content: center; }
+}
+
+/* ---- GRIDS → SINGLE COLUMN ---- */
+@media (max-width: 768px) {
+  .main-grid,
+  .main-grid-3,
+  .detail-grid,
+  .detail-grid-3,
+  .home-grid,
+  .plan-cards,
+  .stats-grid,
+  .aa-grid,
+  .two-col,
+  .form-grid { 
+    grid-template-columns: 1fr !important; 
+  }
+  .preview-col,
+  .right-col,
+  .home-right,
+  .checklist-panel { 
+    position: static !important; 
+    width: 100% !important;
+  }
+}
+
+/* ---- CARDS ---- */
+@media (max-width: 768px) {
+  .form-card, .card, .usage-card, .score-widget,
+  .admin-actions, .advisor-hero { 
+    border-radius: 12px !important; 
+    padding: 16px !important; 
+  }
+}
+
+/* ---- HERO SECTIONS ---- */
+@media (max-width: 768px) {
+  /* Plan hero (D10) */
+  .plan-hero { 
+    flex-direction: column !important; 
+    padding: 18px !important; 
+    gap: 14px !important;
+  }
+  .ph-right-block { width: 100% !important; }
+  .ph-plan-name { font-size: 22px !important; }
+
+  /* Advisor hero (AD2) */
+  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
+  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
+  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
+
+  /* Profile header */
+  .prh-top { flex-direction: column !important; gap: 12px !important; }
+  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
+  .pss-right { flex-direction: column !important; gap: 6px !important; }
+  .pss-left { gap: 8px !important; }
+
+  /* Admin hero */
+  .advisor-hero { border-radius: 16px !important; }
+}
+
+/* ---- STATS GRID ---- */
+@media (max-width: 768px) {
+  .stats-grid { 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .stat-card { padding: 14px !important; }
+  .sc-val { font-size: 22px !important; }
+}
+
+/* ---- TABLES → CARD-STYLE ---- */
+@media (max-width: 768px) {
+  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
+  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+.mobile-table-cards { display: none; }
+
+/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
+@media (max-width: 768px) {
+  .prof-tabs, .detail-tabs { 
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .prof-tabs::-webkit-scrollbar,
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .ptab, .dtab { 
+    padding: 11px 14px !important; 
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ---- PREVIEW TOOLBAR (D11) ---- */
+@media (max-width: 768px) {
+  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
+  .pt-url { display: none !important; }
+  .pt-spacer { display: none !important; }
+  .preview-area { padding: 12px !important; }
+  .preview-frame { border-radius: 14px !important; }
+  /* hide checklist panel on mobile — show as collapsible below */
+  .checklist-panel { display: none !important; }
+}
+
+/* ---- PLAN COMPARISON (D10) ---- */
+@media (max-width: 768px) {
+  .plan-cards { gap: 10px !important; }
+  .pc-name { font-size: 14px !important; }
+  .pc-price { font-size: 20px !important; }
+}
+
+/* ---- LOGIN SPLIT (A1) ---- */
+@media (max-width: 768px) {
+  .login-wrap { flex-direction: column !important; min-height: auto !important; }
+  .login-left { display: none !important; }
+  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
+}
+
+/* ---- SIGNUP STEPS (A2) ---- */
+@media (max-width: 768px) {
+  .signup-wrap { flex-direction: column !important; }
+  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+  .signup-right { width: 100% !important; padding: 20px 16px !important; }
+  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
+}
+
+/* ---- DIRECTORY (P3) ---- */
+@media (max-width: 768px) {
+  .dir-layout { flex-direction: column !important; }
+  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
+  .dir-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---- LANDING PAGE (P1) ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 40px 20px 30px !important; }
+  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
+  .hero-subtitle { font-size: 14px !important; }
+  .hero-btns { flex-direction: column !important; gap: 10px !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  .pricing-grid { grid-template-columns: 1fr !important; }
+  .lp-nav-links { display: none !important; }
+}
+
+/* ---- SCORE PAGE (D9) ---- */
+@media (max-width: 768px) {
+  .score-hero { padding: 20px !important; }
+  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
+}
+
+/* ---- GALLERY GRID (D6) ---- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ---- MISC UTILITIES ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  br.hide-mobile { display: none !important; }
+  .text-center-mobile { text-align: center !important; }
+}
+.show-mobile { display: none; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="nav-links">
+    <span class="nl">For Advisors</span>
+    <span class="nl">Examples</span>
+    <span class="nl">Pricing</span>
+  </div>
+  <div class="nav-right">
+    <span class="nr">Register</span>
+    <span class="nr-sep">|</span>
+    <span class="nr">Login</span>
+    <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO BAND -->
+  <div class="dir-hero">
+    <div class="dh-top">
+      <div class="dh-left">
+        <h1>Discover Verified Advisors</h1>
+        <p>Browse India's most credible insurance professionals — all IRDAI verified, OTP reviewed, and YVITY Score rated.</p>
+      </div>
+      <div class="dh-stats">
+        <div class="dst"><div class="dst-val">500+</div><div class="dst-lbl">Verified Advisors</div></div>
+        <div class="dst"><div class="dst-val">15K+</div><div class="dst-lbl">Testimonials</div></div>
+        <div class="dst"><div class="dst-val">28</div><div class="dst-lbl">Cities</div></div>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" type="text" placeholder="Search by name, city, company, or service…">
+      </div>
+      <button class="search-btn">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </button>
+    </div>
+
+    <!-- Filter chips -->
+    <div class="filter-chips">
+      <span class="fc-label">Category:</span>
+      <button class="fc on"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Insurance</button>
+      <button class="fc off"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Real Estate</button>
+      <button class="fc off"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Finance</button>
+      <button class="fc off"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Consulting</button>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="dir-layout">
+
+    <!-- FILTER PANEL -->
+    <div class="filter-panel">
+      <div class="fp-title">Filters <span class="fp-clear">Clear All</span></div>
+
+      <div class="fp-section">
+        <div class="fp-sec-title">Location</div>
+        <div class="fp-option"><div class="fp-check on"></div><span class="fp-opt-label">All India</span><span class="fp-opt-count">500+</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">Nellore</span><span class="fp-opt-count">18</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">Hyderabad</span><span class="fp-opt-count">64</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">Mumbai</span><span class="fp-opt-count">91</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">Bengaluru</span><span class="fp-opt-count">57</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">Chennai</span><span class="fp-opt-count">43</span></div>
+      </div>
+
+      <div class="fp-divider"></div>
+
+      <div class="fp-section">
+        <div class="fp-sec-title">Company</div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">LIC</span><span class="fp-opt-count">142</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">HDFC Life</span><span class="fp-opt-count">89</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">TATA AIA</span><span class="fp-opt-count">54</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">ICICI Prudential</span><span class="fp-opt-count">71</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">SBI Life</span><span class="fp-opt-count">48</span></div>
+      </div>
+
+      <div class="fp-divider"></div>
+
+      <div class="fp-section">
+        <div class="fp-sec-title">Experience</div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">0–5 Years</span><span class="fp-opt-count">128</span></div>
+        <div class="fp-option"><div class="fp-check on"></div><span class="fp-opt-label">5–10 Years</span><span class="fp-opt-count">196</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">10+ Years</span><span class="fp-opt-count">176</span></div>
+      </div>
+
+      <div class="fp-divider"></div>
+
+      <div class="fp-section">
+        <div class="fp-sec-title">YVITY Score</div>
+        <div class="score-range">
+          <div class="sr-bar"><div class="sr-fill"></div><div class="sr-handles"><div class="sr-h" style="left:20%"></div><div class="sr-h" style="left:90%"></div></div></div>
+          <div class="sr-range-lbl"><span>60</span><span>100</span></div>
+        </div>
+      </div>
+
+      <div class="fp-divider"></div>
+
+      <div class="fp-section">
+        <div class="fp-sec-title">Plan</div>
+        <div class="fp-option"><div class="fp-check on"></div><span class="fp-opt-label">Gold Members</span><span class="fp-opt-count">89</span></div>
+        <div class="fp-option"><div class="fp-check on"></div><span class="fp-opt-label">Silver Members</span><span class="fp-opt-count">214</span></div>
+        <div class="fp-option"><div class="fp-check"></div><span class="fp-opt-label">Free</span><span class="fp-opt-count">197</span></div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-area">
+
+      <!-- Results Header -->
+      <div class="results-header">
+        <div class="rh-left">Showing <strong>303 advisors</strong> · Sorted by YVITY Score</div>
+        <div class="rh-right">
+          <span class="sort-label">Sort by:</span>
+          <select class="sort-select">
+            <option>YVITY Score (Highest)</option>
+            <option>Most Reviews</option>
+            <option>Most Recent</option>
+            <option>Experience</option>
+          </select>
+          <div class="view-toggle">
+            <div class="vt-btn on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+            <div class="vt-btn off"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- Card 1 — Gold (Krishna Mohan) -->
+        <div class="adv-card featured-card">
+          <div class="ac-top-bar gold-bar"></div>
+          <div class="ac-body">
+            <div class="ac-row1">
+              <div class="ac-av">
+                <div class="ac-av-img"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&h=120&fit=crop&crop=face" alt=""></div>
+                <div class="ac-av-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
+              </div>
+              <div class="ac-info">
+                <div class="ac-name">Krishna Mohan <div class="ac-name-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+                <div class="ac-title">Life & Health Insurance Advisor</div>
+                <div class="ac-meta">
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nellore, AP</div>
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>6 yrs exp</div>
+                </div>
+              </div>
+              <div class="ac-score-wrap">
+                <div class="ac-score-ring"><span class="ac-score-num">87</span></div>
+                <div class="ac-score-lbl">YVITY Score</div>
+              </div>
+            </div>
+            <div class="ac-tags">
+              <span class="ac-tag">Life Insurance</span>
+              <span class="ac-tag">Health</span>
+              <span class="ac-tag">NRI Plans</span>
+              <span class="ac-tag ac-tag-gold">★ Founding Advisor</span>
+            </div>
+            <div class="ac-stats">
+              <div class="acs"><div class="acs-val">50</div><div class="acs-lbl">Reviews</div></div>
+              <div class="acs"><div class="acs-val">32</div><div class="acs-lbl">Recomm.</div></div>
+              <div class="acs"><div class="acs-val">200+</div><div class="acs-lbl">Policies</div></div>
+              <div class="acs"><div class="acs-val">1.2K</div><div class="acs-lbl">Views</div></div>
+            </div>
+            <div class="ac-footer">
+              <button class="ac-view-btn">View Full Profile →</button>
+              <div class="ac-contact-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 — Gold -->
+        <div class="adv-card featured-card">
+          <div class="ac-top-bar gold-bar"></div>
+          <div class="ac-body">
+            <div class="ac-row1">
+              <div class="ac-av">
+                <div class="ac-av-img"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&h=120&fit=crop&crop=face" alt=""></div>
+                <div class="ac-av-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
+              </div>
+              <div class="ac-info">
+                <div class="ac-name">Vikram Patel <div class="ac-name-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+                <div class="ac-title">Senior Insurance Advisor · MDRT</div>
+                <div class="ac-meta">
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Mumbai, MH</div>
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>13 yrs exp</div>
+                </div>
+              </div>
+              <div class="ac-score-wrap">
+                <div class="ac-score-ring"><span class="ac-score-num">92</span></div>
+                <div class="ac-score-lbl">YVITY Score</div>
+              </div>
+            </div>
+            <div class="ac-tags">
+              <span class="ac-tag">MDRT Member</span>
+              <span class="ac-tag">Claims Expert</span>
+              <span class="ac-tag ac-tag-gold">★ Founding Advisor</span>
+            </div>
+            <div class="ac-stats">
+              <div class="acs"><div class="acs-val">78</div><div class="acs-lbl">Reviews</div></div>
+              <div class="acs"><div class="acs-val">54</div><div class="acs-lbl">Recomm.</div></div>
+              <div class="acs"><div class="acs-val">500+</div><div class="acs-lbl">Policies</div></div>
+              <div class="acs"><div class="acs-val">3.4K</div><div class="acs-lbl">Views</div></div>
+            </div>
+            <div class="ac-footer">
+              <button class="ac-view-btn">View Full Profile →</button>
+              <div class="ac-contact-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 — Silver -->
+        <div class="adv-card">
+          <div class="ac-top-bar silver-bar"></div>
+          <div class="ac-body">
+            <div class="ac-row1">
+              <div class="ac-av">
+                <div class="ac-av-img"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=120&h=120&fit=crop&crop=face" alt=""></div>
+                <div class="ac-av-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
+              </div>
+              <div class="ac-info">
+                <div class="ac-name">Priya Nair <div class="ac-name-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+                <div class="ac-title">Health Insurance Specialist</div>
+                <div class="ac-meta">
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Bengaluru, KA</div>
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>8 yrs exp</div>
+                </div>
+              </div>
+              <div class="ac-score-wrap">
+                <div class="ac-score-ring"><span class="ac-score-num">85</span></div>
+                <div class="ac-score-lbl">YVITY Score</div>
+              </div>
+            </div>
+            <div class="ac-tags">
+              <span class="ac-tag">Health Plans</span>
+              <span class="ac-tag">Family Cover</span>
+              <span class="ac-tag">Critical Illness</span>
+            </div>
+            <div class="ac-stats">
+              <div class="acs"><div class="acs-val">42</div><div class="acs-lbl">Reviews</div></div>
+              <div class="acs"><div class="acs-val">—</div><div class="acs-lbl">Recomm.</div></div>
+              <div class="acs"><div class="acs-val">300+</div><div class="acs-lbl">Policies</div></div>
+              <div class="acs"><div class="acs-val">890</div><div class="acs-lbl">Views</div></div>
+            </div>
+            <div class="ac-footer">
+              <button class="ac-view-btn">View Full Profile →</button>
+              <div class="ac-contact-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 — Silver -->
+        <div class="adv-card">
+          <div class="ac-top-bar silver-bar"></div>
+          <div class="ac-body">
+            <div class="ac-row1">
+              <div class="ac-av">
+                <div class="ac-av-img"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&crop=face" alt=""></div>
+                <div class="ac-av-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
+              </div>
+              <div class="ac-info">
+                <div class="ac-name">Rajesh Kumar <div class="ac-name-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+                <div class="ac-title">Life Insurance Advisor</div>
+                <div class="ac-meta">
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Hyderabad, TS</div>
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>7 yrs exp</div>
+                </div>
+              </div>
+              <div class="ac-score-wrap">
+                <div class="ac-score-ring"><span class="ac-score-num">81</span></div>
+                <div class="ac-score-lbl">YVITY Score</div>
+              </div>
+            </div>
+            <div class="ac-tags">
+              <span class="ac-tag">Term Plans</span>
+              <span class="ac-tag">ULIPs</span>
+              <span class="ac-tag">Retirement</span>
+            </div>
+            <div class="ac-stats">
+              <div class="acs"><div class="acs-val">35</div><div class="acs-lbl">Reviews</div></div>
+              <div class="acs"><div class="acs-val">—</div><div class="acs-lbl">Recomm.</div></div>
+              <div class="acs"><div class="acs-val">250+</div><div class="acs-lbl">Policies</div></div>
+              <div class="acs"><div class="acs-val">640</div><div class="acs-lbl">Views</div></div>
+            </div>
+            <div class="ac-footer">
+              <button class="ac-view-btn">View Full Profile →</button>
+              <div class="ac-contact-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 — Teal (Free) -->
+        <div class="adv-card">
+          <div class="ac-top-bar teal-bar"></div>
+          <div class="ac-body">
+            <div class="ac-row1">
+              <div class="ac-av">
+                <div class="ac-av-img"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&crop=face" alt=""></div>
+                <div class="ac-av-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
+              </div>
+              <div class="ac-info">
+                <div class="ac-name">Suresh Reddy <div class="ac-name-tick"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+                <div class="ac-title">Insurance & Wealth Advisor</div>
+                <div class="ac-meta">
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Chennai, TN</div>
+                  <div class="ac-meta-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>5 yrs exp</div>
+                </div>
+              </div>
+              <div class="ac-score-wrap">
+                <div class="ac-score-ring"><span class="ac-score-num">74</span></div>
+                <div class="ac-score-lbl">YVITY Score</div>
+              </div>
+            </div>
+            <div class="ac-tags">
+              <span class="ac-tag">Life Insurance</span>
+              <span class="ac-tag">Wealth Planning</span>
+            </div>
+            <div class="ac-stats">
+              <div class="acs"><div class="acs-val">18</div><div class="acs-lbl">Reviews</div></div>
+              <div class="acs"><div class="acs-val">—</div><div class="acs-lbl">Recomm.</div></div>
+              <div class="acs"><div class="acs-val">120+</div><div class="acs-lbl">Policies</div></div>
+              <div class="acs"><div class="acs-val">310</div><div class="acs-lbl">Views</div></div>
+            </div>
+            <div class="ac-footer">
+              <button class="ac-view-btn">View Full Profile →</button>
+              <div class="ac-contact-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login required card -->
+        <div class="login-overlay-card">
+          <div class="loc-lock">🔒</div>
+          <div class="loc-title">Login to See More Advisors</div>
+          <div class="loc-sub">Create a free account to browse all 303 verified advisors and view full profiles.</div>
+          <button class="loc-btn">Login / Register Free</button>
+          <div class="loc-count">298 more advisors available</div>
+        </div>
+
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <div class="pg-arrow"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></div>
+        <div class="pg-btn on">1</div>
+        <div class="pg-btn off">2</div>
+        <div class="pg-btn off">3</div>
+        <div class="pg-dots">···</div>
+        <div class="pg-btn off">12</div>
+        <div class="pg-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

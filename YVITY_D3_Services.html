@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY – Services Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;
+  --navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;--gold-dk:#B8860B;
+  --bg:#EEF4F7;--muted:#5A7080;--text:#1A3040;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+
+/* NAV */
+.topnav{background:var(--teal-dk);height:54px;display:flex;align-items:center;padding:0 20px 0 0;box-shadow:0 2px 10px rgba(6,85,85,0.25);position:sticky;top:0;z-index:200;}
+.tn-logo{width:220px;display:flex;align-items:center;gap:8px;color:white;font-size:18px;font-weight:800;letter-spacing:1.5px;padding:0 20px;border-right:1px solid rgba(255,255,255,0.1);flex-shrink:0;}
+.tn-logo svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.5;}
+.tn-mid{flex:1;padding:0 24px;}
+.tn-breadcrumb{display:flex;align-items:center;gap:8px;font-size:13.5px;}
+.tb-item{color:rgba(255,255,255,0.55);cursor:pointer;}
+.tb-sep{color:rgba(255,255,255,0.25);}
+.tb-active{color:white;font-weight:600;}
+.tn-right{display:flex;align-items:center;gap:12px;}
+.tn-icon{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.tn-icon svg{width:17px;height:17px;stroke:rgba(255,255,255,0.8);fill:none;stroke-width:2;}
+.tn-profile{display:flex;align-items:center;gap:9px;cursor:pointer;padding:4px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);}
+.tn-av{width:30px;height:30px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.3);}
+.tn-av img{width:100%;height:100%;object-fit:cover;}
+.tn-name{font-size:13px;font-weight:700;color:white;}
+.tn-plan{font-size:10px;color:rgba(255,255,255,0.55);}
+
+/* BODY */
+.body-wrap{display:flex;flex:1;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:white;border-right:1px solid rgba(11,123,123,0.08);display:flex;flex-direction:column;min-height:calc(100vh - 54px);position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;flex-shrink:0;}
+.sb-section{padding:16px 12px 8px;}
+.sb-sec-title{font-size:10.5px;font-weight:700;color:#9AAABB;text-transform:uppercase;letter-spacing:0.6px;padding:0 8px;margin-bottom:6px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:2px;}
+.sb-item:hover{background:#F0F6F6;}
+.sb-item.on{background:var(--teal-lt);border:1px solid rgba(11,123,123,0.12);}
+.sb-item svg{width:16px;height:16px;stroke:#9AAABB;fill:none;stroke-width:2;flex-shrink:0;}
+.sb-item.on svg{stroke:var(--teal-dk);}
+.sb-item span{font-size:13px;font-weight:500;color:#6A8090;}
+.sb-item.on span{font-weight:700;color:var(--teal-dk);}
+.sb-divider{height:1px;background:rgba(11,123,123,0.07);margin:8px 12px;}
+
+/* MAIN */
+.main{flex:1;padding:28px;overflow-x:hidden;}
+
+/* Page header */
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.ph-left h1{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:3px;}
+.ph-left p{font-size:13px;color:var(--muted);}
+.ph-right{display:flex;gap:10px;}
+.btn{display:flex;align-items:center;gap:7px;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;border:none;}
+.btn-outline{background:white;color:var(--teal-dk);border:1.5px solid rgba(11,123,123,0.2);}
+.btn-primary{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;box-shadow:0 3px 10px rgba(11,123,123,0.25);}
+.btn-primary:hover{box-shadow:0 6px 18px rgba(11,123,123,0.35);transform:translateY(-1px);}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* LAYOUT */
+.edit-grid{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;}
+.form-col{display:flex;flex-direction:column;gap:18px;}
+
+/* Cards */
+.form-card{background:white;border-radius:16px;padding:24px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);}
+.fc-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.fc-title svg{width:16px;height:16px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.fc-sub{font-size:12.5px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+
+/* Section divider */
+.section-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(11,123,123,0.08);}
+
+/* SERVICE CARDS */
+.service-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;}
+.svc-card{background:#FAFCFC;border:1.5px solid rgba(11,123,123,0.1);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:all .2s;cursor:pointer;}
+.svc-card:hover{border-color:rgba(11,123,123,0.22);box-shadow:0 3px 12px rgba(6,85,85,0.08);}
+.svc-card.active-card{border-color:var(--teal);background:rgba(11,123,123,0.02);box-shadow:0 3px 12px rgba(11,123,123,0.1);}
+.svc-ico-wrap{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.svc-ico-teal{background:var(--teal-lt);}
+.svc-ico-green{background:rgba(26,122,74,0.08);}
+.svc-ico-gold{background:rgba(201,168,76,0.1);}
+.svc-ico-blue{background:rgba(59,130,246,0.08);}
+.svc-ico-purple{background:rgba(139,92,246,0.08);}
+.svc-body{flex:1;}
+.svc-name-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.svc-name{font-size:14px;font-weight:700;color:var(--navy);}
+.svc-type-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;}
+.svc-tag-life{background:rgba(11,123,123,0.1);color:var(--teal-dk);}
+.svc-tag-health{background:rgba(26,122,74,0.08);color:var(--green);}
+.svc-tag-general{background:rgba(201,168,76,0.1);color:var(--gold-dk);}
+.svc-desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:8px;}
+.svc-tags-row{display:flex;gap:5px;flex-wrap:wrap;}
+.svc-mini-tag{font-size:10.5px;background:white;border:1px solid rgba(11,123,123,0.12);border-radius:8px;padding:2px 8px;color:#3A5060;}
+.svc-actions{display:flex;gap:6px;flex-direction:column;align-items:flex-end;justify-content:space-between;}
+.svc-drag{cursor:grab;padding:4px;}
+.svc-drag svg{width:14px;height:14px;stroke:#C8D8DC;fill:none;stroke-width:2;}
+.svc-edit-btn{display:flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--teal-dk);background:var(--teal-lt);border:none;border-radius:8px;padding:5px 10px;cursor:pointer;font-family:'Inter',sans-serif;}
+.svc-edit-btn svg{width:12px;height:12px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.svc-del-btn{display:flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:#B91C1C;background:rgba(239,68,68,0.07);border:none;border-radius:8px;padding:5px 10px;cursor:pointer;font-family:'Inter',sans-serif;}
+.svc-del-btn svg{width:12px;height:12px;stroke:#B91C1C;fill:none;stroke-width:2;}
+
+/* Add service form */
+.add-service-form{border:1.5px dashed rgba(11,123,123,0.25);border-radius:14px;padding:20px;background:rgba(11,123,123,0.01);}
+.asf-title{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.asf-title svg{width:15px;height:15px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.input-row.single{grid-template-columns:1fr;}
+.ig{display:flex;flex-direction:column;gap:5px;}
+.ig label{font-size:12px;font-weight:700;color:var(--navy);}
+.ig-wrap{position:relative;display:flex;align-items:center;}
+.ig-icon{position:absolute;left:12px;width:15px;height:15px;stroke:#9AAABB;fill:none;stroke-width:2;}
+.ig-input{width:100%;padding:10px 12px 10px 36px;border:1.5px solid rgba(11,123,123,0.16);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;transition:all .2s;background:#FAFCFC;}
+.ig-input.no-icon{padding-left:12px;}
+.ig-input:focus{border-color:var(--teal);background:white;box-shadow:0 0 0 3px rgba(11,123,123,0.07);}
+.ig-input::placeholder{color:#B0C4CC;}
+.ig-select{width:100%;padding:10px 12px;border:1.5px solid rgba(11,123,123,0.16);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;background:#FAFCFC;cursor:pointer;}
+.ig-select:focus{border-color:var(--teal);}
+.ig-textarea{width:100%;padding:10px 12px;border:1.5px solid rgba(11,123,123,0.16);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;transition:all .2s;background:#FAFCFC;resize:none;line-height:1.6;}
+.ig-textarea:focus{border-color:var(--teal);background:white;}
+
+/* Icon picker */
+.icon-picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.ip-opt{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:1.5px solid transparent;background:#F4F9FA;transition:all .15s;}
+.ip-opt:hover{border-color:rgba(11,123,123,0.2);}
+.ip-opt.on{border-color:var(--teal);background:var(--teal-lt);box-shadow:0 0 0 2px rgba(11,123,123,0.1);}
+
+/* Add form buttons */
+.asf-btns{display:flex;gap:10px;margin-top:14px;}
+.asf-btn-cancel{flex:0.4;padding:10px;background:white;color:var(--muted);border:1.5px solid rgba(11,123,123,0.15);border-radius:10px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+.asf-btn-add{flex:1;padding:10px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 10px rgba(11,123,123,0.22);display:flex;align-items:center;justify-content:center;gap:7px;}
+.asf-btn-add svg{width:14px;height:14px;stroke:white;fill:none;stroke-width:2;}
+
+/* COMPANY LOGOS section */
+.logo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.logo-card{background:#FAFCFC;border:1.5px solid rgba(11,123,123,0.1);border-radius:12px;padding:14px;text-align:center;position:relative;transition:all .2s;cursor:pointer;}
+.logo-card:hover{border-color:rgba(11,123,123,0.22);}
+.logo-card.featured{border-color:rgba(11,123,123,0.25);background:var(--teal-lt);}
+.lc-ico{font-size:26px;margin-bottom:6px;}
+.lc-name{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.lc-type{font-size:10.5px;color:var(--muted);}
+.lc-rm{position:absolute;top:6px;right:6px;width:18px;height:18px;background:rgba(239,68,68,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.lc-rm svg{width:10px;height:10px;stroke:#B91C1C;fill:none;stroke-width:2.5;}
+.lc-featured-tag{position:absolute;top:6px;left:6px;font-size:9px;font-weight:700;background:var(--teal);color:white;padding:1px 6px;border-radius:6px;}
+.logo-add-card{background:white;border:1.5px dashed rgba(11,123,123,0.2);border-radius:12px;padding:14px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:all .15s;}
+.logo-add-card:hover{border-color:var(--teal);background:var(--teal-lt);}
+.logo-add-card svg{width:20px;height:20px;stroke:var(--teal);fill:none;stroke-width:2;}
+.logo-add-card span{font-size:11.5px;font-weight:600;color:var(--teal-dk);}
+
+/* INFO / WARN banners */
+.info-banner{display:flex;gap:10px;background:rgba(11,123,123,0.05);border:1px solid rgba(11,123,123,0.12);border-radius:10px;padding:11px 14px;margin-bottom:14px;}
+.info-banner svg{width:15px;height:15px;stroke:var(--teal);fill:none;stroke-width:2;flex-shrink:0;margin-top:1px;}
+.info-banner p{font-size:12.5px;color:var(--muted);line-height:1.6;}
+
+/* ── RIGHT PREVIEW ── */
+.preview-col{position:sticky;top:82px;display:flex;flex-direction:column;gap:14px;}
+.preview-card{background:white;border-radius:16px;overflow:hidden;border:1px solid rgba(11,123,123,0.09);box-shadow:0 4px 20px rgba(6,85,85,0.1);}
+.prev-label{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#F4F9FA;border-bottom:1px solid rgba(11,123,123,0.08);}
+.prev-label-txt{font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.prev-label-txt svg{width:13px;height:13px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.prev-live{font-size:10.5px;font-weight:700;color:var(--green);background:rgba(26,122,74,0.08);padding:2px 8px;border-radius:8px;display:flex;align-items:center;gap:4px;}
+.prev-live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* Services tab preview */
+.prev-body{padding:16px;}
+.prev-svc-section{margin-bottom:16px;}
+.prev-svc-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.prev-svc-cards{display:flex;flex-direction:column;gap:8px;}
+.prev-svc-card{background:#FAFCFC;border:1px solid rgba(11,123,123,0.1);border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center;}
+.prev-svc-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.prev-svc-name{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:1px;}
+.prev-svc-desc{font-size:10.5px;color:var(--muted);}
+.prev-svc-tag{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:6px;margin-left:auto;flex-shrink:0;}
+.prev-logo-row{display:flex;flex-wrap:wrap;gap:6px;}
+.prev-logo{display:flex;align-items:center;gap:5px;background:white;border:1px solid rgba(11,123,123,0.1);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--navy);}
+.prev-logo-ico{font-size:13px;}
+
+/* Reorder hint */
+.reorder-hint{display:flex;align-items:center;gap:8px;background:rgba(11,123,123,0.04);border:1px solid rgba(11,123,123,0.1);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--muted);}
+.reorder-hint svg{width:14px;height:14px;stroke:var(--teal);fill:none;stroke-width:2;flex-shrink:0;}
+
+/* ============================================================
+   YVITY RESPONSIVE — Mobile First (max-width: 768px)
+   ============================================================ */
+
+/* Viewport meta already in each file's <head> */
+
+/* ---- TOP NAV ---- */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 12px !important;
+    height: 50px !important;
+  }
+  .tn-logo {
+    width: auto !important;
+    font-size: 16px !important;
+    border-right: none !important;
+    padding: 0 !important;
+    flex: 1;
+  }
+  .tn-mid { display: none !important; }
+  .tn-right { gap: 6px !important; }
+  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
+  .tn-name { font-size: 12px !important; }
+  .tn-plan, .tn-role { display: none !important; }
+  .tn-btn span, .ph-right .btn span { display: none; }
+  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
+}
+
+/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .body-wrap { flex-direction: column !important; }
+}
+
+/* ---- BOTTOM NAV (mobile only) ---- */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 58px;
+    background: var(--teal-dk, #065555);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 64px;
+  }
+  .mbn-item.on { background: rgba(255,255,255,0.12); }
+  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
+  .mbn-item.on svg { stroke: white; }
+  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .mbn-item.on .mbn-label { color: white; }
+  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* push page content above bottom nav */
+  .main, .preview-area, body > .body-wrap > .main {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ---- ADMIN BOTTOM NAV — dark purple ---- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav.admin-nav {
+    background: #1E0A38 !important;
+    border-top-color: rgba(139,92,246,0.2) !important;
+  }
+  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
+  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
+  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
+  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
+  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
+}
+
+/* ---- MAIN CONTENT PADDING ---- */
+@media (max-width: 768px) {
+  .main { padding: 16px !important; }
+  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .page-hdr h1 { font-size: 18px !important; }
+  .ph-right { width: 100%; }
+  .ph-right .btn { flex: 1; justify-content: center; }
+}
+
+/* ---- GRIDS → SINGLE COLUMN ---- */
+@media (max-width: 768px) {
+  .main-grid,
+  .main-grid-3,
+  .detail-grid,
+  .detail-grid-3,
+  .home-grid,
+  .plan-cards,
+  .stats-grid,
+  .aa-grid,
+  .two-col,
+  .form-grid { 
+    grid-template-columns: 1fr !important; 
+  }
+  .preview-col,
+  .right-col,
+  .home-right,
+  .checklist-panel { 
+    position: static !important; 
+    width: 100% !important;
+  }
+}
+
+/* ---- CARDS ---- */
+@media (max-width: 768px) {
+  .form-card, .card, .usage-card, .score-widget,
+  .admin-actions, .advisor-hero { 
+    border-radius: 12px !important; 
+    padding: 16px !important; 
+  }
+}
+
+/* ---- HERO SECTIONS ---- */
+@media (max-width: 768px) {
+  /* Plan hero (D10) */
+  .plan-hero { 
+    flex-direction: column !important; 
+    padding: 18px !important; 
+    gap: 14px !important;
+  }
+  .ph-right-block { width: 100% !important; }
+  .ph-plan-name { font-size: 22px !important; }
+
+  /* Advisor hero (AD2) */
+  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
+  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
+  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
+
+  /* Profile header */
+  .prh-top { flex-direction: column !important; gap: 12px !important; }
+  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
+  .pss-right { flex-direction: column !important; gap: 6px !important; }
+  .pss-left { gap: 8px !important; }
+
+  /* Admin hero */
+  .advisor-hero { border-radius: 16px !important; }
+}
+
+/* ---- STATS GRID ---- */
+@media (max-width: 768px) {
+  .stats-grid { 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .stat-card { padding: 14px !important; }
+  .sc-val { font-size: 22px !important; }
+}
+
+/* ---- TABLES → CARD-STYLE ---- */
+@media (max-width: 768px) {
+  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
+  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+.mobile-table-cards { display: none; }
+
+/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
+@media (max-width: 768px) {
+  .prof-tabs, .detail-tabs { 
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .prof-tabs::-webkit-scrollbar,
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .ptab, .dtab { 
+    padding: 11px 14px !important; 
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ---- PREVIEW TOOLBAR (D11) ---- */
+@media (max-width: 768px) {
+  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
+  .pt-url { display: none !important; }
+  .pt-spacer { display: none !important; }
+  .preview-area { padding: 12px !important; }
+  .preview-frame { border-radius: 14px !important; }
+  /* hide checklist panel on mobile — show as collapsible below */
+  .checklist-panel { display: none !important; }
+}
+
+/* ---- PLAN COMPARISON (D10) ---- */
+@media (max-width: 768px) {
+  .plan-cards { gap: 10px !important; }
+  .pc-name { font-size: 14px !important; }
+  .pc-price { font-size: 20px !important; }
+}
+
+/* ---- LOGIN SPLIT (A1) ---- */
+@media (max-width: 768px) {
+  .login-wrap { flex-direction: column !important; min-height: auto !important; }
+  .login-left { display: none !important; }
+  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
+}
+
+/* ---- SIGNUP STEPS (A2) ---- */
+@media (max-width: 768px) {
+  .signup-wrap { flex-direction: column !important; }
+  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+  .signup-right { width: 100% !important; padding: 20px 16px !important; }
+  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
+}
+
+/* ---- DIRECTORY (P3) ---- */
+@media (max-width: 768px) {
+  .dir-layout { flex-direction: column !important; }
+  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
+  .dir-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---- LANDING PAGE (P1) ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 40px 20px 30px !important; }
+  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
+  .hero-subtitle { font-size: 14px !important; }
+  .hero-btns { flex-direction: column !important; gap: 10px !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  .pricing-grid { grid-template-columns: 1fr !important; }
+  .lp-nav-links { display: none !important; }
+}
+
+/* ---- SCORE PAGE (D9) ---- */
+@media (max-width: 768px) {
+  .score-hero { padding: 20px !important; }
+  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
+}
+
+/* ---- GALLERY GRID (D6) ---- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ---- MISC UTILITIES ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  br.hide-mobile { display: none !important; }
+  .text-center-mobile { text-align: center !important; }
+}
+.show-mobile { display: none; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topnav">
+  <div class="tn-logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="tn-mid">
+    <div class="tn-breadcrumb">
+      <span class="tb-item">Dashboard</span><span class="tb-sep">›</span>
+      <span class="tb-item">Edit Profile</span><span class="tb-sep">›</span>
+      <span class="tb-active">Services Editor</span>
+    </div>
+  </div>
+  <div class="tn-right">
+    <div class="tn-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+    <div class="tn-profile">
+      <div class="tn-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face" alt=""></div>
+      <div><div class="tn-name">Krishna Mohan</div><div class="tn-plan">Silver Plan</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="body-wrap">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-section">
+      <div class="sb-sec-title">Overview</div>
+      <div class="sb-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Dashboard</span>
+      </div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Edit Profile</div>
+      <div class="sb-item">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Header & About</span>
+      </div>
+      <div class="sb-item on">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Services</span>
+      </div>
+      <div class="sb-item">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span>Professional Journey</span>
+      </div>
+      <div class="sb-item">
+        <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+        <span>Education</span>
+      </div>
+      <div class="sb-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        <span>Achievements</span>
+      </div>
+      <div class="sb-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+        <span>Gallery</span>
+      </div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Credibility</div>
+      <div class="sb-item">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Testimonials</span>
+      </div>
+      <div class="sb-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        <span>YVITY Score</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-hdr">
+      <div class="ph-left">
+        <h1>Services Editor</h1>
+        <p>5 services active · Last saved 5 minutes ago</p>
+      </div>
+      <div class="ph-right">
+        <button class="btn btn-outline">
+          <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </button>
+        <button class="btn btn-primary">
+          <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/></svg>
+          Save Changes
+        </button>
+      </div>
+    </div>
+
+    <div class="edit-grid">
+      <div class="form-col">
+
+        <!-- SERVICE CARDS -->
+        <div class="form-card">
+          <div class="fc-title"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Your Services</div>
+          <div class="fc-sub">Add the insurance services you offer. Clients see these in your Services tab. Drag to reorder.</div>
+
+          <div class="reorder-hint">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Drag the ⠿ handle to reorder services. First 3 shown on Home tab preview.
+          </div>
+
+          <div class="section-label">Life Insurance Services</div>
+          <div class="service-cards">
+
+            <div class="svc-card active-card">
+              <div class="svc-ico-wrap svc-ico-teal">🛡️</div>
+              <div class="svc-body">
+                <div class="svc-name-row">
+                  <div class="svc-name">Life Insurance Planning</div>
+                  <span class="svc-type-tag svc-tag-life">Life</span>
+                </div>
+                <div class="svc-desc">Comprehensive life coverage planning for individuals and families. Term plans, whole life, endowment and ULIP options.</div>
+                <div class="svc-tags-row">
+                  <span class="svc-mini-tag">Term Plans</span>
+                  <span class="svc-mini-tag">Endowment</span>
+                  <span class="svc-mini-tag">ULIP</span>
+                </div>
+              </div>
+              <div class="svc-actions">
+                <div class="svc-drag"><svg viewBox="0 0 24 24"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+                <button class="svc-edit-btn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+                <button class="svc-del-btn"><svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Del</button>
+              </div>
+            </div>
+
+            <div class="svc-card">
+              <div class="svc-ico-wrap svc-ico-gold">🌍</div>
+              <div class="svc-body">
+                <div class="svc-name-row">
+                  <div class="svc-name">NRI Insurance Plans</div>
+                  <span class="svc-type-tag svc-tag-life">Life</span>
+                </div>
+                <div class="svc-desc">Specialised insurance solutions for Non-Resident Indians. Dollar-denominated plans, repatriation coverage and NRI-specific riders.</div>
+                <div class="svc-tags-row">
+                  <span class="svc-mini-tag">NRI Specific</span>
+                  <span class="svc-mini-tag">Dollar Plans</span>
+                </div>
+              </div>
+              <div class="svc-actions">
+                <div class="svc-drag"><svg viewBox="0 0 24 24"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+                <button class="svc-edit-btn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+                <button class="svc-del-btn"><svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Del</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="section-label">Health Insurance Services</div>
+          <div class="service-cards">
+
+            <div class="svc-card">
+              <div class="svc-ico-wrap svc-ico-green">❤️</div>
+              <div class="svc-body">
+                <div class="svc-name-row">
+                  <div class="svc-name">Health Insurance</div>
+                  <span class="svc-type-tag svc-tag-health">Health</span>
+                </div>
+                <div class="svc-desc">Individual and family floater health insurance plans. Cashless hospitalisation across 10,000+ network hospitals.</div>
+                <div class="svc-tags-row">
+                  <span class="svc-mini-tag">Family Floater</span>
+                  <span class="svc-mini-tag">Cashless</span>
+                  <span class="svc-mini-tag">Critical Illness</span>
+                </div>
+              </div>
+              <div class="svc-actions">
+                <div class="svc-drag"><svg viewBox="0 0 24 24"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+                <button class="svc-edit-btn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+                <button class="svc-del-btn"><svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Del</button>
+              </div>
+            </div>
+
+            <div class="svc-card">
+              <div class="svc-ico-wrap svc-ico-teal">👨‍👩‍👧‍👦</div>
+              <div class="svc-body">
+                <div class="svc-name-row">
+                  <div class="svc-name">Family Protection Plans</div>
+                  <span class="svc-type-tag svc-tag-health">Health</span>
+                </div>
+                <div class="svc-desc">Comprehensive protection for your entire family with a single policy covering all members under one umbrella plan.</div>
+                <div class="svc-tags-row">
+                  <span class="svc-mini-tag">Maternity</span>
+                  <span class="svc-mini-tag">Child Plans</span>
+                </div>
+              </div>
+              <div class="svc-actions">
+                <div class="svc-drag"><svg viewBox="0 0 24 24"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+                <button class="svc-edit-btn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+                <button class="svc-del-btn"><svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Del</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="section-label">Other Services</div>
+          <div class="service-cards">
+            <div class="svc-card">
+              <div class="svc-ico-wrap svc-ico-blue">📋</div>
+              <div class="svc-body">
+                <div class="svc-name-row">
+                  <div class="svc-name">Claims Assistance</div>
+                  <span class="svc-type-tag svc-tag-general">Support</span>
+                </div>
+                <div class="svc-desc">End-to-end claim settlement support. Documentation, follow-up with insurer, and faster claim resolution.</div>
+                <div class="svc-tags-row">
+                  <span class="svc-mini-tag">Documentation</span>
+                  <span class="svc-mini-tag">Follow-up</span>
+                </div>
+              </div>
+              <div class="svc-actions">
+                <div class="svc-drag"><svg viewBox="0 0 24 24"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+                <button class="svc-edit-btn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+                <button class="svc-del-btn"><svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Del</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADD NEW SERVICE FORM -->
+        <div class="form-card">
+          <div class="fc-title"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add New Service</div>
+          <div class="fc-sub">Fill the details below to add a new service to your profile.</div>
+
+          <div class="input-row">
+            <div class="ig">
+              <label>Service Name *</label>
+              <div class="ig-wrap">
+                <svg class="ig-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <input class="ig-input" type="text" placeholder="e.g. Term Insurance Planning">
+              </div>
+            </div>
+            <div class="ig">
+              <label>Category *</label>
+              <select class="ig-select">
+                <option value="">Select category…</option>
+                <option>Life Insurance</option>
+                <option>Health Insurance</option>
+                <option>Support / Claims</option>
+                <option>Investment</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-row single">
+            <div class="ig">
+              <label>Short Description</label>
+              <textarea class="ig-textarea" rows="3" placeholder="Briefly describe what this service covers and who it's for…"></textarea>
+            </div>
+          </div>
+
+          <div class="ig" style="margin-bottom:14px;">
+            <label>Service Icon</label>
+            <div class="icon-picker">
+              <div class="ip-opt on">🛡️</div>
+              <div class="ip-opt">❤️</div>
+              <div class="ip-opt">🏥</div>
+              <div class="ip-opt">👨‍👩‍👧‍👦</div>
+              <div class="ip-opt">🌍</div>
+              <div class="ip-opt">📋</div>
+              <div class="ip-opt">💰</div>
+              <div class="ip-opt">🏠</div>
+              <div class="ip-opt">🚗</div>
+              <div class="ip-opt">🎓</div>
+              <div class="ip-opt">👴</div>
+              <div class="ip-opt">📈</div>
+            </div>
+          </div>
+
+          <div class="input-row single">
+            <div class="ig">
+              <label>Tags (comma separated)</label>
+              <div class="ig-wrap">
+                <svg class="ig-icon" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                <input class="ig-input" type="text" placeholder="e.g. Term Plans, Endowment, ULIP">
+              </div>
+            </div>
+          </div>
+
+          <div class="asf-btns">
+            <button class="asf-btn-cancel">Cancel</button>
+            <button class="asf-btn-add">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Service
+            </button>
+          </div>
+        </div>
+
+        <!-- COMPANY LOGOS -->
+        <div class="form-card">
+          <div class="fc-title"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Associated Company Logos</div>
+          <div class="fc-sub">Companies you are associated with. Displayed at the bottom of your Services tab, grouped by Life & Health.</div>
+          <div class="logo-grid">
+            <div class="logo-card featured">
+              <div class="lc-featured-tag">Featured</div>
+              <div class="lc-rm"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+              <div class="lc-ico">🏦</div>
+              <div class="lc-name">LIC of India</div>
+              <div class="lc-type">Life · Primary</div>
+            </div>
+            <div class="logo-card">
+              <div class="lc-rm"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+              <div class="lc-ico">🏢</div>
+              <div class="lc-name">HDFC Life</div>
+              <div class="lc-type">Life</div>
+            </div>
+            <div class="logo-card">
+              <div class="lc-rm"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+              <div class="lc-ico">🏛️</div>
+              <div class="lc-name">TATA AIA</div>
+              <div class="lc-type">Life + Health</div>
+            </div>
+            <div class="logo-card">
+              <div class="lc-rm"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+              <div class="lc-ico">🏗️</div>
+              <div class="lc-name">Star Health</div>
+              <div class="lc-type">Health</div>
+            </div>
+            <div class="logo-add-card">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Add Company</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save row -->
+        <div style="display:flex;gap:12px;padding-bottom:16px;">
+          <button class="btn btn-outline" style="flex:0.3">Discard</button>
+          <button class="btn btn-primary" style="flex:1">
+            <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/></svg>
+            Save All Changes
+          </button>
+        </div>
+
+      </div>
+
+      <!-- RIGHT PREVIEW -->
+      <div class="preview-col">
+        <div class="preview-card">
+          <div class="prev-label">
+            <div class="prev-label-txt"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Services Tab Preview</div>
+            <div class="prev-live"><div class="prev-live-dot"></div>Live</div>
+          </div>
+          <div class="prev-body">
+            <div class="prev-svc-section">
+              <div class="prev-svc-title">Life Insurance</div>
+              <div class="prev-svc-cards">
+                <div class="prev-svc-card">
+                  <div class="prev-svc-ico svc-ico-teal">🛡️</div>
+                  <div>
+                    <div class="prev-svc-name">Life Insurance Planning</div>
+                    <div class="prev-svc-desc">Term, Endowment, ULIP options</div>
+                  </div>
+                  <span class="prev-svc-tag svc-tag-life">Life</span>
+                </div>
+                <div class="prev-svc-card">
+                  <div class="prev-svc-ico svc-ico-gold">🌍</div>
+                  <div>
+                    <div class="prev-svc-name">NRI Insurance Plans</div>
+                    <div class="prev-svc-desc">Dollar plans, NRI-specific riders</div>
+                  </div>
+                  <span class="prev-svc-tag svc-tag-life">Life</span>
+                </div>
+              </div>
+            </div>
+            <div class="prev-svc-section">
+              <div class="prev-svc-title">Health Insurance</div>
+              <div class="prev-svc-cards">
+                <div class="prev-svc-card">
+                  <div class="prev-svc-ico svc-ico-green">❤️</div>
+                  <div>
+                    <div class="prev-svc-name">Health Insurance</div>
+                    <div class="prev-svc-desc">Family floater, cashless</div>
+                  </div>
+                  <span class="prev-svc-tag svc-tag-health">Health</span>
+                </div>
+                <div class="prev-svc-card">
+                  <div class="prev-svc-ico svc-ico-teal">👨‍👩‍👧‍👦</div>
+                  <div>
+                    <div class="prev-svc-name">Family Protection</div>
+                    <div class="prev-svc-desc">Maternity, child plans</div>
+                  </div>
+                  <span class="prev-svc-tag svc-tag-health">Health</span>
+                </div>
+              </div>
+            </div>
+            <div class="prev-svc-section" style="margin-bottom:0">
+              <div class="prev-svc-title">Associated Companies</div>
+              <div class="prev-logo-row">
+                <div class="prev-logo"><span class="prev-logo-ico">🏦</span>LIC</div>
+                <div class="prev-logo"><span class="prev-logo-ico">🏢</span>HDFC Life</div>
+                <div class="prev-logo"><span class="prev-logo-ico">🏛️</span>TATA AIA</div>
+                <div class="prev-logo"><span class="prev-logo-ico">🏗️</span>Star Health</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tips card -->
+        <div style="background:white;border-radius:14px;padding:18px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;">💡 Tips for Services</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);">
+              <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>
+              Keep service names short and clear
+            </div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);">
+              <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>
+              Group Life & Health separately for clarity
+            </div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);">
+              <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>
+              Add tags so clients can quickly identify what you offer
+            </div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);">
+              <span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>
+              Your top 3 services appear on your Home tab preview
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

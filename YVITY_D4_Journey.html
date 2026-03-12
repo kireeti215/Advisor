@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY – Professional Journey Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;
+  --navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;--gold-dk:#B8860B;
+  --bg:#EEF4F7;--muted:#5A7080;--text:#1A3040;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+
+/* NAV */
+.topnav{background:var(--teal-dk);height:54px;display:flex;align-items:center;padding:0 20px 0 0;box-shadow:0 2px 10px rgba(6,85,85,0.25);position:sticky;top:0;z-index:200;}
+.tn-logo{width:220px;display:flex;align-items:center;gap:8px;color:white;font-size:18px;font-weight:800;letter-spacing:1.5px;padding:0 20px;border-right:1px solid rgba(255,255,255,0.1);flex-shrink:0;}
+.tn-logo svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.5;}
+.tn-mid{flex:1;padding:0 24px;}
+.tn-bc{display:flex;align-items:center;gap:8px;font-size:13.5px;}
+.tbc{color:rgba(255,255,255,0.55);cursor:pointer;}
+.tbs{color:rgba(255,255,255,0.25);}
+.tba{color:white;font-weight:600;}
+.tn-right{display:flex;align-items:center;gap:12px;}
+.tn-icon{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.tn-icon svg{width:17px;height:17px;stroke:rgba(255,255,255,0.8);fill:none;stroke-width:2;}
+.tn-profile{display:flex;align-items:center;gap:9px;cursor:pointer;padding:4px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);}
+.tn-av{width:30px;height:30px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.3);}
+.tn-av img{width:100%;height:100%;object-fit:cover;}
+.tn-name{font-size:13px;font-weight:700;color:white;}
+.tn-plan{font-size:10px;color:rgba(255,255,255,0.55);}
+
+/* BODY */
+.body-wrap{display:flex;flex:1;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:white;border-right:1px solid rgba(11,123,123,0.08);display:flex;flex-direction:column;min-height:calc(100vh - 54px);position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;flex-shrink:0;}
+.sb-section{padding:16px 12px 8px;}
+.sb-sec-title{font-size:10.5px;font-weight:700;color:#9AAABB;text-transform:uppercase;letter-spacing:0.6px;padding:0 8px;margin-bottom:6px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:2px;}
+.sb-item:hover{background:#F0F6F6;}
+.sb-item.on{background:var(--teal-lt);border:1px solid rgba(11,123,123,0.12);}
+.sb-item svg{width:16px;height:16px;stroke:#9AAABB;fill:none;stroke-width:2;flex-shrink:0;}
+.sb-item.on svg{stroke:var(--teal-dk);}
+.sb-item span{font-size:13px;font-weight:500;color:#6A8090;}
+.sb-item.on span{font-weight:700;color:var(--teal-dk);}
+.sb-divider{height:1px;background:rgba(11,123,123,0.07);margin:8px 12px;}
+
+/* MAIN */
+.main{flex:1;padding:28px;overflow-x:hidden;}
+
+/* Page header */
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.ph-left h1{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:3px;}
+.ph-left p{font-size:13px;color:var(--muted);}
+.ph-right{display:flex;gap:10px;}
+.btn{display:flex;align-items:center;gap:7px;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;border:none;}
+.btn-outline{background:white;color:var(--teal-dk);border:1.5px solid rgba(11,123,123,0.2);}
+.btn-primary{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;box-shadow:0 3px 10px rgba(11,123,123,0.25);}
+.btn-primary:hover{box-shadow:0 6px 18px rgba(11,123,123,0.35);transform:translateY(-1px);}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* LAYOUT */
+.edit-grid{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start;}
+.form-col{display:flex;flex-direction:column;gap:18px;}
+
+/* Cards */
+.form-card{background:white;border-radius:16px;padding:24px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);}
+.fc-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.fc-title svg{width:16px;height:16px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.fc-sub{font-size:12.5px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+
+/* WARN / INFO banners */
+.warn-banner{display:flex;gap:10px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:11px 14px;margin-bottom:16px;}
+.warn-banner svg{width:15px;height:15px;stroke:#D97706;fill:none;stroke-width:2;flex-shrink:0;margin-top:1px;}
+.warn-banner p{font-size:12.5px;color:#92400E;line-height:1.6;}
+.warn-banner strong{font-weight:700;}
+.info-banner{display:flex;gap:10px;background:rgba(11,123,123,0.05);border:1px solid rgba(11,123,123,0.12);border-radius:10px;padding:11px 14px;margin-bottom:16px;}
+.info-banner svg{width:15px;height:15px;stroke:var(--teal);fill:none;stroke-width:2;flex-shrink:0;margin-top:1px;}
+.info-banner p{font-size:12.5px;color:var(--muted);line-height:1.6;}
+
+/* JOURNEY ENTRY CARDS */
+.journey-list{display:flex;flex-direction:column;gap:14px;margin-bottom:18px;position:relative;}
+.journey-list::before{content:'';position:absolute;left:27px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--teal),rgba(11,123,123,0.1));z-index:0;}
+
+.jcard{display:flex;gap:14px;position:relative;z-index:1;}
+.jcard-dot-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding-top:16px;}
+.jcard-dot{width:16px;height:16px;border-radius:50%;border:2.5px solid white;box-shadow:0 0 0 2px var(--teal);background:var(--teal);flex-shrink:0;}
+.jcard-dot.current{background:var(--green);box-shadow:0 0 0 2px var(--green);}
+.jcard-dot.old{background:#C8D8DC;box-shadow:0 0 0 2px #C8D8DC;}
+
+.jcard-body{flex:1;background:#FAFCFC;border:1.5px solid rgba(11,123,123,0.1);border-radius:14px;padding:18px;transition:all .2s;}
+.jcard-body:hover{border-color:rgba(11,123,123,0.2);box-shadow:0 3px 12px rgba(6,85,85,0.07);}
+.jcard-body.locked{background:#F8FBFB;border-color:rgba(11,123,123,0.07);}
+
+.jcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:12px;}
+.jcard-title-wrap{}
+.jcard-role{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.jcard-company{font-size:13px;font-weight:600;color:var(--teal-dk);margin-bottom:3px;display:flex;align-items:center;gap:6px;}
+.jcard-company svg{width:13px;height:13px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.jcard-dates{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.jcard-dates svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2;}
+.jcard-current-tag{font-size:10.5px;font-weight:700;background:rgba(26,122,74,0.1);color:var(--green);padding:2px 9px;border-radius:8px;white-space:nowrap;}
+.jcard-city{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted);margin-bottom:8px;}
+.jcard-city svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2;}
+.jcard-desc{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:10px;}
+
+.jcard-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+.jact-btn{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.jact-edit{background:var(--teal-lt);color:var(--teal-dk);}
+.jact-edit svg{width:12px;height:12px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.jact-del{background:rgba(239,68,68,0.07);color:#B91C1C;}
+.jact-del svg{width:12px;height:12px;stroke:#B91C1C;fill:none;stroke-width:2;}
+
+/* Lock badge */
+.lock-badge{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#9AAABB;background:#F0F5F5;padding:4px 10px;border-radius:8px;margin-left:auto;}
+.lock-badge svg{width:12px;height:12px;stroke:#9AAABB;fill:none;stroke-width:2;}
+
+/* Duration badge */
+.dur-badge{display:inline-flex;align-items:center;gap:4px;background:var(--teal-lt);color:var(--teal-dk);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:8px;}
+
+/* ADD NEW FORM */
+.add-form{border:1.5px dashed rgba(11,123,123,0.22);border-radius:14px;padding:20px;background:rgba(11,123,123,0.01);}
+.af-title{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.af-title svg{width:15px;height:15px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.input-row.single{grid-template-columns:1fr;}
+.input-row.three{grid-template-columns:1fr 1fr 1fr;}
+.ig{display:flex;flex-direction:column;gap:5px;}
+.ig label{font-size:12px;font-weight:700;color:var(--navy);}
+.ig-wrap{position:relative;display:flex;align-items:center;}
+.ig-icon{position:absolute;left:12px;width:15px;height:15px;stroke:#9AAABB;fill:none;stroke-width:2;}
+.ig-input{width:100%;padding:10px 12px 10px 36px;border:1.5px solid rgba(11,123,123,0.16);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;transition:all .2s;background:#FAFCFC;}
+.ig-input.no-icon{padding-left:12px;}
+.ig-input:focus{border-color:var(--teal);background:white;box-shadow:0 0 0 3px rgba(11,123,123,0.07);}
+.ig-input::placeholder{color:#B0C4CC;}
+.ig-textarea{width:100%;padding:10px 12px;border:1.5px solid rgba(11,123,123,0.16);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;transition:all .2s;background:#FAFCFC;resize:none;line-height:1.6;}
+.ig-textarea:focus{border-color:var(--teal);background:white;}
+.ig-select{width:100%;padding:10px 12px;border:1.5px solid rgba(11,123,123,0.16);border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;background:#FAFCFC;cursor:pointer;}
+.ig-hint{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* Current role toggle */
+.current-toggle{display:flex;align-items:center;gap:10px;background:#F4F9FA;border:1px solid rgba(11,123,123,0.1);border-radius:10px;padding:10px 14px;margin-bottom:12px;}
+.ct-check{width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(11,123,123,0.25);display:flex;align-items:center;justify-content:center;cursor:pointer;background:white;}
+.ct-check.on{background:var(--green);border-color:var(--green);}
+.ct-check.on::after{content:'✓';font-size:11px;color:white;font-weight:800;}
+.ct-label{font-size:13px;font-weight:600;color:var(--navy);cursor:pointer;}
+.ct-sub{font-size:11.5px;color:var(--muted);margin-left:auto;}
+
+/* Form buttons */
+.af-btns{display:flex;gap:10px;margin-top:14px;}
+.af-cancel{flex:0.4;padding:10px;background:white;color:var(--muted);border:1.5px solid rgba(11,123,123,0.15);border-radius:10px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+.af-add{flex:1;padding:10px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 10px rgba(11,123,123,0.22);display:flex;align-items:center;justify-content:center;gap:7px;}
+.af-add svg{width:14px;height:14px;stroke:white;fill:none;stroke-width:2;}
+
+/* RIGHT PREVIEW */
+.preview-col{position:sticky;top:82px;display:flex;flex-direction:column;gap:14px;}
+.preview-card{background:white;border-radius:16px;overflow:hidden;border:1px solid rgba(11,123,123,0.09);box-shadow:0 4px 20px rgba(6,85,85,0.1);}
+.prev-label{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#F4F9FA;border-bottom:1px solid rgba(11,123,123,0.08);}
+.prev-label-txt{font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.prev-label-txt svg{width:13px;height:13px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.prev-live{font-size:10.5px;font-weight:700;color:var(--green);background:rgba(26,122,74,0.08);padding:2px 8px;border-radius:8px;display:flex;align-items:center;gap:4px;}
+.prev-live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.prev-body{padding:16px;}
+
+/* Mini timeline preview */
+.prev-timeline{position:relative;padding-left:20px;}
+.prev-timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--teal),rgba(11,123,123,0.15));}
+.prev-titem{position:relative;margin-bottom:14px;}
+.prev-titem:last-child{margin-bottom:0;}
+.prev-tdot{position:absolute;left:-17px;top:4px;width:10px;height:10px;border-radius:50%;border:2px solid white;}
+.prev-tdot.cur{background:var(--green);box-shadow:0 0 0 2px var(--green);}
+.prev-tdot.past{background:var(--teal);box-shadow:0 0 0 2px var(--teal);}
+.prev-tdot.old{background:#C8D8DC;box-shadow:0 0 0 2px #C8D8DC;}
+.prev-trole{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:1px;}
+.prev-tco{font-size:11px;font-weight:600;color:var(--teal-dk);margin-bottom:1px;}
+.prev-tdate{font-size:10.5px;color:var(--muted);display:flex;align-items:center;gap:4px;}
+.prev-tdesc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.55;}
+.prev-tcur{display:inline-block;font-size:9.5px;font-weight:700;background:rgba(26,122,74,0.1);color:var(--green);padding:1px 6px;border-radius:6px;margin-left:5px;}
+
+/* ============================================================
+   YVITY RESPONSIVE — Mobile First (max-width: 768px)
+   ============================================================ */
+
+/* Viewport meta already in each file's <head> */
+
+/* ---- TOP NAV ---- */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 12px !important;
+    height: 50px !important;
+  }
+  .tn-logo {
+    width: auto !important;
+    font-size: 16px !important;
+    border-right: none !important;
+    padding: 0 !important;
+    flex: 1;
+  }
+  .tn-mid { display: none !important; }
+  .tn-right { gap: 6px !important; }
+  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
+  .tn-name { font-size: 12px !important; }
+  .tn-plan, .tn-role { display: none !important; }
+  .tn-btn span, .ph-right .btn span { display: none; }
+  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
+}
+
+/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .body-wrap { flex-direction: column !important; }
+}
+
+/* ---- BOTTOM NAV (mobile only) ---- */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 58px;
+    background: var(--teal-dk, #065555);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 64px;
+  }
+  .mbn-item.on { background: rgba(255,255,255,0.12); }
+  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
+  .mbn-item.on svg { stroke: white; }
+  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .mbn-item.on .mbn-label { color: white; }
+  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* push page content above bottom nav */
+  .main, .preview-area, body > .body-wrap > .main {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ---- ADMIN BOTTOM NAV — dark purple ---- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav.admin-nav {
+    background: #1E0A38 !important;
+    border-top-color: rgba(139,92,246,0.2) !important;
+  }
+  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
+  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
+  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
+  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
+  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
+}
+
+/* ---- MAIN CONTENT PADDING ---- */
+@media (max-width: 768px) {
+  .main { padding: 16px !important; }
+  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .page-hdr h1 { font-size: 18px !important; }
+  .ph-right { width: 100%; }
+  .ph-right .btn { flex: 1; justify-content: center; }
+}
+
+/* ---- GRIDS → SINGLE COLUMN ---- */
+@media (max-width: 768px) {
+  .main-grid,
+  .main-grid-3,
+  .detail-grid,
+  .detail-grid-3,
+  .home-grid,
+  .plan-cards,
+  .stats-grid,
+  .aa-grid,
+  .two-col,
+  .form-grid { 
+    grid-template-columns: 1fr !important; 
+  }
+  .preview-col,
+  .right-col,
+  .home-right,
+  .checklist-panel { 
+    position: static !important; 
+    width: 100% !important;
+  }
+}
+
+/* ---- CARDS ---- */
+@media (max-width: 768px) {
+  .form-card, .card, .usage-card, .score-widget,
+  .admin-actions, .advisor-hero { 
+    border-radius: 12px !important; 
+    padding: 16px !important; 
+  }
+}
+
+/* ---- HERO SECTIONS ---- */
+@media (max-width: 768px) {
+  /* Plan hero (D10) */
+  .plan-hero { 
+    flex-direction: column !important; 
+    padding: 18px !important; 
+    gap: 14px !important;
+  }
+  .ph-right-block { width: 100% !important; }
+  .ph-plan-name { font-size: 22px !important; }
+
+  /* Advisor hero (AD2) */
+  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
+  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
+  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
+
+  /* Profile header */
+  .prh-top { flex-direction: column !important; gap: 12px !important; }
+  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
+  .pss-right { flex-direction: column !important; gap: 6px !important; }
+  .pss-left { gap: 8px !important; }
+
+  /* Admin hero */
+  .advisor-hero { border-radius: 16px !important; }
+}
+
+/* ---- STATS GRID ---- */
+@media (max-width: 768px) {
+  .stats-grid { 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .stat-card { padding: 14px !important; }
+  .sc-val { font-size: 22px !important; }
+}
+
+/* ---- TABLES → CARD-STYLE ---- */
+@media (max-width: 768px) {
+  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
+  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+.mobile-table-cards { display: none; }
+
+/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
+@media (max-width: 768px) {
+  .prof-tabs, .detail-tabs { 
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .prof-tabs::-webkit-scrollbar,
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .ptab, .dtab { 
+    padding: 11px 14px !important; 
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ---- PREVIEW TOOLBAR (D11) ---- */
+@media (max-width: 768px) {
+  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
+  .pt-url { display: none !important; }
+  .pt-spacer { display: none !important; }
+  .preview-area { padding: 12px !important; }
+  .preview-frame { border-radius: 14px !important; }
+  /* hide checklist panel on mobile — show as collapsible below */
+  .checklist-panel { display: none !important; }
+}
+
+/* ---- PLAN COMPARISON (D10) ---- */
+@media (max-width: 768px) {
+  .plan-cards { gap: 10px !important; }
+  .pc-name { font-size: 14px !important; }
+  .pc-price { font-size: 20px !important; }
+}
+
+/* ---- LOGIN SPLIT (A1) ---- */
+@media (max-width: 768px) {
+  .login-wrap { flex-direction: column !important; min-height: auto !important; }
+  .login-left { display: none !important; }
+  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
+}
+
+/* ---- SIGNUP STEPS (A2) ---- */
+@media (max-width: 768px) {
+  .signup-wrap { flex-direction: column !important; }
+  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+  .signup-right { width: 100% !important; padding: 20px 16px !important; }
+  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
+}
+
+/* ---- DIRECTORY (P3) ---- */
+@media (max-width: 768px) {
+  .dir-layout { flex-direction: column !important; }
+  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
+  .dir-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---- LANDING PAGE (P1) ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 40px 20px 30px !important; }
+  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
+  .hero-subtitle { font-size: 14px !important; }
+  .hero-btns { flex-direction: column !important; gap: 10px !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  .pricing-grid { grid-template-columns: 1fr !important; }
+  .lp-nav-links { display: none !important; }
+}
+
+/* ---- SCORE PAGE (D9) ---- */
+@media (max-width: 768px) {
+  .score-hero { padding: 20px !important; }
+  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
+}
+
+/* ---- GALLERY GRID (D6) ---- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ---- MISC UTILITIES ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  br.hide-mobile { display: none !important; }
+  .text-center-mobile { text-align: center !important; }
+}
+.show-mobile { display: none; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topnav">
+  <div class="tn-logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="tn-mid">
+    <div class="tn-bc">
+      <span class="tbc">Dashboard</span><span class="tbs">›</span>
+      <span class="tbc">Edit Profile</span><span class="tbs">›</span>
+      <span class="tba">Professional Journey</span>
+    </div>
+  </div>
+  <div class="tn-right">
+    <div class="tn-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+    <div class="tn-profile">
+      <div class="tn-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face" alt=""></div>
+      <div><div class="tn-name">Krishna Mohan</div><div class="tn-plan">Silver Plan</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="body-wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-section">
+      <div class="sb-sec-title">Overview</div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Dashboard</span></div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Edit Profile</div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Header & About</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Services</span></div>
+      <div class="sb-item on"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Professional Journey</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg><span>Education</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg><span>Achievements</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg><span>Gallery</span></div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Credibility</div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Testimonials</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg><span>YVITY Score</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-hdr">
+      <div class="ph-left">
+        <h1>Professional Journey Editor</h1>
+        <p>4 entries · 2019 → Present · Card-based, not timeline</p>
+      </div>
+      <div class="ph-right">
+        <button class="btn btn-outline"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Preview</button>
+        <button class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/></svg>Save Changes</button>
+      </div>
+    </div>
+
+    <div class="edit-grid">
+      <div class="form-col">
+
+        <!-- LOCK RULES WARNING -->
+        <div class="form-card" style="padding:18px 22px;">
+          <div class="warn-banner" style="margin-bottom:0;">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <p><strong>Edit Lock Rules (Backend Enforced):</strong> Journey entries are <strong>locked for editing after 30 days</strong>. Entries cannot be <strong>deleted after 7 days</strong>. This ensures credibility and prevents manipulation of professional history.</p>
+          </div>
+        </div>
+
+        <!-- EXISTING ENTRIES -->
+        <div class="form-card">
+          <div class="fc-title"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Your Professional Journey</div>
+          <div class="fc-sub">Your career history displayed as professional cards on your public profile. Most recent first.</div>
+
+          <div class="journey-list">
+
+            <!-- Entry 1 — Current, unlocked -->
+            <div class="jcard">
+              <div class="jcard-dot-wrap"><div class="jcard-dot current"></div></div>
+              <div class="jcard-body">
+                <div class="jcard-top">
+                  <div class="jcard-title-wrap">
+                    <div class="jcard-role">Life & Health Insurance Advisor</div>
+                    <div class="jcard-company"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>LIC of India</div>
+                    <div class="jcard-dates"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jan 2022 – Present <span class="jcard-current-tag">Current</span></div>
+                  </div>
+                  <div class="dur-badge">3 yrs</div>
+                </div>
+                <div class="jcard-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nellore, Andhra Pradesh</div>
+                <div class="jcard-desc">Managing a portfolio of 200+ clients across Nellore and surrounding districts. Specialised in term insurance, health floater plans and NRI-specific policies. Consistent top performer with IRDA compliance maintained throughout.</div>
+                <div class="jcard-actions">
+                  <button class="jact-btn jact-edit"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+                  <button class="jact-btn jact-del"><svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Delete</button>
+                  <div style="font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px;margin-left:4px;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" style="stroke:var(--green);fill:none;stroke-width:2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                    Editable · Added 15 days ago
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Entry 2 — Past, unlocked (within 30 days) -->
+            <div class="jcard">
+              <div class="jcard-dot-wrap"><div class="jcard-dot"></div></div>
+              <div class="jcard-body">
+                <div class="jcard-top">
+                  <div class="jcard-title-wrap">
+                    <div class="jcard-role">Insurance Sales Officer</div>
+                    <div class="jcard-company"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>HDFC Life Insurance</div>
+                    <div class="jcard-dates"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Mar 2020 – Dec 2021</div>
+                  </div>
+                  <div class="dur-badge">1 yr 9 mo</div>
+                </div>
+                <div class="jcard-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nellore, Andhra Pradesh</div>
+                <div class="jcard-desc">Handled individual and corporate clients for life insurance products. Achieved 120% of annual target in FY2021. Trained 5 junior advisors during tenure.</div>
+                <div class="jcard-actions">
+                  <button class="jact-btn jact-edit"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+                  <button class="jact-btn jact-del"><svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/></svg>Delete</button>
+                  <div style="font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px;margin-left:4px;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" style="stroke:var(--green);fill:none;stroke-width:2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                    Editable · Added 22 days ago
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Entry 3 — LOCKED (30+ days) -->
+            <div class="jcard">
+              <div class="jcard-dot-wrap"><div class="jcard-dot old"></div></div>
+              <div class="jcard-body locked">
+                <div class="jcard-top">
+                  <div class="jcard-title-wrap">
+                    <div class="jcard-role">Junior Insurance Advisor</div>
+                    <div class="jcard-company"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>TATA AIA Life Insurance</div>
+                    <div class="jcard-dates"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jun 2019 – Feb 2020</div>
+                  </div>
+                  <div class="dur-badge">9 mo</div>
+                </div>
+                <div class="jcard-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nellore, Andhra Pradesh</div>
+                <div class="jcard-desc">Started career as junior advisor. Learned product portfolio, client acquisition, and claims process under senior mentorship.</div>
+                <div class="jcard-actions">
+                  <div class="lock-badge"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Locked · 45 days ago</div>
+                  <div style="font-size:11.5px;color:#9AAABB;margin-left:4px;">Contact support to edit</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Entry 4 — LOCKED -->
+            <div class="jcard">
+              <div class="jcard-dot-wrap"><div class="jcard-dot old"></div></div>
+              <div class="jcard-body locked">
+                <div class="jcard-top">
+                  <div class="jcard-title-wrap">
+                    <div class="jcard-role">Insurance Trainee</div>
+                    <div class="jcard-company"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>LIC of India (Training)</div>
+                    <div class="jcard-dates"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jan 2019 – May 2019</div>
+                  </div>
+                  <div class="dur-badge">5 mo</div>
+                </div>
+                <div class="jcard-city"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Nellore, Andhra Pradesh</div>
+                <div class="jcard-desc">Completed IRDAI mandatory training program. Passed licensing exam on first attempt.</div>
+                <div class="jcard-actions">
+                  <div class="lock-badge"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Locked · 4 years ago</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ADD NEW ENTRY FORM -->
+        <div class="form-card">
+          <div class="fc-title"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add New Journey Entry</div>
+          <div class="fc-sub">Add a new role to your professional history. Once added, entries lock after 30 days and cannot be deleted after 7 days.</div>
+
+          <div class="info-banner">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>Add entries in <strong>reverse chronological order</strong> (most recent first). Clients see your latest role prominently at the top.</p>
+          </div>
+
+          <div class="add-form">
+            <div class="af-title"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>New Role Details</div>
+
+            <div class="input-row">
+              <div class="ig">
+                <label>Designation / Role *</label>
+                <div class="ig-wrap">
+                  <svg class="ig-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input class="ig-input" type="text" placeholder="e.g. Senior Insurance Advisor">
+                </div>
+              </div>
+              <div class="ig">
+                <label>Company Name *</label>
+                <div class="ig-wrap">
+                  <svg class="ig-icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                  <input class="ig-input" type="text" placeholder="e.g. LIC of India">
+                </div>
+              </div>
+            </div>
+
+            <!-- Current role toggle -->
+            <div class="current-toggle">
+              <div class="ct-check on"></div>
+              <div class="ct-label">This is my current role</div>
+              <div class="ct-sub">End date will show as "Present"</div>
+            </div>
+
+            <div class="input-row three">
+              <div class="ig">
+                <label>Start Month</label>
+                <select class="ig-select">
+                  <option>January</option><option>February</option><option>March</option>
+                  <option>April</option><option>May</option><option selected>June</option>
+                  <option>July</option><option>August</option><option>September</option>
+                  <option>October</option><option>November</option><option>December</option>
+                </select>
+              </div>
+              <div class="ig">
+                <label>Start Year</label>
+                <input class="ig-input no-icon" type="text" placeholder="2024">
+              </div>
+              <div class="ig">
+                <label>City</label>
+                <div class="ig-wrap">
+                  <svg class="ig-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <input class="ig-input" type="text" placeholder="Nellore">
+                </div>
+              </div>
+            </div>
+
+            <div class="input-row single">
+              <div class="ig">
+                <label>Short Description (2–3 lines)</label>
+                <textarea class="ig-textarea" rows="3" placeholder="Briefly describe your key responsibilities, achievements, or specialisations in this role…"></textarea>
+                <div class="ig-hint">Max 200 characters · Locked after 30 days · Cannot delete after 7 days</div>
+              </div>
+            </div>
+
+            <div class="af-btns">
+              <button class="af-cancel">Cancel</button>
+              <button class="af-add">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Journey Entry
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save row -->
+        <div style="display:flex;gap:12px;padding-bottom:16px;">
+          <button class="btn btn-outline" style="flex:0.3">Discard</button>
+          <button class="btn btn-primary" style="flex:1">
+            <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/></svg>
+            Save All Changes
+          </button>
+        </div>
+
+      </div>
+
+      <!-- RIGHT PREVIEW -->
+      <div class="preview-col">
+        <div class="preview-card">
+          <div class="prev-label">
+            <div class="prev-label-txt"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Journey Tab Preview</div>
+            <div class="prev-live"><div class="prev-live-dot"></div>Live</div>
+          </div>
+          <div class="prev-body">
+            <div class="prev-timeline">
+              <div class="prev-titem">
+                <div class="prev-tdot cur"></div>
+                <div class="prev-trole">Life & Health Insurance Advisor <span class="prev-tcur">Current</span></div>
+                <div class="prev-tco">LIC of India</div>
+                <div class="prev-tdate"><svg width="10" height="10" viewBox="0 0 24 24" style="stroke:var(--muted);fill:none;stroke-width:2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jan 2022 – Present · Nellore, AP</div>
+                <div class="prev-tdesc">Managing 200+ clients. Specialised in term, health floater & NRI policies.</div>
+              </div>
+              <div class="prev-titem">
+                <div class="prev-tdot past"></div>
+                <div class="prev-trole">Insurance Sales Officer</div>
+                <div class="prev-tco">HDFC Life Insurance</div>
+                <div class="prev-tdate"><svg width="10" height="10" viewBox="0 0 24 24" style="stroke:var(--muted);fill:none;stroke-width:2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Mar 2020 – Dec 2021 · Nellore</div>
+                <div class="prev-tdesc">120% of annual target in FY2021. Trained 5 junior advisors.</div>
+              </div>
+              <div class="prev-titem">
+                <div class="prev-tdot old"></div>
+                <div class="prev-trole">Junior Insurance Advisor</div>
+                <div class="prev-tco">TATA AIA Life Insurance</div>
+                <div class="prev-tdate"><svg width="10" height="10" viewBox="0 0 24 24" style="stroke:var(--muted);fill:none;stroke-width:2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jun 2019 – Feb 2020 · Nellore</div>
+              </div>
+              <div class="prev-titem">
+                <div class="prev-tdot old"></div>
+                <div class="prev-trole">Insurance Trainee</div>
+                <div class="prev-tco">LIC of India (Training)</div>
+                <div class="prev-tdate"><svg width="10" height="10" viewBox="0 0 24 24" style="stroke:var(--muted);fill:none;stroke-width:2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jan – May 2019 · Nellore</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lock rules reminder -->
+        <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:14px;padding:16px 18px;">
+          <div style="font-size:13px;font-weight:700;color:#92400E;margin-bottom:10px;display:flex;align-items:center;gap:7px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" style="stroke:#D97706;fill:none;stroke-width:2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Edit Lock Rules
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;gap:8px;font-size:12px;color:#92400E;">
+              <span style="font-weight:700;flex-shrink:0;">30 days</span>
+              <span>Edit window — entries lock for editing after 30 days</span>
+            </div>
+            <div style="display:flex;gap:8px;font-size:12px;color:#92400E;">
+              <span style="font-weight:700;flex-shrink:0;">7 days</span>
+              <span>Delete window — cannot delete after 7 days of adding</span>
+            </div>
+            <div style="display:flex;gap:8px;font-size:12px;color:#92400E;">
+              <span style="font-weight:700;flex-shrink:0;">Why?</span>
+              <span>Prevents manipulation of professional history — builds client trust</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

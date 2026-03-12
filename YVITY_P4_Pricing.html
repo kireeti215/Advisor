@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY – Pricing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;--teal-md:#0D9494;
+  --navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;--gold-dk:#B8860B;
+  --bg:#b2ced8;--muted:#5A7080;--text:#1A3040;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);background-image:radial-gradient(ellipse 80% 60% at 10% 20%,rgba(255,255,255,0.45) 0%,transparent 55%),radial-gradient(ellipse 60% 70% at 90% 80%,rgba(6,85,85,0.14) 0%,transparent 55%);min-height:100vh;}
+
+/* NAV */
+.nav{background:var(--teal-dk);padding:0 48px;height:56px;display:flex;align-items:center;box-shadow:0 2px 12px rgba(6,85,85,0.3);position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:8px;color:white;font-size:20px;font-weight:800;letter-spacing:1.5px;margin-right:48px;}
+.logo svg{width:20px;height:20px;stroke:white;fill:none;stroke-width:2.5;}
+.nav-links{display:flex;gap:32px;flex:1;}
+.nl{color:rgba(255,255,255,0.82);font-size:14px;cursor:pointer;}
+.nl.active{color:white;font-weight:600;border-bottom:2px solid rgba(255,255,255,0.5);padding-bottom:2px;}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nr{color:rgba(255,255,255,0.82);font-size:14px;cursor:pointer;}
+.nr-sep{color:rgba(255,255,255,0.3);}
+.nav-icon svg{width:20px;height:20px;stroke:rgba(255,255,255,0.7);fill:none;stroke-width:1.8;cursor:pointer;}
+
+/* PAGE */
+.page{max-width:1100px;margin:0 auto;padding:48px 24px 72px;}
+
+/* HERO */
+.pricing-hero{text-align:center;margin-bottom:48px;}
+.ph-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.4);border-radius:20px;padding:6px 18px;font-size:12px;font-weight:700;color:var(--teal-dk);margin-bottom:18px;backdrop-filter:blur(6px);}
+.ph-tag-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 0 2px rgba(26,122,74,0.25);}
+.ph-h1{font-family:'Playfair Display',serif;font-size:46px;font-weight:800;color:var(--navy);line-height:1.15;margin-bottom:14px;letter-spacing:-0.3px;}
+.ph-h1 span{color:var(--teal);}
+.ph-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto 24px;}
+
+/* Toggle */
+.billing-toggle{display:inline-flex;align-items:center;gap:0;background:rgba(255,255,255,0.9);border-radius:12px;padding:4px;border:1.5px solid rgba(11,123,123,0.14);box-shadow:0 2px 10px rgba(6,85,85,0.08);}
+.bt-opt{padding:8px 22px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);}
+.bt-opt.on{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;box-shadow:0 3px 10px rgba(11,123,123,0.28);}
+.bt-save{display:inline-block;background:linear-gradient(135deg,#1A7A4A,#22A060);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;}
+
+/* PLANS GRID */
+.plans-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;align-items:start;margin-bottom:60px;}
+
+.plan{background:rgba(255,255,255,0.97);border-radius:20px;overflow:hidden;border:1.5px solid rgba(11,123,123,0.1);box-shadow:0 4px 16px rgba(6,85,85,0.08);transition:all .25s;}
+.plan:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(6,85,85,0.14);}
+.plan.pop{border-color:var(--teal);box-shadow:0 8px 32px rgba(11,123,123,0.2);transform:scale(1.03);}
+.plan.pop:hover{transform:scale(1.03) translateY(-4px);box-shadow:0 20px 48px rgba(11,123,123,0.26);}
+.plan.gld{border-color:rgba(201,168,76,0.3);box-shadow:0 4px 20px rgba(184,134,11,0.1);}
+.plan.gld:hover{box-shadow:0 16px 40px rgba(184,134,11,0.18);}
+
+/* Plan top bar */
+.plan-bar{height:5px;}
+.bar-free{background:linear-gradient(90deg,#9AAABB,#B8C8D0);}
+.bar-silver{background:linear-gradient(90deg,var(--teal-dk),var(--teal));}
+.bar-gold{background:linear-gradient(90deg,#B8860B,#DAA520,#C9A84C);}
+
+/* Plan header */
+.plan-head{padding:28px 26px 22px;}
+.plan-pop-badge{display:inline-block;font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:10px;margin-bottom:12px;}
+.badge-pop{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;}
+.badge-gold{background:linear-gradient(135deg,#B8860B,#DAA520);color:white;}
+.plan-icon{font-size:32px;margin-bottom:10px;}
+.plan-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.plan-tagline{font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.55;}
+.plan-price-row{display:flex;align-items:flex-end;gap:6px;margin-bottom:6px;}
+.plan-price{font-size:40px;font-weight:800;color:var(--navy);line-height:1;}
+.plan-price-per{font-size:13px;color:var(--muted);font-weight:400;padding-bottom:4px;}
+.plan-price-strike{font-size:16px;color:#B0C0C8;text-decoration:line-through;font-weight:400;padding-bottom:4px;}
+.plan-billed{font-size:11.5px;color:var(--muted);margin-bottom:20px;}
+.plan-cta-btn{width:100%;padding:13px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;border:none;}
+.btn-free{background:#F0F6F6;color:var(--teal-dk);border:1.5px solid rgba(11,123,123,0.2);}
+.btn-free:hover{background:var(--teal-lt);border-color:var(--teal);}
+.btn-silver{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;box-shadow:0 4px 16px rgba(11,123,123,0.32);}
+.btn-silver:hover{box-shadow:0 8px 24px rgba(11,123,123,0.42);}
+.btn-gold{background:linear-gradient(135deg,#B8860B,#DAA520);color:white;box-shadow:0 4px 16px rgba(184,134,11,0.28);}
+.btn-gold:hover{box-shadow:0 8px 24px rgba(184,134,11,0.38);}
+
+/* Divider */
+.plan-divider{height:1px;background:rgba(11,123,123,0.07);margin:0 26px;}
+
+/* Features list */
+.plan-features{padding:22px 26px 26px;}
+.pf-section-title{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;margin-top:14px;}
+.pf-section-title:first-child{margin-top:0;}
+.pf-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px;font-size:13px;color:var(--text);line-height:1.45;}
+.pf-item svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;}
+.pf-yes{stroke:var(--green);fill:none;stroke-width:2.5;}
+.pf-no{stroke:#C8D8DC;fill:none;stroke-width:2.5;}
+.pf-item.dim{color:#A0B4BC;}
+.pf-limit{display:inline-block;background:var(--teal-lt);color:var(--teal-dk);font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:8px;margin-left:4px;}
+.pf-gold-tag{display:inline-block;background:rgba(201,168,76,0.15);color:#8B6914;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:8px;margin-left:4px;}
+.pf-new{display:inline-block;background:rgba(26,122,74,0.1);color:var(--green);font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;margin-left:4px;}
+
+/* COMPARISON TABLE */
+.comp-section{margin-bottom:60px;}
+.comp-head{text-align:center;margin-bottom:32px;}
+.sec-tag{display:inline-block;background:var(--teal-lt);color:var(--teal-dk);font-size:11.5px;font-weight:700;padding:5px 16px;border-radius:20px;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;}
+.comp-head h2{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;color:var(--navy);}
+
+.comp-table{background:rgba(255,255,255,0.97);border-radius:18px;overflow:hidden;border:1px solid rgba(11,123,123,0.09);box-shadow:0 4px 20px rgba(6,85,85,0.09);}
+
+.ct-head{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--teal-dk);}
+.ct-h{padding:16px 18px;font-size:13px;font-weight:700;color:white;text-align:center;}
+.ct-h:first-child{text-align:left;color:rgba(255,255,255,0.7);}
+.ct-h.gold-h{color:#F0C060;}
+
+.ct-group-row{padding:11px 18px 6px;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;background:#F8FBFB;border-bottom:1px solid rgba(11,123,123,0.06);}
+
+.ct-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:1px solid rgba(11,123,123,0.06);transition:background .15s;}
+.ct-row:last-child{border-bottom:none;}
+.ct-row:hover{background:rgba(11,123,123,0.02);}
+.ct-cell{padding:13px 18px;font-size:13px;color:var(--text);display:flex;align-items:center;justify-content:center;}
+.ct-cell:first-child{justify-content:flex-start;font-weight:500;}
+.ct-cell svg{width:16px;height:16px;}
+.ct-yes{stroke:var(--green);fill:none;stroke-width:2.5;}
+.ct-no{stroke:#C8D8DC;fill:none;stroke-width:2.5;}
+.ct-val{font-weight:700;color:var(--navy);font-size:13px;}
+.ct-muted{color:#A0B4BC;font-size:12px;}
+.ct-gold-val{font-weight:700;color:var(--gold-dk);}
+.ct-highlight{background:rgba(11,123,123,0.025);}
+
+/* UPGRADE PSYCHOLOGY */
+.upgrade-section{margin-bottom:60px;}
+.upgrade-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.ug-card{background:rgba(255,255,255,0.96);border-radius:16px;padding:26px 22px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 12px rgba(6,85,85,0.07);text-align:center;}
+.ug-icon{font-size:36px;margin-bottom:12px;}
+.ug-plan{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.ug-plan.free-col{color:#9AAABB;}
+.ug-plan.silver-col{color:var(--teal);}
+.ug-plan.gold-col{color:var(--gold-dk);}
+.ug-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.ug-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* SCORE SECTION */
+.score-section{background:rgba(255,255,255,0.96);border-radius:20px;padding:36px 40px;margin-bottom:60px;border:1px solid rgba(11,123,123,0.09);box-shadow:0 4px 20px rgba(6,85,85,0.09);}
+.score-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.score-left h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;color:var(--navy);margin-bottom:10px;}
+.score-left p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+.score-items{display:flex;flex-direction:column;gap:10px;}
+.si{display:flex;align-items:center;gap:12px;}
+.si-bar-wrap{flex:1;height:7px;background:#E0EEEE;border-radius:10px;overflow:hidden;}
+.si-bar{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--teal-dk),var(--teal));}
+.si-label{font-size:12.5px;color:var(--navy);font-weight:600;width:170px;flex-shrink:0;}
+.si-pts{font-size:12px;font-weight:700;color:var(--teal-dk);width:40px;text-align:right;flex-shrink:0;}
+.score-right{text-align:center;}
+.score-circle-wrap{position:relative;width:180px;height:180px;margin:0 auto 16px;}
+.score-svg{width:180px;height:180px;transform:rotate(-90deg);}
+.score-track{stroke:#E0EEEE;stroke-width:12;fill:none;}
+.score-fill{stroke:url(#scoreGrad);stroke-width:12;fill:none;stroke-linecap:round;stroke-dasharray:489;stroke-dashoffset:63;transition:stroke-dashoffset .6s ease;}
+.score-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.sc-num{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;color:var(--navy);}
+.sc-of{font-size:13px;color:var(--muted);}
+.score-caption{font-size:13px;color:var(--muted);line-height:1.6;max-width:200px;margin:0 auto;}
+
+/* FAQ */
+.faq-section{margin-bottom:60px;}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.faq-item{background:rgba(255,255,255,0.96);border-radius:14px;padding:20px 22px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.06);}
+.faq-q{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;}
+.faq-q-ico{width:20px;height:20px;background:var(--teal-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px;font-weight:800;color:var(--teal-dk);}
+.faq-a{font-size:12.5px;color:var(--muted);line-height:1.7;padding-left:30px;}
+
+/* CTA BOTTOM */
+.cta-bottom{background:linear-gradient(135deg,var(--teal-dk),#0A6060,var(--teal));border-radius:24px;padding:52px 48px;text-align:center;box-shadow:0 16px 48px rgba(6,85,85,0.28);position:relative;overflow:hidden;}
+.cta-bottom::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,0.04);top:-120px;right:-100px;}
+.cta-bottom::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.03);bottom:-100px;left:100px;}
+.cb-inner{position:relative;z-index:1;}
+.cb-h2{font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:white;margin-bottom:12px;}
+.cb-sub{font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.65;}
+.cb-btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+.cb-btn-white{background:white;color:var(--teal-dk);border:none;border-radius:12px;padding:14px 32px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+.cb-btn-out{background:transparent;color:white;border:2px solid rgba(255,255,255,0.4);border-radius:12px;padding:13px 28px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+.cb-trust{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;}
+.cb-t{display:flex;align-items:center;gap:6px;font-size:12.5px;color:rgba(255,255,255,0.65);}
+.cb-t svg{width:14px;height:14px;stroke:rgba(255,255,255,0.65);fill:none;stroke-width:2;}
+
+/* ============================================================
+   YVITY RESPONSIVE — Mobile First (max-width: 768px)
+   ============================================================ */
+
+/* Viewport meta already in each file's <head> */
+
+/* ---- TOP NAV ---- */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 12px !important;
+    height: 50px !important;
+  }
+  .tn-logo {
+    width: auto !important;
+    font-size: 16px !important;
+    border-right: none !important;
+    padding: 0 !important;
+    flex: 1;
+  }
+  .tn-mid { display: none !important; }
+  .tn-right { gap: 6px !important; }
+  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
+  .tn-name { font-size: 12px !important; }
+  .tn-plan, .tn-role { display: none !important; }
+  .tn-btn span, .ph-right .btn span { display: none; }
+  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
+}
+
+/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .body-wrap { flex-direction: column !important; }
+}
+
+/* ---- BOTTOM NAV (mobile only) ---- */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 58px;
+    background: var(--teal-dk, #065555);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 64px;
+  }
+  .mbn-item.on { background: rgba(255,255,255,0.12); }
+  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
+  .mbn-item.on svg { stroke: white; }
+  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .mbn-item.on .mbn-label { color: white; }
+  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* push page content above bottom nav */
+  .main, .preview-area, body > .body-wrap > .main {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ---- ADMIN BOTTOM NAV — dark purple ---- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav.admin-nav {
+    background: #1E0A38 !important;
+    border-top-color: rgba(139,92,246,0.2) !important;
+  }
+  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
+  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
+  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
+  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
+  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
+}
+
+/* ---- MAIN CONTENT PADDING ---- */
+@media (max-width: 768px) {
+  .main { padding: 16px !important; }
+  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .page-hdr h1 { font-size: 18px !important; }
+  .ph-right { width: 100%; }
+  .ph-right .btn { flex: 1; justify-content: center; }
+}
+
+/* ---- GRIDS → SINGLE COLUMN ---- */
+@media (max-width: 768px) {
+  .main-grid,
+  .main-grid-3,
+  .detail-grid,
+  .detail-grid-3,
+  .home-grid,
+  .plan-cards,
+  .stats-grid,
+  .aa-grid,
+  .two-col,
+  .form-grid { 
+    grid-template-columns: 1fr !important; 
+  }
+  .preview-col,
+  .right-col,
+  .home-right,
+  .checklist-panel { 
+    position: static !important; 
+    width: 100% !important;
+  }
+}
+
+/* ---- CARDS ---- */
+@media (max-width: 768px) {
+  .form-card, .card, .usage-card, .score-widget,
+  .admin-actions, .advisor-hero { 
+    border-radius: 12px !important; 
+    padding: 16px !important; 
+  }
+}
+
+/* ---- HERO SECTIONS ---- */
+@media (max-width: 768px) {
+  /* Plan hero (D10) */
+  .plan-hero { 
+    flex-direction: column !important; 
+    padding: 18px !important; 
+    gap: 14px !important;
+  }
+  .ph-right-block { width: 100% !important; }
+  .ph-plan-name { font-size: 22px !important; }
+
+  /* Advisor hero (AD2) */
+  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
+  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
+  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
+
+  /* Profile header */
+  .prh-top { flex-direction: column !important; gap: 12px !important; }
+  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
+  .pss-right { flex-direction: column !important; gap: 6px !important; }
+  .pss-left { gap: 8px !important; }
+
+  /* Admin hero */
+  .advisor-hero { border-radius: 16px !important; }
+}
+
+/* ---- STATS GRID ---- */
+@media (max-width: 768px) {
+  .stats-grid { 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .stat-card { padding: 14px !important; }
+  .sc-val { font-size: 22px !important; }
+}
+
+/* ---- TABLES → CARD-STYLE ---- */
+@media (max-width: 768px) {
+  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
+  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+.mobile-table-cards { display: none; }
+
+/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
+@media (max-width: 768px) {
+  .prof-tabs, .detail-tabs { 
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .prof-tabs::-webkit-scrollbar,
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .ptab, .dtab { 
+    padding: 11px 14px !important; 
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ---- PREVIEW TOOLBAR (D11) ---- */
+@media (max-width: 768px) {
+  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
+  .pt-url { display: none !important; }
+  .pt-spacer { display: none !important; }
+  .preview-area { padding: 12px !important; }
+  .preview-frame { border-radius: 14px !important; }
+  /* hide checklist panel on mobile — show as collapsible below */
+  .checklist-panel { display: none !important; }
+}
+
+/* ---- PLAN COMPARISON (D10) ---- */
+@media (max-width: 768px) {
+  .plan-cards { gap: 10px !important; }
+  .pc-name { font-size: 14px !important; }
+  .pc-price { font-size: 20px !important; }
+}
+
+/* ---- LOGIN SPLIT (A1) ---- */
+@media (max-width: 768px) {
+  .login-wrap { flex-direction: column !important; min-height: auto !important; }
+  .login-left { display: none !important; }
+  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
+}
+
+/* ---- SIGNUP STEPS (A2) ---- */
+@media (max-width: 768px) {
+  .signup-wrap { flex-direction: column !important; }
+  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+  .signup-right { width: 100% !important; padding: 20px 16px !important; }
+  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
+}
+
+/* ---- DIRECTORY (P3) ---- */
+@media (max-width: 768px) {
+  .dir-layout { flex-direction: column !important; }
+  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
+  .dir-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---- LANDING PAGE (P1) ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 40px 20px 30px !important; }
+  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
+  .hero-subtitle { font-size: 14px !important; }
+  .hero-btns { flex-direction: column !important; gap: 10px !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  .pricing-grid { grid-template-columns: 1fr !important; }
+  .lp-nav-links { display: none !important; }
+}
+
+/* ---- SCORE PAGE (D9) ---- */
+@media (max-width: 768px) {
+  .score-hero { padding: 20px !important; }
+  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
+}
+
+/* ---- GALLERY GRID (D6) ---- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ---- MISC UTILITIES ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  br.hide-mobile { display: none !important; }
+  .text-center-mobile { text-align: center !important; }
+}
+.show-mobile { display: none; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="nav-links">
+    <span class="nl">For Advisors</span>
+    <span class="nl">Examples</span>
+    <span class="nl active">Pricing</span>
+  </div>
+  <div class="nav-right">
+    <span class="nr">Register</span>
+    <span class="nr-sep">|</span>
+    <span class="nr">Login</span>
+    <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="pricing-hero">
+    <div class="ph-tag"><div class="ph-tag-dot"></div>Simple · Transparent · No Hidden Fees</div>
+    <h1 class="ph-h1">Invest in Your<br><span>Credibility</span></h1>
+    <p class="ph-sub">Start free. Upgrade as your credibility grows. All plans include a structured public profile, IRDAI license display, and WhatsApp-shareable profile link.</p>
+    <div class="billing-toggle">
+      <div class="bt-opt on">Monthly</div>
+      <div class="bt-opt">Yearly <span class="bt-save">Save 20%</span></div>
+    </div>
+  </div>
+
+  <!-- PLANS -->
+  <div class="plans-grid">
+
+    <!-- FREE -->
+    <div class="plan">
+      <div class="plan-bar bar-free"></div>
+      <div class="plan-head">
+        <div class="plan-icon">🌱</div>
+        <div class="plan-name">Free</div>
+        <div class="plan-tagline">Start your credibility journey. Build your profile and collect your first testimonials.</div>
+        <div class="plan-price-row">
+          <div class="plan-price">₹0</div>
+          <div class="plan-price-per">/ forever</div>
+        </div>
+        <div class="plan-billed">No credit card required</div>
+        <button class="plan-cta-btn btn-free">Get Started Free →</button>
+      </div>
+      <div class="plan-divider"></div>
+      <div class="plan-features">
+        <div class="pf-section-title">Profile</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Basic Public Profile Page</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Education & Journey Sections</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Services Section</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Share Profile Link (WhatsApp)</div>
+
+        <div class="pf-section-title">Limits</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Achievements <span class="pf-limit">3 only</span></div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Gallery Photos <span class="pf-limit">3 only</span></div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Text Testimonials <span class="pf-limit">5 only</span></div>
+
+        <div class="pf-section-title">Not Included</div>
+        <div class="pf-item dim"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Identity Verified Badge</div>
+        <div class="pf-item dim"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>IRDA License Display</div>
+        <div class="pf-item dim"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>QR Code for Visiting Card</div>
+        <div class="pf-item dim"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Audio / Video Testimonials</div>
+      </div>
+    </div>
+
+    <!-- SILVER -->
+    <div class="plan pop">
+      <div class="plan-bar bar-silver"></div>
+      <div class="plan-head">
+        <div class="plan-pop-badge badge-pop">⭐ MOST POPULAR</div>
+        <div class="plan-icon">🛡️</div>
+        <div class="plan-name">Silver</div>
+        <div class="plan-tagline">Look professional. Verified badge, QR code, audio testimonials and IRDAI display.</div>
+        <div class="plan-price-row">
+          <div class="plan-price">₹999</div>
+          <div class="plan-price-per">/ year</div>
+        </div>
+        <div class="plan-billed">₹83/month · Billed annually · Razorpay secured</div>
+        <button class="plan-cta-btn btn-silver">Get Silver — ₹999/yr →</button>
+      </div>
+      <div class="plan-divider"></div>
+      <div class="plan-features">
+        <div class="pf-section-title">Everything in Free, plus</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Identity Verified Badge (Public) <span class="pf-new">NEW</span></div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>IRDAI License Display on Profile</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>QR Code for Visiting Card <span class="pf-new">NEW</span></div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Audio Testimonials</div>
+
+        <div class="pf-section-title">Increased Limits</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Achievements <span class="pf-limit">Up to 10</span></div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Gallery Photos <span class="pf-limit">Up to 15</span></div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Text Testimonials <span class="pf-limit">Unlimited</span></div>
+
+        <div class="pf-section-title">Not Included</div>
+        <div class="pf-item dim"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Video Testimonials</div>
+        <div class="pf-item dim"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>'Recommend this Professional'</div>
+        <div class="pf-item dim"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Intro Video on Profile</div>
+        <div class="pf-item dim"><svg class="pf-no" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Featured Directory Priority</div>
+      </div>
+    </div>
+
+    <!-- GOLD -->
+    <div class="plan gld">
+      <div class="plan-bar bar-gold"></div>
+      <div class="plan-head">
+        <div class="plan-pop-badge badge-gold">◆ MOST POWERFUL</div>
+        <div class="plan-icon">👑</div>
+        <div class="plan-name">Gold</div>
+        <div class="plan-tagline">Look authoritative. Recommendations, video testimonials, intro video and directory priority.</div>
+        <div class="plan-price-row">
+          <div class="plan-price">₹2,999</div>
+          <div class="plan-price-per">/ year</div>
+        </div>
+        <div class="plan-billed">₹250/month · Billed annually · Razorpay secured</div>
+        <button class="plan-cta-btn btn-gold">Get Gold — ₹2,999/yr →</button>
+      </div>
+      <div class="plan-divider"></div>
+      <div class="plan-features">
+        <div class="pf-section-title">Everything in Silver, plus</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Video Testimonials <span class="pf-new">GOLD ONLY</span></div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>'Recommend this Professional' <span class="pf-gold-tag">GOLD ONLY</span></div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Intro Video on Profile Home</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Featured in Directory (Priority Top)</div>
+
+        <div class="pf-section-title">Unlimited Everything</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited Achievements</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited Gallery Photos</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited All Testimonials</div>
+
+        <div class="pf-section-title">Premium Identity</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Gold Member Badge on Profile</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Recommendation Count on Header</div>
+        <div class="pf-item"><svg class="pf-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Premium Company Association Logos</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- UPGRADE PSYCHOLOGY -->
+  <div class="upgrade-section">
+    <div class="comp-head">
+      <div class="sec-tag">Upgrade Psychology</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:800;color:var(--navy);">What Each Plan Says About You</h2>
+    </div>
+    <div class="upgrade-grid">
+      <div class="ug-card">
+        <div class="ug-icon">🌱</div>
+        <div class="ug-plan free-col">Free Plan</div>
+        <div class="ug-title">Getting Started</div>
+        <div class="ug-desc">Profile looks incomplete. Limited testimonials, no verified badge, no IRDAI display. Clients may hesitate. Good for starting out.</div>
+      </div>
+      <div class="ug-card" style="border-color:rgba(11,123,123,0.18);box-shadow:0 4px 16px rgba(11,123,123,0.1);">
+        <div class="ug-icon">🛡️</div>
+        <div class="ug-plan silver-col">Silver Plan</div>
+        <div class="ug-title">Looks Professional</div>
+        <div class="ug-desc">Verified badge, QR code on visiting card, IRDAI visible, audio testimonials. Clients see a credible, legitimate advisor they can trust.</div>
+      </div>
+      <div class="ug-card" style="border-color:rgba(201,168,76,0.25);box-shadow:0 4px 16px rgba(184,134,11,0.08);">
+        <div class="ug-icon">👑</div>
+        <div class="ug-plan gold-col">Gold Plan</div>
+        <div class="ug-title">Looks Authoritative</div>
+        <div class="ug-desc">Recommendations, video testimonials, intro video, priority directory listing. Clients see an elite advisor — top of their field.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- YVITY SCORE -->
+  <div class="score-section">
+    <div class="score-inner">
+      <div class="score-left">
+        <h2>How YVITY Score Works</h2>
+        <p>Your YVITY Score (0–100) is calculated automatically and updates in real-time. Higher score = higher rank in directory. Upgrade to unlock more signals.</p>
+        <div class="score-items">
+          <div class="si"><div class="si-label">IRDAI License Verified</div><div class="si-bar-wrap"><div class="si-bar" style="width:100%"></div></div><div class="si-pts">20 pts</div></div>
+          <div class="si"><div class="si-label">Selfie Verification</div><div class="si-bar-wrap"><div class="si-bar" style="width:50%"></div></div><div class="si-pts">10 pts</div></div>
+          <div class="si"><div class="si-label">Mobile OTP</div><div class="si-bar-wrap"><div class="si-bar" style="width:50%"></div></div><div class="si-pts">10 pts</div></div>
+          <div class="si"><div class="si-label">Verified Testimonials</div><div class="si-bar-wrap"><div class="si-bar" style="width:75%"></div></div><div class="si-pts">15 pts</div></div>
+          <div class="si"><div class="si-label">Recommendations (Gold)</div><div class="si-bar-wrap"><div class="si-bar" style="width:75%;background:linear-gradient(90deg,#B8860B,#DAA520)"></div></div><div class="si-pts">15 pts</div></div>
+          <div class="si"><div class="si-label">Profile 100% Complete</div><div class="si-bar-wrap"><div class="si-bar" style="width:50%"></div></div><div class="si-pts">10 pts</div></div>
+          <div class="si"><div class="si-label">Active (Last 90 days)</div><div class="si-bar-wrap"><div class="si-bar" style="width:25%"></div></div><div class="si-pts">5 pts</div></div>
+          <div class="si"><div class="si-label">Achievement Badges</div><div class="si-bar-wrap"><div class="si-bar" style="width:25%"></div></div><div class="si-pts">5 pts</div></div>
+          <div class="si"><div class="si-label">Founding / Core Badge</div><div class="si-bar-wrap"><div class="si-bar" style="width:25%"></div></div><div class="si-pts">5 pts</div></div>
+          <div class="si"><div class="si-label">Email OTP</div><div class="si-bar-wrap"><div class="si-bar" style="width:25%"></div></div><div class="si-pts">5 pts</div></div>
+        </div>
+      </div>
+      <div class="score-right">
+        <div class="score-circle-wrap">
+          <svg class="score-svg" viewBox="0 0 180 180">
+            <defs>
+              <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#065555"/>
+                <stop offset="100%" stop-color="#0D9494"/>
+              </linearGradient>
+            </defs>
+            <circle class="score-track" cx="90" cy="90" r="78"/>
+            <circle class="score-fill" cx="90" cy="90" r="78"/>
+          </svg>
+          <div class="score-center">
+            <div class="sc-num">87</div>
+            <div class="sc-of">/ 100</div>
+          </div>
+        </div>
+        <div class="score-caption">Your YVITY Score is displayed prominently on your public profile and in the directory — sorted highest first.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="comp-section">
+    <div class="comp-head">
+      <div class="sec-tag">Full Comparison</div>
+      <h2>Feature-by-Feature Breakdown</h2>
+    </div>
+    <div class="comp-table">
+      <div class="ct-head">
+        <div class="ct-h">Feature</div>
+        <div class="ct-h">Free</div>
+        <div class="ct-h">Silver ₹999</div>
+        <div class="ct-h gold-h">Gold ₹2,999</div>
+      </div>
+
+      <div class="ct-group-row">Profile & Identity</div>
+      <div class="ct-row"><div class="ct-cell">Profile Creation</div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="ct-row ct-highlight"><div class="ct-cell">Basic Public Profile</div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="ct-row"><div class="ct-cell">Identity Verified Badge</div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="ct-row ct-highlight"><div class="ct-cell">IRDA License Display</div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="ct-row"><div class="ct-cell">QR Code for Visiting Card</div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+
+      <div class="ct-group-row">Content Limits</div>
+      <div class="ct-row"><div class="ct-cell">Achievements</div><div class="ct-cell"><span class="ct-muted">3 only</span></div><div class="ct-cell"><span class="ct-val">10</span></div><div class="ct-cell"><span class="ct-gold-val">Unlimited</span></div></div>
+      <div class="ct-row ct-highlight"><div class="ct-cell">Gallery Photos</div><div class="ct-cell"><span class="ct-muted">3 only</span></div><div class="ct-cell"><span class="ct-val">15</span></div><div class="ct-cell"><span class="ct-gold-val">Unlimited</span></div></div>
+      <div class="ct-row"><div class="ct-cell">Text Testimonials</div><div class="ct-cell"><span class="ct-muted">5 only</span></div><div class="ct-cell"><span class="ct-val">Unlimited</span></div><div class="ct-cell"><span class="ct-gold-val">Unlimited</span></div></div>
+
+      <div class="ct-group-row">Testimonials</div>
+      <div class="ct-row"><div class="ct-cell">Audio Testimonials</div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="ct-row ct-highlight"><div class="ct-cell">Video Testimonials</div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+
+      <div class="ct-group-row">Gold Exclusive</div>
+      <div class="ct-row"><div class="ct-cell">'Recommend this Professional'</div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="ct-row ct-highlight"><div class="ct-cell">Intro Video on Profile</div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="ct-row"><div class="ct-cell">Featured in Directory (Priority)</div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-no" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+
+      <div class="ct-group-row">Share & Visibility</div>
+      <div class="ct-row"><div class="ct-cell">Share Profile Link</div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="ct-row ct-highlight"><div class="ct-cell">Profile Views Count</div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div><div class="ct-cell"><svg class="ct-yes" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div class="comp-head">
+      <div class="sec-tag">FAQ</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:800;color:var(--navy);">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item"><div class="faq-q"><div class="faq-q-ico">Q</div>Can I upgrade or downgrade anytime?</div><div class="faq-a">Yes. Upgrade anytime from your dashboard. Downgrade takes effect at the end of your current billing cycle.</div></div>
+      <div class="faq-item"><div class="faq-q"><div class="faq-q-ico">Q</div>How is IRDAI license verified?</div><div class="faq-a">In Phase 1, our admin team manually verifies your IRDAI license number within 24 hours. Phase 2 will automate this via API.</div></div>
+      <div class="faq-item"><div class="faq-q"><div class="faq-q-ico">Q</div>What payment methods are accepted?</div><div class="faq-a">All payments are processed via Razorpay — UPI, debit/credit card, net banking, and wallets are accepted.</div></div>
+      <div class="faq-item"><div class="faq-q"><div class="faq-q-ico">Q</div>Are testimonials really OTP-verified?</div><div class="faq-a">Yes. Every testimonial on YVITY requires the reviewer to verify their mobile number via OTP. No fake reviews.</div></div>
+      <div class="faq-item"><div class="faq-q"><div class="faq-q-ico">Q</div>What is 'Recommend this Professional'?</div><div class="faq-a">Gold-only feature. Logged-in users can formally recommend a Gold advisor. Recommendation count appears on the profile header.</div></div>
+      <div class="faq-item"><div class="faq-q"><div class="faq-q-ico">Q</div>Can I share my profile without login?</div><div class="faq-a">Yes. Your profile link can be shared via WhatsApp, visiting card QR code, or directly. Viewers don't need an account to view your profile.</div></div>
+    </div>
+  </div>
+
+  <!-- CTA BOTTOM -->
+  <div class="cta-bottom">
+    <div class="cb-inner">
+      <div class="cb-h2">Start Building Your Credibility Today</div>
+      <div class="cb-sub">Join India's first professional credibility platform for insurance advisors. Founding Advisor spots are limited.</div>
+      <div class="cb-btns">
+        <button class="cb-btn-white">Get Started Free →</button>
+        <button class="cb-btn-out">Get Silver — ₹999/yr</button>
+      </div>
+      <div class="cb-trust">
+        <div class="cb-t"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>IRDAI Verified</div>
+        <div class="cb-t"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Razorpay Secured</div>
+        <div class="cb-t"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>No Hidden Charges</div>
+        <div class="cb-t"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Cancel Anytime</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

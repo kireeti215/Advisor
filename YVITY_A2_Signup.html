@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY – Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;
+  --navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;
+  --bg:#b2ced8;--muted:#5A7080;--text:#1A3040;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);background-image:radial-gradient(ellipse 80% 60% at 10% 20%,rgba(255,255,255,0.45) 0%,transparent 55%),radial-gradient(ellipse 60% 70% at 90% 80%,rgba(6,85,85,0.14) 0%,transparent 55%);min-height:100vh;display:flex;flex-direction:column;}
+
+/* NAV */
+.nav{background:var(--teal-dk);padding:0 48px;height:56px;display:flex;align-items:center;box-shadow:0 2px 12px rgba(6,85,85,0.3);}
+.logo{display:flex;align-items:center;gap:8px;color:white;font-size:20px;font-weight:800;letter-spacing:1.5px;}
+.logo svg{width:20px;height:20px;stroke:white;fill:none;stroke-width:2.5;}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.nr{color:rgba(255,255,255,0.82);font-size:14px;cursor:pointer;}
+.nr-sep{color:rgba(255,255,255,0.3);}
+
+/* LAYOUT */
+.layout{flex:1;display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 56px);}
+
+/* ═══ LEFT SIDEBAR ═══ */
+.left-side{background:linear-gradient(160deg,var(--teal-dk) 0%,#074A4A 50%,#063D3D 100%);padding:36px 32px;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+.ls-bg1{position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.03);top:-80px;right:-80px;}
+.ls-bg2{position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.03);bottom:-60px;left:-40px;}
+.ls-content{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;}
+
+.ls-logo{display:flex;align-items:center;gap:8px;color:white;font-size:18px;font-weight:800;letter-spacing:1.5px;margin-bottom:28px;}
+.ls-logo svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.5;}
+
+.ls-h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:white;line-height:1.3;margin-bottom:10px;}
+.ls-h2 span{color:#7FDFDF;}
+.ls-sub{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:32px;}
+
+/* STEPS LIST */
+.steps-list{display:flex;flex-direction:column;gap:0;flex:1;}
+.step-item{display:flex;gap:14px;align-items:flex-start;position:relative;padding-bottom:24px;}
+.step-item:last-child{padding-bottom:0;}
+.step-item:not(:last-child)::after{content:'';position:absolute;left:16px;top:34px;bottom:0;width:2px;background:rgba(255,255,255,0.1);}
+.step-item.done::after{background:rgba(74,224,154,0.4);}
+.step-item.active::after{background:rgba(255,255,255,0.1);}
+
+.si-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;transition:all .2s;}
+.si-num.done{background:#1A7A4A;color:white;box-shadow:0 3px 10px rgba(26,122,74,0.4);}
+.si-num.active{background:white;color:var(--teal-dk);box-shadow:0 3px 12px rgba(255,255,255,0.2);}
+.si-num.pending{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);border:1.5px solid rgba(255,255,255,0.15);}
+.si-num.done-ico{font-size:14px;}
+
+.si-info{padding-top:6px;}
+.si-title{font-size:13.5px;font-weight:700;margin-bottom:2px;}
+.si-title.done{color:rgba(255,255,255,0.7);}
+.si-title.active{color:white;}
+.si-title.pending{color:rgba(255,255,255,0.35);}
+.si-desc{font-size:11.5px;line-height:1.55;}
+.si-desc.done{color:rgba(255,255,255,0.45);}
+.si-desc.active{color:rgba(255,255,255,0.65);}
+.si-desc.pending{color:rgba(255,255,255,0.2);}
+.si-done-tag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:#4AE09A;margin-top:3px;}
+.si-done-tag svg{width:11px;height:11px;stroke:#4AE09A;fill:none;stroke-width:2.5;}
+
+/* Bottom badge earned */
+.ls-badge{margin-top:auto;padding-top:24px;}
+.ls-badge-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;}
+.lbc-ico{font-size:28px;}
+.lbc-info{}
+.lbc-title{font-size:13px;font-weight:700;color:white;margin-bottom:3px;}
+.lbc-sub{font-size:11.5px;color:rgba(255,255,255,0.55);line-height:1.55;}
+
+/* ═══ RIGHT MAIN AREA ═══ */
+.right-main{background:rgba(255,255,255,0.94);display:flex;align-items:flex-start;justify-content:center;padding:44px 56px;overflow-y:auto;}
+.form-container{width:100%;max-width:500px;}
+
+/* Progress bar */
+.progress-wrap{margin-bottom:28px;}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.prog-label{font-size:12.5px;font-weight:700;color:var(--teal-dk);}
+.prog-count{font-size:12px;color:var(--muted);}
+.prog-bar{height:6px;background:#E0EEEE;border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--teal-dk),var(--teal));border-radius:10px;width:57%;transition:width .4s ease;}
+
+/* Step header */
+.step-header{margin-bottom:24px;}
+.sh-step-tag{display:inline-flex;align-items:center;gap:6px;background:var(--teal-lt);color:var(--teal-dk);font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:10px;margin-bottom:10px;}
+.sh-step-tag svg{width:12px;height:12px;stroke:var(--teal-dk);fill:none;stroke-width:2.5;}
+.sh-h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.sh-sub{font-size:13.5px;color:var(--muted);line-height:1.65;}
+
+/* Input group */
+.input-group{margin-bottom:16px;}
+.ig-label{font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:7px;display:block;}
+.ig-wrap{position:relative;display:flex;align-items:center;}
+.ig-icon{position:absolute;left:14px;width:17px;height:17px;stroke:#9AAABB;fill:none;stroke-width:2;flex-shrink:0;}
+.ig-input{width:100%;padding:13px 14px 13px 42px;border:1.5px solid rgba(11,123,123,0.18);border-radius:12px;font-size:14px;font-family:'Inter',sans-serif;color:var(--navy);outline:none;transition:all .2s;background:#FAFCFC;}
+.ig-input:focus{border-color:var(--teal);background:white;box-shadow:0 0 0 3px rgba(11,123,123,0.08);}
+.ig-input.verified{border-color:var(--green);background:rgba(26,122,74,0.04);}
+.ig-input::placeholder{color:#B0C4CC;}
+.ig-verified{position:absolute;right:14px;display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--green);}
+.ig-verified svg{width:14px;height:14px;stroke:var(--green);fill:none;stroke-width:2.5;}
+
+/* Two columns */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* OTP boxes */
+.otp-section{margin-bottom:18px;}
+.otp-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.otp-lbl{font-size:12.5px;font-weight:700;color:var(--navy);}
+.otp-resend{font-size:12px;color:var(--teal);cursor:pointer;font-weight:600;}
+.otp-boxes{display:flex;gap:10px;}
+.otp-box{width:50px;height:54px;border:1.5px solid rgba(11,123,123,0.2);border-radius:12px;font-size:20px;font-weight:700;color:var(--navy);text-align:center;font-family:'Inter',sans-serif;outline:none;background:#FAFCFC;transition:all .2s;}
+.otp-box:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(11,123,123,0.08);}
+.otp-box.filled{border-color:var(--green);background:rgba(26,122,74,0.05);color:var(--green);}
+.otp-sent{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--green);font-weight:600;margin-top:8px;}
+.otp-sent svg{width:13px;height:13px;stroke:var(--green);fill:none;stroke-width:2.5;}
+
+/* IRDA input special */
+.irda-wrap{position:relative;}
+.irda-hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+.irda-format{display:inline-block;background:var(--teal-lt);color:var(--teal-dk);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:6px;font-family:monospace;}
+
+/* Liveness check card */
+.liveness-card{border:1.5px dashed rgba(11,123,123,0.25);border-radius:16px;padding:28px;text-align:center;background:rgba(11,123,123,0.02);margin-bottom:18px;}
+.lc-camera{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--teal-lt),#D0ECEC);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 14px;}
+.lc-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.lc-sub{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:16px;max-width:300px;margin-left:auto;margin-right:auto;}
+.lc-checks{display:flex;justify-content:center;gap:20px;margin-bottom:18px;flex-wrap:wrap;}
+.lcc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);}
+.lcc svg{width:13px;height:13px;stroke:var(--teal);fill:none;stroke-width:2;}
+.lc-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;border:none;border-radius:12px;padding:12px 28px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(11,123,123,0.28);}
+.lc-btn svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2;}
+
+/* Selfie upload */
+.selfie-card{border:1.5px dashed rgba(11,123,123,0.25);border-radius:16px;padding:24px;margin-bottom:18px;background:rgba(11,123,123,0.02);}
+.sc-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.sc-side{text-align:center;}
+.sc-preview{width:100%;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#F0F6F6;display:flex;align-items:center;justify-content:center;margin-bottom:8px;border:1.5px solid rgba(11,123,123,0.1);}
+.sc-preview img{width:100%;height:100%;object-fit:cover;}
+.sc-preview-empty{font-size:32px;flex-direction:column;display:flex;align-items:center;justify-content:center;gap:6px;}
+.sc-preview-empty span{font-size:12px;color:var(--muted);font-family:'Inter',sans-serif;}
+.sc-lbl{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.sc-sublbl{font-size:11px;color:var(--muted);}
+
+/* Badge earned section (Step 7) */
+.badge-earned{background:linear-gradient(135deg,rgba(26,122,74,0.07),rgba(11,123,123,0.05));border:1.5px solid rgba(26,122,74,0.2);border-radius:16px;padding:28px;text-align:center;margin-bottom:20px;}
+.be-icon{font-size:56px;margin-bottom:12px;animation:pop .5s ease;}
+@keyframes pop{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.be-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.be-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;}
+.be-badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.be-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;}
+.beb-green{background:rgba(26,122,74,0.1);color:var(--green);border:1.5px solid rgba(26,122,74,0.2);}
+.beb-teal{background:var(--teal-lt);color:var(--teal-dk);border:1.5px solid rgba(11,123,123,0.2);}
+.beb-gold{background:rgba(201,168,76,0.1);color:#8B6914;border:1.5px solid rgba(201,168,76,0.25);}
+
+/* Nav buttons */
+.form-nav{display:flex;gap:12px;margin-top:24px;}
+.btn-back{flex:0.4;padding:13px;background:white;color:var(--teal-dk);border:1.5px solid rgba(11,123,123,0.2);border-radius:12px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;}
+.btn-back:hover{border-color:var(--teal);background:var(--teal-lt);}
+.btn-back svg{width:15px;height:15px;stroke:var(--teal-dk);fill:none;stroke-width:2.5;}
+.btn-next{flex:1;padding:13px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(11,123,123,0.3);display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;}
+.btn-next:hover{box-shadow:0 8px 24px rgba(11,123,123,0.4);transform:translateY(-1px);}
+.btn-next svg{width:15px;height:15px;stroke:white;fill:none;stroke-width:2.5;}
+.btn-next.gold-btn{background:linear-gradient(135deg,#B8860B,#DAA520);box-shadow:0 4px 16px rgba(184,134,11,0.28);}
+
+/* Security note */
+.security-note{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px;font-size:11.5px;color:#9AAABB;}
+.security-note svg{width:13px;height:13px;stroke:#9AAABB;fill:none;stroke-width:2;}
+
+/* Already have account */
+.already-row{text-align:center;margin-top:16px;font-size:13px;color:var(--muted);}
+.already-row a{color:var(--teal);font-weight:700;cursor:pointer;}
+
+/* Divider between forms */
+.form-divider{height:1px;background:rgba(11,123,123,0.08);margin:18px 0;}
+
+/* Info box */
+.info-box{display:flex;gap:10px;background:rgba(11,123,123,0.05);border:1px solid rgba(11,123,123,0.12);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
+.info-box svg{width:16px;height:16px;stroke:var(--teal);fill:none;stroke-width:2;flex-shrink:0;margin-top:1px;}
+.info-box p{font-size:12.5px;color:var(--muted);line-height:1.6;}
+
+/* ============================================================
+   YVITY RESPONSIVE — Mobile First (max-width: 768px)
+   ============================================================ */
+
+/* Viewport meta already in each file's <head> */
+
+/* ---- TOP NAV ---- */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 12px !important;
+    height: 50px !important;
+  }
+  .tn-logo {
+    width: auto !important;
+    font-size: 16px !important;
+    border-right: none !important;
+    padding: 0 !important;
+    flex: 1;
+  }
+  .tn-mid { display: none !important; }
+  .tn-right { gap: 6px !important; }
+  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
+  .tn-name { font-size: 12px !important; }
+  .tn-plan, .tn-role { display: none !important; }
+  .tn-btn span, .ph-right .btn span { display: none; }
+  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
+}
+
+/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .body-wrap { flex-direction: column !important; }
+}
+
+/* ---- BOTTOM NAV (mobile only) ---- */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 58px;
+    background: var(--teal-dk, #065555);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 64px;
+  }
+  .mbn-item.on { background: rgba(255,255,255,0.12); }
+  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
+  .mbn-item.on svg { stroke: white; }
+  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .mbn-item.on .mbn-label { color: white; }
+  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* push page content above bottom nav */
+  .main, .preview-area, body > .body-wrap > .main {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ---- ADMIN BOTTOM NAV — dark purple ---- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav.admin-nav {
+    background: #1E0A38 !important;
+    border-top-color: rgba(139,92,246,0.2) !important;
+  }
+  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
+  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
+  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
+  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
+  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
+}
+
+/* ---- MAIN CONTENT PADDING ---- */
+@media (max-width: 768px) {
+  .main { padding: 16px !important; }
+  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .page-hdr h1 { font-size: 18px !important; }
+  .ph-right { width: 100%; }
+  .ph-right .btn { flex: 1; justify-content: center; }
+}
+
+/* ---- GRIDS → SINGLE COLUMN ---- */
+@media (max-width: 768px) {
+  .main-grid,
+  .main-grid-3,
+  .detail-grid,
+  .detail-grid-3,
+  .home-grid,
+  .plan-cards,
+  .stats-grid,
+  .aa-grid,
+  .two-col,
+  .form-grid { 
+    grid-template-columns: 1fr !important; 
+  }
+  .preview-col,
+  .right-col,
+  .home-right,
+  .checklist-panel { 
+    position: static !important; 
+    width: 100% !important;
+  }
+}
+
+/* ---- CARDS ---- */
+@media (max-width: 768px) {
+  .form-card, .card, .usage-card, .score-widget,
+  .admin-actions, .advisor-hero { 
+    border-radius: 12px !important; 
+    padding: 16px !important; 
+  }
+}
+
+/* ---- HERO SECTIONS ---- */
+@media (max-width: 768px) {
+  /* Plan hero (D10) */
+  .plan-hero { 
+    flex-direction: column !important; 
+    padding: 18px !important; 
+    gap: 14px !important;
+  }
+  .ph-right-block { width: 100% !important; }
+  .ph-plan-name { font-size: 22px !important; }
+
+  /* Advisor hero (AD2) */
+  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
+  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
+  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
+
+  /* Profile header */
+  .prh-top { flex-direction: column !important; gap: 12px !important; }
+  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
+  .pss-right { flex-direction: column !important; gap: 6px !important; }
+  .pss-left { gap: 8px !important; }
+
+  /* Admin hero */
+  .advisor-hero { border-radius: 16px !important; }
+}
+
+/* ---- STATS GRID ---- */
+@media (max-width: 768px) {
+  .stats-grid { 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .stat-card { padding: 14px !important; }
+  .sc-val { font-size: 22px !important; }
+}
+
+/* ---- TABLES → CARD-STYLE ---- */
+@media (max-width: 768px) {
+  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
+  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+.mobile-table-cards { display: none; }
+
+/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
+@media (max-width: 768px) {
+  .prof-tabs, .detail-tabs { 
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .prof-tabs::-webkit-scrollbar,
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .ptab, .dtab { 
+    padding: 11px 14px !important; 
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ---- PREVIEW TOOLBAR (D11) ---- */
+@media (max-width: 768px) {
+  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
+  .pt-url { display: none !important; }
+  .pt-spacer { display: none !important; }
+  .preview-area { padding: 12px !important; }
+  .preview-frame { border-radius: 14px !important; }
+  /* hide checklist panel on mobile — show as collapsible below */
+  .checklist-panel { display: none !important; }
+}
+
+/* ---- PLAN COMPARISON (D10) ---- */
+@media (max-width: 768px) {
+  .plan-cards { gap: 10px !important; }
+  .pc-name { font-size: 14px !important; }
+  .pc-price { font-size: 20px !important; }
+}
+
+/* ---- LOGIN SPLIT (A1) ---- */
+@media (max-width: 768px) {
+  .login-wrap { flex-direction: column !important; min-height: auto !important; }
+  .login-left { display: none !important; }
+  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
+}
+
+/* ---- SIGNUP STEPS (A2) ---- */
+@media (max-width: 768px) {
+  .signup-wrap { flex-direction: column !important; }
+  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+  .signup-right { width: 100% !important; padding: 20px 16px !important; }
+  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
+}
+
+/* ---- DIRECTORY (P3) ---- */
+@media (max-width: 768px) {
+  .dir-layout { flex-direction: column !important; }
+  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
+  .dir-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---- LANDING PAGE (P1) ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 40px 20px 30px !important; }
+  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
+  .hero-subtitle { font-size: 14px !important; }
+  .hero-btns { flex-direction: column !important; gap: 10px !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  .pricing-grid { grid-template-columns: 1fr !important; }
+  .lp-nav-links { display: none !important; }
+}
+
+/* ---- SCORE PAGE (D9) ---- */
+@media (max-width: 768px) {
+  .score-hero { padding: 20px !important; }
+  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
+}
+
+/* ---- GALLERY GRID (D6) ---- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ---- MISC UTILITIES ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  br.hide-mobile { display: none !important; }
+  .text-center-mobile { text-align: center !important; }
+}
+.show-mobile { display: none; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="nav-right">
+    <span class="nr">Home</span>
+    <span class="nr-sep">|</span>
+    <span class="nr">Pricing</span>
+    <span class="nr-sep">|</span>
+    <span class="nr" style="color:white;font-weight:600;">Register</span>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- ═══ LEFT SIDEBAR — STEPS ═══ -->
+  <div class="left-side">
+    <div class="ls-bg1"></div><div class="ls-bg2"></div>
+    <div class="ls-content">
+
+      <div class="ls-logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+
+      <h2 class="ls-h2">Build Your<br><span>Verified</span><br>Identity</h2>
+      <p class="ls-sub">Complete all 7 steps to earn your Identity Verified Badge and go live on YVITY.</p>
+
+      <!-- STEPS -->
+      <div class="steps-list">
+
+        <div class="step-item done">
+          <div class="si-num done">✓</div>
+          <div class="si-info">
+            <div class="si-title done">Full Name & Date of Birth</div>
+            <div class="si-done-tag"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Completed</div>
+          </div>
+        </div>
+
+        <div class="step-item done">
+          <div class="si-num done">✓</div>
+          <div class="si-info">
+            <div class="si-title done">Mobile OTP Verification</div>
+            <div class="si-done-tag"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>+91 98765 43210 Verified</div>
+          </div>
+        </div>
+
+        <div class="step-item done">
+          <div class="si-num done">✓</div>
+          <div class="si-info">
+            <div class="si-title done">Email OTP Verification</div>
+            <div class="si-done-tag"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2249504b514a4c4362474f434b4e0c414d4f">[email&#160;protected]</a> Verified</div>
+          </div>
+        </div>
+
+        <div class="step-item done">
+          <div class="si-num done">✓</div>
+          <div class="si-info">
+            <div class="si-title done">IRDAI License Number</div>
+            <div class="si-done-tag"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Submitted for Admin Review</div>
+          </div>
+        </div>
+
+        <div class="step-item active">
+          <div class="si-num active">5</div>
+          <div class="si-info">
+            <div class="si-title active">Liveness Check</div>
+            <div class="si-desc active">Live camera blink/smile verification to confirm you're real</div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="si-num pending">6</div>
+          <div class="si-info">
+            <div class="si-title pending">Selfie Upload</div>
+            <div class="si-desc pending">Capture your professional photo</div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="si-num pending">7</div>
+          <div class="si-info">
+            <div class="si-title pending">Identity Verified Badge</div>
+            <div class="si-desc pending">Badge generated & profile goes live</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom reward -->
+      <div class="ls-badge">
+        <div class="ls-badge-card">
+          <div class="lbc-ico">🏅</div>
+          <div class="lbc-info">
+            <div class="lbc-title">Founding Advisor 2026</div>
+            <div class="lbc-sub">Complete registration to earn this permanent badge — given only to first 500 advisors.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT MAIN — ACTIVE STEP ═══ -->
+  <div class="right-main">
+    <div class="form-container">
+
+      <!-- Progress bar -->
+      <div class="progress-wrap">
+        <div class="prog-top">
+          <div class="prog-label">Step 5 of 7 — Liveness Check</div>
+          <div class="prog-count">4 steps completed ✓</div>
+        </div>
+        <div class="prog-bar"><div class="prog-fill"></div></div>
+      </div>
+
+      <!-- ── STEP 5: LIVENESS CHECK (Active) ── -->
+      <div class="step-header">
+        <div class="sh-step-tag">
+          <svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          Step 5 · Live Camera Verification
+        </div>
+        <h2 class="sh-h2">Liveness Check</h2>
+        <p class="sh-sub">We need to confirm you're a real person. Please allow camera access and follow the on-screen prompts.</p>
+      </div>
+
+      <div class="info-box">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p>This check prevents fake profiles. Your camera feed is <strong>not recorded or stored</strong>. It runs locally in your browser.</p>
+      </div>
+
+      <div class="liveness-card">
+        <div class="lc-camera">📷</div>
+        <div class="lc-title">Ready to Start Liveness Check</div>
+        <div class="lc-sub">Position your face in the frame. You'll be asked to blink once and smile. Takes less than 10 seconds.</div>
+        <div class="lc-checks">
+          <div class="lcc"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Blink Detection</div>
+          <div class="lcc"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Smile Detection</div>
+          <div class="lcc"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Anti-Spoofing</div>
+          <div class="lcc"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Not Recorded</div>
+        </div>
+        <button class="lc-btn">
+          <svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          Start Camera Check
+        </button>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- ── STEP 6 PREVIEW: SELFIE ── -->
+      <div class="step-header" style="opacity:0.55">
+        <div class="sh-step-tag" style="background:#F0F5F5;color:#8AAABB;">
+          <svg viewBox="0 0 24 24" style="stroke:#8AAABB"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Step 6 · Selfie Upload (Next)
+        </div>
+        <h2 class="sh-h2" style="font-size:20px;color:#8AAABB">Selfie Upload</h2>
+        <p class="sh-sub" style="font-size:13px;">Capture a clear, professional-looking photo. This will appear on your public profile.</p>
+      </div>
+
+      <div class="selfie-card" style="opacity:0.5;pointer-events:none;">
+        <div class="sc-row">
+          <div class="sc-side">
+            <div class="sc-preview">
+              <div class="sc-preview-empty">📸<span>Take Selfie</span></div>
+            </div>
+            <div class="sc-lbl">Live Camera</div>
+            <div class="sc-sublbl">Use front camera</div>
+          </div>
+          <div class="sc-side">
+            <div class="sc-preview">
+              <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face" alt="">
+            </div>
+            <div class="sc-lbl">Your Photo</div>
+            <div class="sc-sublbl">Preview here</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- ── STEP 7 PREVIEW: BADGE ── -->
+      <div class="step-header" style="opacity:0.45">
+        <div class="sh-step-tag" style="background:#F0F5F5;color:#8AAABB;">
+          <svg viewBox="0 0 24 24" style="stroke:#8AAABB"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Step 7 · Identity Badge (Final)
+        </div>
+        <h2 class="sh-h2" style="font-size:20px;color:#8AAABB">Identity Verified Badge</h2>
+        <p class="sh-sub" style="font-size:13px;">Your badge will be generated and your profile will go live on YVITY.</p>
+      </div>
+
+      <div class="badge-earned" style="opacity:0.45;pointer-events:none;">
+        <div class="be-icon">🛡️</div>
+        <div class="be-title">Identity Verified!</div>
+        <div class="be-sub">Your YVITY profile is now live and visible to clients. Share your profile link on WhatsApp.</div>
+        <div class="be-badges">
+          <span class="be-badge beb-green">✓ Identity Verified</span>
+          <span class="be-badge beb-teal">✦ Core Advisor 2026</span>
+          <span class="be-badge beb-gold">★ Founding Advisor 2026</span>
+        </div>
+      </div>
+
+      <!-- Nav buttons -->
+      <div class="form-nav">
+        <button class="btn-back">
+          <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>
+          Back
+        </button>
+        <button class="btn-next">
+          Start Liveness Check
+          <svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+        </button>
+      </div>
+
+      <div class="security-note">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Your data is encrypted · OTP via MSG91 · Camera not stored
+      </div>
+
+      <di

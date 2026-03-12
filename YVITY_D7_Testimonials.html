@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY – Testimonials Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;
+  --navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;--gold-dk:#B8860B;
+  --bg:#EEF4F7;--muted:#5A7080;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+
+/* NAV */
+.topnav{background:var(--teal-dk);height:54px;display:flex;align-items:center;padding:0 20px 0 0;box-shadow:0 2px 10px rgba(6,85,85,0.25);position:sticky;top:0;z-index:200;}
+.tn-logo{width:220px;display:flex;align-items:center;gap:8px;color:white;font-size:18px;font-weight:800;letter-spacing:1.5px;padding:0 20px;border-right:1px solid rgba(255,255,255,0.1);flex-shrink:0;}
+.tn-logo svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.5;}
+.tn-mid{flex:1;padding:0 24px;}
+.tn-bc{display:flex;align-items:center;gap:8px;font-size:13.5px;}
+.tbc{color:rgba(255,255,255,0.55);cursor:pointer;}
+.tbs{color:rgba(255,255,255,0.25);}
+.tba{color:white;font-weight:600;}
+.tn-right{display:flex;align-items:center;gap:12px;}
+.tn-icon{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
+.tn-icon svg{width:17px;height:17px;stroke:rgba(255,255,255,0.8);fill:none;stroke-width:2;}
+.tn-notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:#FF6B6B;border-radius:50%;border:1.5px solid var(--teal-dk);}
+.tn-profile{display:flex;align-items:center;gap:9px;cursor:pointer;padding:4px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);}
+.tn-av{width:30px;height:30px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.3);}
+.tn-av img{width:100%;height:100%;object-fit:cover;}
+.tn-name{font-size:13px;font-weight:700;color:white;}
+.tn-plan{font-size:10px;color:rgba(255,255,255,0.55);}
+
+.body-wrap{display:flex;flex:1;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:white;border-right:1px solid rgba(11,123,123,0.08);display:flex;flex-direction:column;min-height:calc(100vh - 54px);position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;flex-shrink:0;}
+.sb-section{padding:16px 12px 8px;}
+.sb-sec-title{font-size:10.5px;font-weight:700;color:#9AAABB;text-transform:uppercase;letter-spacing:0.6px;padding:0 8px;margin-bottom:6px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:2px;}
+.sb-item:hover{background:#F0F6F6;}
+.sb-item.on{background:var(--teal-lt);border:1px solid rgba(11,123,123,0.12);}
+.sb-item svg{width:16px;height:16px;stroke:#9AAABB;fill:none;stroke-width:2;flex-shrink:0;}
+.sb-item.on svg{stroke:var(--teal-dk);}
+.sb-item span{font-size:13px;font-weight:500;color:#6A8090;}
+.sb-item.on span{font-weight:700;color:var(--teal-dk);}
+.sb-badge{margin-left:auto;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;}
+.sb-badge-red{background:rgba(239,68,68,0.1);color:#B91C1C;}
+.sb-divider{height:1px;background:rgba(11,123,123,0.07);margin:8px 12px;}
+
+/* MAIN */
+.main{flex:1;padding:28px;overflow-x:hidden;}
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.ph-left h1{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:3px;}
+.ph-left p{font-size:13px;color:var(--muted);}
+.ph-right{display:flex;gap:10px;}
+.btn{display:flex;align-items:center;gap:7px;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;border:none;}
+.btn-outline{background:white;color:var(--teal-dk);border:1.5px solid rgba(11,123,123,0.2);}
+.btn-primary{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;box-shadow:0 3px 10px rgba(11,123,123,0.25);}
+.btn-primary:hover{box-shadow:0 6px 18px rgba(11,123,123,0.35);transform:translateY(-1px);}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+.stat-card{background:white;border-radius:14px;padding:18px;border:1px solid rgba(11,123,123,0.07);box-shadow:0 2px 8px rgba(6,85,85,0.05);display:flex;align-items:center;gap:14px;}
+.sc-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.sc-ico-teal{background:var(--teal-lt);}
+.sc-ico-green{background:rgba(26,122,74,0.08);}
+.sc-ico-gold{background:rgba(201,168,76,0.1);}
+.sc-ico-red{background:rgba(239,68,68,0.08);}
+.sc-val{font-size:26px;font-weight:800;font-family:'Playfair Display',serif;color:var(--navy);line-height:1;}
+.sc-lbl{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+/* GRID */
+.main-grid{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start;}
+.left-col{display:flex;flex-direction:column;gap:18px;}
+.form-card{background:white;border-radius:16px;padding:24px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);}
+.fc-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;}
+.fc-title-left{display:flex;align-items:center;gap:8px;}
+.fc-title-left svg{width:16px;height:16px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.fc-sub{font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.6;}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.ftab{padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s;font-family:'Inter',sans-serif;}
+.ftab.on{background:var(--teal-lt);color:var(--teal-dk);border-color:rgba(11,123,123,0.2);}
+.ftab.off{background:white;color:var(--muted);border-color:rgba(11,123,123,0.12);}
+.ftab.pending{background:rgba(239,68,68,0.07);color:#B91C1C;border-color:rgba(239,68,68,0.2);}
+.ftab.pending.on{background:rgba(239,68,68,0.12);border-color:#EF4444;}
+.ftab-count{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:800;margin-left:4px;}
+.ftab-count-teal{background:var(--teal);color:white;}
+.ftab-count-red{background:#EF4444;color:white;}
+
+/* TESTIMONIAL CARDS */
+.test-list{display:flex;flex-direction:column;gap:14px;}
+
+.tcard{border-radius:14px;padding:18px;border:1.5px solid;transition:all .2s;}
+.tcard:hover{box-shadow:0 4px 16px rgba(6,85,85,0.09);}
+.tcard-text{background:#FAFCFC;border-color:rgba(11,123,123,0.12);}
+.tcard-audio{background:rgba(139,92,246,0.02);border-color:rgba(139,92,246,0.18);}
+.tcard-video{background:rgba(201,168,76,0.03);border-color:rgba(201,168,76,0.2);}
+.tcard-pending{background:rgba(239,68,68,0.02);border-color:rgba(239,68,68,0.2);}
+
+.tc-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;}
+.tc-av{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid rgba(11,123,123,0.12);}
+.tc-av img{width:100%;height:100%;object-fit:cover;}
+.tc-info{flex:1;}
+.tc-name-row{display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap;}
+.tc-name{font-size:14px;font-weight:700;color:var(--navy);}
+.tc-verify-badge{display:flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:8px;}
+.tcvb-otp{background:rgba(26,122,74,0.1);color:var(--green);}
+.tcvb-otp svg{width:10px;height:10px;stroke:var(--green);fill:none;stroke-width:2.5;}
+.tcvb-pending{background:rgba(239,68,68,0.08);color:#B91C1C;}
+.tcvb-pending svg{width:10px;height:10px;stroke:#B91C1C;fill:none;stroke-width:2;}
+.tc-relation{font-size:12px;color:var(--muted);margin-bottom:3px;}
+.tc-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tc-stars{font-size:13px;}
+.tc-type-tag{display:flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:8px;}
+.tct-text{background:var(--teal-lt);color:var(--teal-dk);}
+.tct-text svg{width:11px;height:11px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.tct-audio{background:rgba(139,92,246,0.1);color:#7C3AED;}
+.tct-audio svg{width:11px;height:11px;stroke:#7C3AED;fill:none;stroke-width:2;}
+.tct-video{background:rgba(201,168,76,0.12);color:var(--gold-dk);}
+.tct-video svg{width:11px;height:11px;stroke:var(--gold-dk);fill:none;stroke-width:2;}
+.tc-date{font-size:11px;color:#9AAABB;}
+
+/* Text content */
+.tc-text-body{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;padding:12px 14px;background:rgba(11,123,123,0.03);border-radius:10px;border-left:3px solid rgba(11,123,123,0.2);}
+
+/* Audio waveform */
+.tc-audio-body{background:rgba(139,92,246,0.05);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.audio-play{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#A855F7);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;}
+.audio-play svg{width:14px;height:14px;stroke:white;fill:white;}
+.audio-wave{flex:1;height:32px;display:flex;align-items:center;gap:2px;}
+.wave-bar{width:3px;border-radius:2px;background:rgba(139,92,246,0.35);}
+.wave-bar.active{background:#7C3AED;}
+.audio-dur{font-size:11px;color:#7C3AED;font-weight:700;white-space:nowrap;}
+
+/* Video thumbnail */
+.tc-video-body{border-radius:10px;overflow:hidden;margin-bottom:12px;position:relative;height:90px;background:linear-gradient(135deg,#1A1A2E,#2D2D44);display:flex;align-items:center;justify-content:center;}
+.video-play-btn{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.video-play-btn svg{width:16px;height:16px;stroke:var(--gold-dk);fill:var(--gold-dk);}
+.video-dur{position:absolute;bottom:8px;right:10px;font-size:11px;font-weight:700;color:rgba(255,255,255,0.8);}
+.video-gold-tag{position:absolute;top:8px;left:8px;font-size:9.5px;font-weight:700;background:linear-gradient(135deg,var(--gold-dk),var(--gold));color:white;padding:2px 8px;border-radius:6px;}
+
+/* Actions row */
+.tc-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.tca-btn{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.tca-approve{background:rgba(26,122,74,0.1);color:var(--green);}
+.tca-approve svg{width:12px;height:12px;stroke:var(--green);fill:none;stroke-width:2.5;}
+.tca-reject{background:rgba(239,68,68,0.08);color:#B91C1C;}
+.tca-reject svg{width:12px;height:12px;stroke:#B91C1C;fill:none;stroke-width:2;}
+.tca-hide{background:#F4F9FA;color:var(--muted);}
+.tca-hide svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2;}
+.tca-share{background:var(--teal-lt);color:var(--teal-dk);}
+.tca-share svg{width:12px;height:12px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.tc-spacer{flex:1;}
+.tc-hidden-tag{font-size:11px;color:#9AAABB;font-style:italic;}
+
+/* Pending action required */
+.pending-banner{display:flex;align-items:center;gap:10px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;}
+.pb-dot{width:8px;height:8px;background:#EF4444;border-radius:50%;flex-shrink:0;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.pb-text{font-size:12.5px;color:#B91C1C;font-weight:600;}
+
+/* REQUEST LINK SECTION */
+.request-card{background:linear-gradient(135deg,rgba(11,123,123,0.06),rgba(6,85,85,0.02));border:1.5px solid rgba(11,123,123,0.15);border-radius:14px;padding:22px;}
+.rc-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;gap:7px;}
+.rc-title svg{width:15px;height:15px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.rc-sub{font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.6;}
+.link-box{display:flex;align-items:center;gap:0;background:white;border:1.5px solid rgba(11,123,123,0.18);border-radius:11px;overflow:hidden;margin-bottom:12px;}
+.link-prefix{padding:11px 13px;font-size:12.5px;color:#9AAABB;background:#F4F9FA;border-right:1px solid rgba(11,123,123,0.1);white-space:nowrap;}
+.link-val{flex:1;padding:11px 13px;font-size:13px;font-weight:600;color:var(--teal-dk);outline:none;border:none;background:transparent;font-family:'Inter',sans-serif;}
+.link-copy{display:flex;align-items:center;gap:6px;padding:11px 16px;background:var(--teal-dk);color:white;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;border:none;}
+.link-copy svg{width:13px;height:13px;stroke:white;fill:none;stroke-width:2;}
+.share-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.share-btn{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .2s;}
+.sb-whatsapp{background:#25D366;color:white;}
+.sb-whatsapp:hover{background:#22C35E;}
+.sb-sms{background:#0B7B7B;color:white;}
+.sb-sms:hover{background:var(--teal-dk);}
+.sb-email{background:#F4F9FA;color:var(--navy);border:1.5px solid rgba(11,123,123,0.15);}
+.share-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.sb-whatsapp svg{stroke:white;}
+.sb-sms svg{stroke:white;}
+
+/* Plan limit for audio/video */
+.plan-note{display:flex;align-items:center;gap:8px;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:10px 14px;margin-top:14px;}
+.plan-note svg{width:14px;height:14px;stroke:var(--gold-dk);fill:none;stroke-width:2;flex-shrink:0;}
+.plan-note p{font-size:12px;color:#92640E;line-height:1.5;}
+.plan-note a{color:var(--gold-dk);font-weight:700;cursor:pointer;}
+
+/* RIGHT PREVIEW */
+.preview-col{position:sticky;top:82px;display:flex;flex-direction:column;gap:14px;}
+.preview-card{background:white;border-radius:16px;overflow:hidden;border:1px solid rgba(11,123,123,0.09);box-shadow:0 4px 20px rgba(6,85,85,0.1);}
+.prev-label{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#F4F9FA;border-bottom:1px solid rgba(11,123,123,0.08);}
+.prev-label-txt{font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.prev-label-txt svg{width:13px;height:13px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.prev-live{font-size:10.5px;font-weight:700;color:var(--green);background:rgba(26,122,74,0.08);padding:2px 8px;border-radius:8px;display:flex;align-items:center;gap:4px;}
+.prev-live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.5s ease-in-out infinite;}
+.prev-body{padding:14px;}
+
+/* Mini testimonials preview */
+.prev-test{display:flex;flex-direction:column;gap:8px;}
+.pt-card{border-radius:10px;padding:10px 12px;border:1px solid rgba(11,123,123,0.1);background:#FAFCFC;}
+.pt-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.pt-av{width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0;}
+.pt-av img{width:100%;height:100%;object-fit:cover;}
+.pt-name{font-size:11.5px;font-weight:700;color:var(--navy);}
+.pt-stars{font-size:10px;margin-left:auto;}
+.pt-text{font-size:11px;color:var(--muted);line-height:1.5;}
+.pt-type{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:6px;display:inline-flex;align-items:center;gap:3px;margin-top:5px;}
+.ptt-text{background:var(--teal-lt);color:var(--teal-dk);}
+.ptt-audio{background:rgba(139,92,246,0.1);color:#7C3AED;}
+.ptt-video{background:rgba(201,168,76,0.12);color:var(--gold-dk);}
+
+/* ============================================================
+   YVITY RESPONSIVE — Mobile First (max-width: 768px)
+   ============================================================ */
+
+/* Viewport meta already in each file's <head> */
+
+/* ---- TOP NAV ---- */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 12px !important;
+    height: 50px !important;
+  }
+  .tn-logo {
+    width: auto !important;
+    font-size: 16px !important;
+    border-right: none !important;
+    padding: 0 !important;
+    flex: 1;
+  }
+  .tn-mid { display: none !important; }
+  .tn-right { gap: 6px !important; }
+  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
+  .tn-name { font-size: 12px !important; }
+  .tn-plan, .tn-role { display: none !important; }
+  .tn-btn span, .ph-right .btn span { display: none; }
+  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
+}
+
+/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .body-wrap { flex-direction: column !important; }
+}
+
+/* ---- BOTTOM NAV (mobile only) ---- */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 58px;
+    background: var(--teal-dk, #065555);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 64px;
+  }
+  .mbn-item.on { background: rgba(255,255,255,0.12); }
+  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
+  .mbn-item.on svg { stroke: white; }
+  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .mbn-item.on .mbn-label { color: white; }
+  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* push page content above bottom nav */
+  .main, .preview-area, body > .body-wrap > .main {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ---- ADMIN BOTTOM NAV — dark purple ---- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav.admin-nav {
+    background: #1E0A38 !important;
+    border-top-color: rgba(139,92,246,0.2) !important;
+  }
+  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
+  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
+  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
+  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
+  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
+}
+
+/* ---- MAIN CONTENT PADDING ---- */
+@media (max-width: 768px) {
+  .main { padding: 16px !important; }
+  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .page-hdr h1 { font-size: 18px !important; }
+  .ph-right { width: 100%; }
+  .ph-right .btn { flex: 1; justify-content: center; }
+}
+
+/* ---- GRIDS → SINGLE COLUMN ---- */
+@media (max-width: 768px) {
+  .main-grid,
+  .main-grid-3,
+  .detail-grid,
+  .detail-grid-3,
+  .home-grid,
+  .plan-cards,
+  .stats-grid,
+  .aa-grid,
+  .two-col,
+  .form-grid { 
+    grid-template-columns: 1fr !important; 
+  }
+  .preview-col,
+  .right-col,
+  .home-right,
+  .checklist-panel { 
+    position: static !important; 
+    width: 100% !important;
+  }
+}
+
+/* ---- CARDS ---- */
+@media (max-width: 768px) {
+  .form-card, .card, .usage-card, .score-widget,
+  .admin-actions, .advisor-hero { 
+    border-radius: 12px !important; 
+    padding: 16px !important; 
+  }
+}
+
+/* ---- HERO SECTIONS ---- */
+@media (max-width: 768px) {
+  /* Plan hero (D10) */
+  .plan-hero { 
+    flex-direction: column !important; 
+    padding: 18px !important; 
+    gap: 14px !important;
+  }
+  .ph-right-block { width: 100% !important; }
+  .ph-plan-name { font-size: 22px !important; }
+
+  /* Advisor hero (AD2) */
+  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
+  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
+  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
+
+  /* Profile header */
+  .prh-top { flex-direction: column !important; gap: 12px !important; }
+  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
+  .pss-right { flex-direction: column !important; gap: 6px !important; }
+  .pss-left { gap: 8px !important; }
+
+  /* Admin hero */
+  .advisor-hero { border-radius: 16px !important; }
+}
+
+/* ---- STATS GRID ---- */
+@media (max-width: 768px) {
+  .stats-grid { 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .stat-card { padding: 14px !important; }
+  .sc-val { font-size: 22px !important; }
+}
+
+/* ---- TABLES → CARD-STYLE ---- */
+@media (max-width: 768px) {
+  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
+  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+.mobile-table-cards { display: none; }
+
+/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
+@media (max-width: 768px) {
+  .prof-tabs, .detail-tabs { 
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .prof-tabs::-webkit-scrollbar,
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .ptab, .dtab { 
+    padding: 11px 14px !important; 
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ---- PREVIEW TOOLBAR (D11) ---- */
+@media (max-width: 768px) {
+  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
+  .pt-url { display: none !important; }
+  .pt-spacer { display: none !important; }
+  .preview-area { padding: 12px !important; }
+  .preview-frame { border-radius: 14px !important; }
+  /* hide checklist panel on mobile — show as collapsible below */
+  .checklist-panel { display: none !important; }
+}
+
+/* ---- PLAN COMPARISON (D10) ---- */
+@media (max-width: 768px) {
+  .plan-cards { gap: 10px !important; }
+  .pc-name { font-size: 14px !important; }
+  .pc-price { font-size: 20px !important; }
+}
+
+/* ---- LOGIN SPLIT (A1) ---- */
+@media (max-width: 768px) {
+  .login-wrap { flex-direction: column !important; min-height: auto !important; }
+  .login-left { display: none !important; }
+  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
+}
+
+/* ---- SIGNUP STEPS (A2) ---- */
+@media (max-width: 768px) {
+  .signup-wrap { flex-direction: column !important; }
+  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+  .signup-right { width: 100% !important; padding: 20px 16px !important; }
+  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
+}
+
+/* ---- DIRECTORY (P3) ---- */
+@media (max-width: 768px) {
+  .dir-layout { flex-direction: column !important; }
+  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
+  .dir-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---- LANDING PAGE (P1) ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 40px 20px 30px !important; }
+  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
+  .hero-subtitle { font-size: 14px !important; }
+  .hero-btns { flex-direction: column !important; gap: 10px !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  .pricing-grid { grid-template-columns: 1fr !important; }
+  .lp-nav-links { display: none !important; }
+}
+
+/* ---- SCORE PAGE (D9) ---- */
+@media (max-width: 768px) {
+  .score-hero { padding: 20px !important; }
+  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
+}
+
+/* ---- GALLERY GRID (D6) ---- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ---- MISC UTILITIES ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  br.hide-mobile { display: none !important; }
+  .text-center-mobile { text-align: center !important; }
+}
+.show-mobile { display: none; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topnav">
+  <div class="tn-logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="tn-mid">
+    <div class="tn-bc">
+      <span class="tbc">Dashboard</span><span class="tbs">›</span>
+      <span class="tbc">Credibility</span><span class="tbs">›</span>
+      <span class="tba">Testimonials Manager</span>
+    </div>
+  </div>
+  <div class="tn-right">
+    <div class="tn-icon">
+      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="tn-notif-dot"></div>
+    </div>
+    <div class="tn-profile">
+      <div class="tn-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face" alt=""></div>
+      <div><div class="tn-name">Krishna Mohan</div><div class="tn-plan">Silver Plan</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="body-wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-section">
+      <div class="sb-sec-title">Overview</div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Dashboard</span></div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Edit Profile</div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Header & About</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Services</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Professional Journey</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg><span>Education</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg><span>Achievements</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg><span>Gallery</span></div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Credibility</div>
+      <div class="sb-item on"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Testimonials</span><span class="sb-badge sb-badge-red">3 new</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/></svg><span>Recommendations</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg><span>YVITY Score</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-hdr">
+      <div class="ph-left">
+        <h1>Testimonials Manager</h1>
+        <p>50 verified · 3 pending action · Text · Audio · Video</p>
+      </div>
+      <div class="ph-right">
+        <button class="btn btn-outline">
+          <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview Tab
+        </button>
+        <button class="btn btn-primary">
+          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share Request Link
+        </button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="sc-ico sc-ico-teal">💬</div>
+        <div><div class="sc-val">50</div><div class="sc-lbl">Total Verified</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-ico sc-ico-green">⭐</div>
+        <div><div class="sc-val">4.9</div><div class="sc-lbl">Average Rating</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-ico sc-ico-gold">🎙️</div>
+        <div><div class="sc-val">18</div><div class="sc-lbl">Audio Testimonials</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-ico sc-ico-red">🔔</div>
+        <div><div class="sc-val">3</div><div class="sc-lbl">Pending Review</div></div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="left-col">
+
+        <!-- FILTER TABS + LIST -->
+        <div class="form-card">
+          <div class="fc-title">
+            <div class="fc-title-left"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>All Testimonials</div>
+            <div style="font-size:12px;color:var(--muted);">50 verified · 3 pending</div>
+          </div>
+          <div class="fc-sub">Manage incoming testimonials. OTP-verified testimonials are auto-approved. Review pending ones before they go live.</div>
+
+          <div class="filter-tabs">
+            <button class="ftab on">All <span class="ftab-count ftab-count-teal">53</span></button>
+            <button class="ftab off">Text (32)</button>
+            <button class="ftab off">Audio (18)</button>
+            <button class="ftab off">Video (3) 👑</button>
+            <button class="ftab pending off">Pending <span class="ftab-count ftab-count-red">3</span></button>
+            <button class="ftab off">Hidden</button>
+          </div>
+
+          <div class="test-list">
+
+            <!-- PENDING 1 — Text, needs action -->
+            <div class="tcard tcard-pending">
+              <div class="pending-banner">
+                <div class="pb-dot"></div>
+                <div class="pb-text">⚠️ Action Required — OTP not yet verified by client. Approve manually or wait for OTP completion.</div>
+              </div>
+              <div class="tc-top">
+                <div class="tc-av"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face" alt=""></div>
+                <div class="tc-info">
+                  <div class="tc-name-row">
+                    <div class="tc-name">Arun Mehta</div>
+                    <span class="tc-verify-badge tcvb-pending"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>OTP Pending</span>
+                  </div>
+                  <div class="tc-relation">Client · LIC Policy Holder</div>
+                  <div class="tc-meta">
+                    <div class="tc-stars">⭐⭐⭐⭐⭐</div>
+                    <span class="tc-type-tag tct-text"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text</span>
+                    <div class="tc-date">Submitted 2 hours ago</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tc-text-body">"Got my claim settled in just 3 days. Krishna Mohan sir was extremely helpful throughout the process and followed up on my behalf with the insurer. Highly recommend him to anyone looking for a reliable advisor!"</div>
+              <div class="tc-actions">
+                <button class="tca-btn tca-approve"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Approve</button>
+                <button class="tca-btn tca-reject"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Reject</button>
+                <button class="tca-btn tca-hide"><svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Hide</button>
+              </div>
+            </div>
+
+            <!-- PENDING 2 — Audio -->
+            <div class="tcard tcard-audio" style="border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.01);">
+              <div class="pending-banner">
+                <div class="pb-dot"></div>
+                <div class="pb-text">⚠️ Audio testimonial received — OTP not completed. Review and approve manually.</div>
+              </div>
+              <div class="tc-top">
+                <div class="tc-av"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face" alt=""></div>
+                <div class="tc-info">
+                  <div class="tc-name-row">
+                    <div class="tc-name">Sunita Devi</div>
+                    <span class="tc-verify-badge tcvb-pending"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>OTP Pending</span>
+                  </div>
+                  <div class="tc-relation">Client · HDFC Health Policy</div>
+                  <div class="tc-meta">
+                    <div class="tc-stars">⭐⭐⭐⭐⭐</div>
+                    <span class="tc-type-tag tct-audio"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>Audio</span>
+                    <div class="tc-date">Yesterday · 1:24 min</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tc-audio-body">
+                <div class="audio-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+                <div class="audio-wave">
+                  <div class="wave-bar active" style="height:8px;"></div><div class="wave-bar active" style="height:18px;"></div><div class="wave-bar active" style="height:24px;"></div><div class="wave-bar active" style="height:14px;"></div><div class="wave-bar active" style="height:28px;"></div><div class="wave-bar active" style="height:20px;"></div><div class="wave-bar" style="height:16px;"></div><div class="wave-bar" style="height:22px;"></div><div class="wave-bar" style="height:12px;"></div><div class="wave-bar" style="height:26px;"></div><div class="wave-bar" style="height:18px;"></div><div class="wave-bar" style="height:10px;"></div><div class="wave-bar" style="height:20px;"></div><div class="wave-bar" style="height:24px;"></div><div class="wave-bar" style="height:16px;"></div><div class="wave-bar" style="height:28px;"></div><div class="wave-bar" style="height:14px;"></div><div class="wave-bar" style="height:22px;"></div><div class="wave-bar" style="height:8px;"></div><div class="wave-bar" style="height:18px;"></div>
+                </div>
+                <div class="audio-dur">1:24</div>
+              </div>
+              <div class="tc-actions">
+                <button class="tca-btn tca-approve"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Approve</button>
+                <button class="tca-btn tca-reject"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Reject</button>
+                <button class="tca-btn tca-hide"><svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Hide</button>
+              </div>
+            </div>
+
+            <!-- VERIFIED — Text -->
+            <div class="tcard tcard-text">
+              <div class="tc-top">
+                <div class="tc-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" alt=""></div>
+                <div class="tc-info">
+                  <div class="tc-name-row">
+                    <div class="tc-name">Ramesh Kumar</div>
+                    <span class="tc-verify-badge tcvb-otp"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>OTP Verified</span>
+                  </div>
+                  <div class="tc-relation">Client · LIC Term Plan · 6 years</div>
+                  <div class="tc-meta">
+                    <div class="tc-stars">⭐⭐⭐⭐⭐</div>
+                    <span class="tc-type-tag tct-text"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text</span>
+                    <div class="tc-date">3 days ago</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tc-text-body">"Excellent advisor. Krishna Mohan helped our entire family get the right coverage. He explained every policy in detail in Telugu which made it very easy to understand. Been with him for 6 years now."</div>
+              <div class="tc-actions">
+                <button class="tca-btn tca-share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share</button>
+                <button class="tca-btn tca-hide"><svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Hide</button>
+                <div class="tc-spacer"></div>
+                <div style="font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px;">
+                  <svg width="11" height="11" viewBox="0 0 24 24" style="stroke:var(--green);fill:none;stroke-width:2.5"><polyline points="20,6 9,17 4,12"/></svg>
+                  Live on profile
+                </div>
+              </div>
+            </div>
+
+            <!-- VERIFIED — Audio -->
+            <div class="tcard tcard-audio">
+              <div class="tc-top">
+                <div class="tc-av"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face" alt=""></div>
+                <div class="tc-info">
+                  <div class="tc-name-row">
+                    <div class="tc-name">Venkat Rao</div>
+                    <span class="tc-verify-badge tcvb-otp"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>OTP Verified</span>
+                  </div>
+                  <div class="tc-relation">Client · TATA AIA Health · 3 years</div>
+                  <div class="tc-meta">
+                    <div class="tc-stars">⭐⭐⭐⭐⭐</div>
+                    <span class="tc-type-tag tct-audio"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>Audio · Silver</span>
+                    <div class="tc-date">1 week ago · 2:04 min</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tc-audio-body">
+                <div class="audio-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+                <div class="audio-wave">
+                  <div class="wave-bar" style="height:12px;"></div><div class="wave-bar" style="height:22px;"></div><div class="wave-bar" style="height:18px;"></div><div class="wave-bar" style="height:28px;"></div><div class="wave-bar" style="height:16px;"></div><div class="wave-bar" style="height:24px;"></div><div class="wave-bar" style="height:20px;"></div><div class="wave-bar" style="height:14px;"></div><div class="wave-bar" style="height:26px;"></div><div class="wave-bar" style="height:10px;"></div><div class="wave-bar" style="height:20px;"></div><div class="wave-bar" style="height:18px;"></div><div class="wave-bar" style="height:22px;"></div><div class="wave-bar" style="height:14px;"></div><div class="wave-bar" style="height:28px;"></div><div class="wave-bar" style="height:16px;"></div><div class="wave-bar" style="height:12px;"></div><div class="wave-bar" style="height:24px;"></div><div class="wave-bar" style="height:20px;"></div><div class="wave-bar" style="height:16px;"></div>
+                </div>
+                <div class="audio-dur">2:04</div>
+              </div>
+              <div class="tc-actions">
+                <button class="tca-btn tca-share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share</button>
+                <button class="tca-btn tca-hide"><svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Hide</button>
+                <div class="tc-spacer"></div>
+                <div style="font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" style="stroke:var(--green);fill:none;stroke-width:2.5"><polyline points="20,6 9,17 4,12"/></svg>Live on profile</div>
+              </div>
+            </div>
+
+            <!-- VERIFIED — Video (Gold only) -->
+            <div class="tcard tcard-video">
+              <div class="tc-top">
+                <div class="tc-av"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face" alt=""></div>
+                <div class="tc-info">
+                  <div class="tc-name-row">
+                    <div class="tc-name">Srinivas Reddy</div>
+                    <span class="tc-verify-badge tcvb-otp"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>OTP Verified</span>
+                  </div>
+                  <div class="tc-relation">Client · LIC Endowment · NRI Plan</div>
+                  <div class="tc-meta">
+                    <div class="tc-stars">⭐⭐⭐⭐⭐</div>
+                    <span class="tc-type-tag tct-video"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Video · 👑 Gold</span>
+                    <div class="tc-date">2 weeks ago · 1:48 min</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tc-video-body">
+                <div class="video-gold-tag">👑 Gold Video Testimonial</div>
+                <div class="video-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+                <div class="video-dur">1:48</div>
+              </div>
+              <div class="tc-actions">
+                <button class="tca-btn tca-share"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share</button>
+                <button class="tca-btn tca-hide"><svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Hide</button>
+                <div class="tc-spacer"></div>
+                <div style="font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" style="stroke:var(--green);fill:none;stroke-width:2.5"><polyline points="20,6 9,17 4,12"/></svg>Live on profile</div>
+              </div>
+              <div class="plan-note">
+                <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                <p>Video testimonials are a <strong>Gold Plan feature</strong>. This one was submitted by your client — <a>upgrade to Gold</a> to collect more video testimonials and display them prominently.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="text-align:center;margin-top:16px;">
+            <button class="btn btn-outline" style="margin:0 auto;">Load More Testimonials (46 more)</button>
+          </div>
+        </div>
+
+        <!-- REQUEST LINK -->
+        <div class="form-card">
+          <div class="fc-title">
+            <div class="fc-title-left"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Request New Testimonials</div>
+          </div>
+          <div class="fc-sub">Share your unique testimonial link with clients via WhatsApp, SMS or Email. Clients submit text, audio (Silver+), or video (Gold) directly — OTP verified automatically.</div>
+          <div class="request-card">
+            <div class="rc-title"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Your Testimonial Request Link</div>
+            <div class="rc-sub">This unique link lets clients submit their testimonial directly. OTP verification ensures authenticity — every testimonial is client-verified.</div>
+            <div class="link-box">
+              <div class="link-prefix">yvity.in/review/</div>
+              <input class="link-val" type="text" value="krishna-mohan-nellore" readonly>
+              <button class="link-copy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy Link</button>
+            </div>
+            <div class="share-btns">
+              <button class="share-btn sb-whatsapp"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Share on WhatsApp</button>
+              <button class="share-btn sb-sms"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12"/></svg>Send via SMS</button>
+              <button class="share-btn sb-email"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Send via Email</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT PREVIEW -->
+      <div class="preview-col">
+        <div class="preview-card">
+          <div class="prev-label">
+            <div class="prev-label-txt"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Testimonials Tab Preview</div>
+            <div class="prev-live"><div class="prev-live-dot"></div>Live</div>
+          </div>
+          <div class="prev-body">
+            <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Recent Testimonials</div>
+            <div class="prev-test">
+              <div class="pt-card">
+                <div class="pt-top">
+                  <div class="pt-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt=""></div>
+                  <div><div class="pt-name">Ramesh Kumar</div><div style="font-size:10px;color:var(--muted);">LIC Policy Holder</div></div>
+                  <div class="pt-stars" style="margin-left:auto;">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="pt-text">"Excellent advisor. Helped our entire family get the right coverage…"</div>
+                <span class="pt-type ptt-text">💬 Text · OTP Verified</span>
+              </div>
+              <div class="pt-card">
+                <div class="pt-top">
+                  <div class="pt-av"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&h=60&fit=crop&crop=face" alt=""></div>
+                  <div><div class="pt-name">Venkat Rao</div><div style="font-size:10px;color:var(--muted);">TATA AIA Health</div></div>
+                  <div class="pt-stars" style="margin-left:auto;">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="pt-text">🎙️ Audio testimonial · 2:04 min</div>
+                <span class="pt-type ptt-audio">🎙️ Audio · OTP Verified</span>
+              </div>
+              <div class="pt-card">
+                <div class="pt-top">
+                  <div class="pt-av"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt=""></div>
+                  <div><div class="pt-name">Srinivas Reddy</div><div style="font-size:10px;color:var(--muted);">LIC NRI Plan</div></div>
+                  <div class="pt-stars" style="margin-left:auto;">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="pt-text">🎬 Video testimonial · 1:48 min</div>
+                <span class="pt-type ptt-video">🎬 Video · 👑 Gold</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary card -->
+        <div style="background:white;border-radius:14px;padding:18px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;">Plan Limits</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+              <span style="color:var(--muted);">💬 Text testimonials</span>
+              <span style="font-weight:700;color:var(--green);">Unlimited ✓</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+              <span style="color:var(--muted);">🎙️ Audio testimonials</span>
+              <span style="font-weight:700;color:var(--teal-dk);">Silver ✓</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+              <span style="color:var(--muted);">🎬 Video testimonials</span>
+              <span style="font-weight:700;color:var(--gold-dk);">👑 Gold only</span>
+            </div>
+            <div style="height:1px;background:rgba(11,123,123,0.08);margin:4px 0;"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+              <span style="color:var(--muted);">OTP verification</span>
+              <span style="font-weight:700;color:var(--green);">All plans ✓</span>
+            </div>
+          </div>
+          <button style="width:100%;margin-top:14px;padding:10px;background:linear-gradient(135deg,var(--gold-dk),var(--gold));color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">👑 Upgrade for Video Testimonials</button>
+        </div>
+
+        <!-- Tips -->
+        <div style="background:white;border-radius:14px;padding:18px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;">💡 Tips</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>Share your link right after a policy sale via WhatsApp</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>OTP-verified testimonials auto-approve — no manual action needed</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--teal);font-weight:700;flex-shrink:0;">✓</span>Audio & video testimonials show higher trust to new clients</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--gold-dk);font-weight:700;flex-shrink:0;">★</span>Each verified testimonial adds to your YVITY Score</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

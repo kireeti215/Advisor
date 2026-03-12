@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YVITY – Subscription & Billing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --teal:#0B7B7B;--teal-dk:#065555;--teal-lt:#E6F4F4;
+  --navy:#0D2B3E;--green:#1A7A4A;--gold:#C9A84C;--gold-dk:#B8860B;
+  --bg:#EEF4F7;--muted:#5A7080;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+
+/* NAV */
+.topnav{background:var(--teal-dk);height:54px;display:flex;align-items:center;padding:0 20px 0 0;box-shadow:0 2px 10px rgba(6,85,85,0.25);position:sticky;top:0;z-index:200;}
+.tn-logo{width:220px;display:flex;align-items:center;gap:8px;color:white;font-size:18px;font-weight:800;letter-spacing:1.5px;padding:0 20px;border-right:1px solid rgba(255,255,255,0.1);flex-shrink:0;}
+.tn-logo svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.5;}
+.tn-mid{flex:1;padding:0 24px;}
+.tn-bc{display:flex;align-items:center;gap:8px;font-size:13.5px;}
+.tbc{color:rgba(255,255,255,0.55);cursor:pointer;}
+.tbs{color:rgba(255,255,255,0.25);}
+.tba{color:white;font-weight:600;}
+.tn-right{display:flex;align-items:center;gap:12px;}
+.tn-icon{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.tn-icon svg{width:17px;height:17px;stroke:rgba(255,255,255,0.8);fill:none;stroke-width:2;}
+.tn-profile{display:flex;align-items:center;gap:9px;cursor:pointer;padding:4px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);}
+.tn-av{width:30px;height:30px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.3);}
+.tn-av img{width:100%;height:100%;object-fit:cover;}
+.tn-name{font-size:13px;font-weight:700;color:white;}
+.tn-plan{font-size:10px;color:rgba(255,255,255,0.55);}
+
+.body-wrap{display:flex;flex:1;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:white;border-right:1px solid rgba(11,123,123,0.08);display:flex;flex-direction:column;min-height:calc(100vh-54px);position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;flex-shrink:0;}
+.sb-section{padding:16px 12px 8px;}
+.sb-sec-title{font-size:10.5px;font-weight:700;color:#9AAABB;text-transform:uppercase;letter-spacing:0.6px;padding:0 8px;margin-bottom:6px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:2px;}
+.sb-item:hover{background:#F0F6F6;}
+.sb-item.on{background:var(--teal-lt);border:1px solid rgba(11,123,123,0.12);}
+.sb-item svg{width:16px;height:16px;stroke:#9AAABB;fill:none;stroke-width:2;flex-shrink:0;}
+.sb-item.on svg{stroke:var(--teal-dk);}
+.sb-item span{font-size:13px;font-weight:500;color:#6A8090;}
+.sb-item.on span{font-weight:700;color:var(--teal-dk);}
+.sb-divider{height:1px;background:rgba(11,123,123,0.07);margin:8px 12px;}
+
+/* MAIN */
+.main{flex:1;padding:28px;overflow-x:hidden;}
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.ph-left h1{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:3px;}
+.ph-left p{font-size:13px;color:var(--muted);}
+.ph-right{display:flex;gap:10px;}
+.btn{display:flex;align-items:center;gap:7px;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;border:none;}
+.btn-outline{background:white;color:var(--teal-dk);border:1.5px solid rgba(11,123,123,0.2);}
+.btn-outline:hover{background:var(--teal-lt);}
+.btn-danger{background:rgba(239,68,68,0.07);color:#B91C1C;border:1.5px solid rgba(239,68,68,0.2);}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* CURRENT PLAN HERO */
+.plan-hero{background:linear-gradient(150deg,#0A3D2E,#0B5E4A,#0A4A3A);border-radius:20px;padding:28px 32px;display:flex;align-items:center;gap:28px;margin-bottom:22px;position:relative;overflow:hidden;}
+.ph-ring{position:absolute;width:320px;height:320px;border-radius:50%;border:1px solid rgba(201,168,76,0.07);top:-120px;right:-80px;}
+.ph-ring2{position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(201,168,76,0.1);bottom:-80px;left:60px;}
+.ph-left-block{flex:1;position:relative;z-index:1;}
+.ph-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(201,168,76,0.25),rgba(184,134,11,0.15));border:1px solid rgba(201,168,76,0.35);border-radius:20px;padding:5px 14px;margin-bottom:14px;}
+.ph-badge-ico{font-size:14px;}
+.ph-badge-txt{font-size:12px;font-weight:800;color:var(--gold);letter-spacing:0.3px;}
+.ph-plan-name{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;color:white;margin-bottom:6px;}
+.ph-plan-price{font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:16px;}
+.ph-plan-price strong{color:white;font-size:22px;font-weight:800;}
+.ph-meta{display:flex;gap:20px;flex-wrap:wrap;}
+.ph-meta-item{display:flex;flex-direction:column;gap:2px;}
+.ph-meta-label{font-size:10.5px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.5px;}
+.ph-meta-val{font-size:13px;font-weight:700;color:white;}
+.ph-right-block{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1;flex-shrink:0;}
+.ph-renew-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px 22px;text-align:center;min-width:180px;}
+.ph-renew-label{font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+.ph-renew-date{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:white;margin-bottom:4px;}
+.ph-renew-sub{font-size:11px;color:rgba(255,255,255,0.45);}
+.ph-renew-bar{height:5px;background:rgba(255,255,255,0.1);border-radius:10px;margin-top:10px;overflow:hidden;}
+.ph-renew-fill{height:100%;background:linear-gradient(90deg,var(--gold-dk),var(--gold));border-radius:10px;width:68%;}
+.ph-status{display:flex;align-items:center;gap:6px;justify-content:center;font-size:11.5px;font-weight:700;color:var(--gold);}
+.ph-status-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start;}
+.left-col{display:flex;flex-direction:column;gap:18px;}
+.form-card{background:white;border-radius:16px;padding:24px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);}
+.fc-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;}
+.fc-title-left{display:flex;align-items:center;gap:8px;}
+.fc-title-left svg{width:16px;height:16px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.fc-sub{font-size:12.5px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+
+/* PLAN COMPARISON */
+.plan-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:4px;}
+.plan-card{border-radius:16px;padding:22px;border:2px solid;position:relative;transition:all .2s;}
+.pc-free{background:#FAFCFC;border-color:rgba(11,123,123,0.1);}
+.pc-silver{background:linear-gradient(160deg,#F8FAFA,#F0F6F8);border-color:rgba(11,123,123,0.2);}
+.pc-gold{background:linear-gradient(160deg,#FFFBF0,#FFF8E6);border-color:rgba(201,168,76,0.35);}
+.pc-current{border-color:var(--teal-dk);box-shadow:0 0 0 3px rgba(11,123,123,0.1);}
+.pc-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:10.5px;font-weight:800;padding:3px 12px;border-radius:20px;white-space:nowrap;}
+.pcb-current{background:var(--teal-dk);color:white;}
+.pcb-popular{background:linear-gradient(135deg,var(--gold-dk),var(--gold));color:white;}
+.pc-icon{font-size:28px;margin-bottom:10px;}
+.pc-name{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.pc-price{font-size:26px;font-weight:800;font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:2px;}
+.pc-price span{font-size:13px;font-weight:400;color:var(--muted);}
+.pc-price-sub{font-size:11.5px;color:var(--muted);margin-bottom:16px;}
+.pc-features{display:flex;flex-direction:column;gap:7px;margin-bottom:18px;}
+.pcf{display:flex;align-items:flex-start;gap:7px;font-size:12px;}
+.pcf-yes{color:var(--navy);}
+.pcf-no{color:#B0C4CC;text-decoration:line-through;}
+.pcf svg{width:13px;height:13px;flex-shrink:0;margin-top:1px;}
+.pcf-yes svg{stroke:var(--green);fill:none;stroke-width:2.5;}
+.pcf-no svg{stroke:#CBD5E0;fill:none;stroke-width:2;}
+.pc-btn{width:100%;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;transition:all .2s;}
+.pcb-active{background:var(--teal-lt);color:var(--teal-dk);cursor:default;}
+.pcb-upgrade-silver{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:white;box-shadow:0 3px 10px rgba(11,123,123,0.2);}
+.pcb-upgrade-gold{background:linear-gradient(135deg,var(--gold-dk),var(--gold));color:white;box-shadow:0 4px 14px rgba(184,134,11,0.25);}
+.pcb-downgrade{background:#F4F9FA;color:var(--muted);}
+
+/* INVOICE TABLE */
+.invoice-table{width:100%;border-collapse:collapse;}
+.it-head th{font-size:11.5px;font-weight:700;color:#9AAABB;text-transform:uppercase;letter-spacing:0.5px;padding:8px 12px;text-align:left;border-bottom:1px solid rgba(11,123,123,0.08);}
+.it-row td{padding:13px 12px;font-size:13px;color:var(--navy);border-bottom:1px solid rgba(11,123,123,0.05);}
+.it-row:last-child td{border-bottom:none;}
+.it-row:hover td{background:#F8FAFA;}
+.it-status{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:8px;}
+.its-paid{background:rgba(26,122,74,0.1);color:var(--green);}
+.its-paid svg{width:10px;height:10px;stroke:var(--green);fill:none;stroke-width:2.5;}
+.it-dl{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--teal-dk);cursor:pointer;}
+.it-dl svg{width:13px;height:13px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.it-amount{font-weight:700;color:var(--navy);}
+
+/* PAYMENT METHOD */
+.payment-card{display:flex;align-items:center;gap:16px;background:#F4F9FA;border:1.5px solid rgba(11,123,123,0.12);border-radius:14px;padding:18px;margin-bottom:14px;}
+.pm-icon{width:48px;height:32px;background:white;border:1px solid rgba(11,123,123,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.pm-info{flex:1;}
+.pm-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.pm-sub{font-size:12px;color:var(--muted);}
+.pm-default{font-size:10.5px;font-weight:700;background:var(--teal-lt);color:var(--teal-dk);padding:2px 8px;border-radius:8px;}
+.pm-edit{font-size:12.5px;font-weight:600;color:var(--teal-dk);cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;}
+.add-pm{display:flex;align-items:center;gap:8px;padding:12px 16px;border:1.5px dashed rgba(11,123,123,0.2);border-radius:12px;cursor:pointer;transition:all .2s;font-size:13px;font-weight:600;color:var(--teal-dk);background:transparent;}
+.add-pm:hover{border-color:var(--teal);background:var(--teal-lt);}
+.add-pm svg{width:15px;height:15px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+
+/* AUTO RENEW TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:#F4F9FA;border:1px solid rgba(11,123,123,0.1);border-radius:12px;margin-bottom:14px;}
+.tr-left{}
+.tr-title{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.tr-sub{font-size:12px;color:var(--muted);}
+.toggle{width:46px;height:26px;background:var(--teal-dk);border-radius:13px;position:relative;cursor:pointer;flex-shrink:0;}
+.toggle-knob{width:20px;height:20px;background:white;border-radius:50%;position:absolute;top:3px;right:3px;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.toggle.off{background:#CBD5E0;}
+.toggle.off .toggle-knob{left:3px;right:auto;}
+
+/* CANCEL ZONE */
+.cancel-zone{border:1.5px solid rgba(239,68,68,0.15);border-radius:14px;padding:20px;background:rgba(239,68,68,0.02);}
+.cz-title{font-size:13.5px;font-weight:700;color:#B91C1C;margin-bottom:4px;}
+.cz-sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+.cz-warn{display:flex;align-items:flex-start;gap:8px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.cz-warn svg{width:14px;height:14px;stroke:#B91C1C;fill:none;stroke-width:2;flex-shrink:0;margin-top:1px;}
+.cz-warn p{font-size:12px;color:#B91C1C;line-height:1.6;}
+
+/* RIGHT PREVIEW */
+.preview-col{position:sticky;top:82px;display:flex;flex-direction:column;gap:14px;}
+
+/* Usage summary */
+.usage-card{background:white;border-radius:16px;padding:20px;border:1px solid rgba(11,123,123,0.08);box-shadow:0 2px 8px rgba(6,85,85,0.05);}
+.uc-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.uc-title svg{width:14px;height:14px;stroke:var(--teal-dk);fill:none;stroke-width:2;}
+.usage-row{margin-bottom:12px;}
+.ur-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.ur-label{font-size:12.5px;color:var(--muted);}
+.ur-val{font-size:12.5px;font-weight:700;color:var(--navy);}
+.ur-bar{height:6px;background:#E6F4F4;border-radius:10px;overflow:hidden;}
+.ur-fill{height:100%;border-radius:10px;}
+.urf-teal{background:linear-gradient(90deg,var(--teal-dk),var(--teal));}
+.urf-gold{background:linear-gradient(90deg,var(--gold-dk),var(--gold));}
+.urf-green{background:linear-gradient(90deg,#1A7A4A,#22C55E);}
+.ur-note{font-size:11px;color:#9AAABB;margin-top:3px;}
+
+/* Razorpay badge */
+.razorpay-badge{display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;background:#F4F9FA;border:1px solid rgba(11,123,123,0.08);border-radius:10px;margin-top:4px;}
+.razorpay-badge svg{width:14px;height:14px;stroke:#9AAABB;fill:none;stroke-width:2;}
+.razorpay-badge span{font-size:11.5px;color:#9AAABB;font-weight:600;}
+
+/* ============================================================
+   YVITY RESPONSIVE — Mobile First (max-width: 768px)
+   ============================================================ */
+
+/* Viewport meta already in each file's <head> */
+
+/* ---- TOP NAV ---- */
+@media (max-width: 768px) {
+  .topnav {
+    padding: 0 12px !important;
+    height: 50px !important;
+  }
+  .tn-logo {
+    width: auto !important;
+    font-size: 16px !important;
+    border-right: none !important;
+    padding: 0 !important;
+    flex: 1;
+  }
+  .tn-mid { display: none !important; }
+  .tn-right { gap: 6px !important; }
+  .tn-profile, .tn-admin-profile { padding: 3px 7px !important; }
+  .tn-name { font-size: 12px !important; }
+  .tn-plan, .tn-role { display: none !important; }
+  .tn-btn span, .ph-right .btn span { display: none; }
+  .tn-btn, .ph-right .btn { padding: 7px 10px !important; }
+}
+
+/* ---- SIDEBAR → HIDDEN on mobile (bottom nav replaces it) ---- */
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .body-wrap { flex-direction: column !important; }
+}
+
+/* ---- BOTTOM NAV (mobile only) ---- */
+.mobile-bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 58px;
+    background: var(--teal-dk, #065555);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    box-shadow: 0 -4px 16px rgba(6,85,85,0.2);
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 64px;
+  }
+  .mbn-item.on { background: rgba(255,255,255,0.12); }
+  .mbn-item svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.6); fill: none; stroke-width: 2; }
+  .mbn-item.on svg { stroke: white; }
+  .mbn-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.55); }
+  .mbn-item.on .mbn-label { color: white; }
+  .mbn-badge { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; background: #EF4444; border-radius: 50%; font-size: 8px; font-weight: 800; color: white; display: flex; align-items: center; justify-content: center; }
+
+  /* push page content above bottom nav */
+  .main, .preview-area, body > .body-wrap > .main {
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ---- ADMIN BOTTOM NAV — dark purple ---- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav.admin-nav {
+    background: #1E0A38 !important;
+    border-top-color: rgba(139,92,246,0.2) !important;
+  }
+  .admin-nav .mbn-item svg { stroke: rgba(255,255,255,0.45); }
+  .admin-nav .mbn-item.on { background: rgba(139,92,246,0.2); }
+  .admin-nav .mbn-item.on svg { stroke: #C4B5FD; }
+  .admin-nav .mbn-label { color: rgba(255,255,255,0.4); }
+  .admin-nav .mbn-item.on .mbn-label { color: #E9D5FF; }
+}
+
+/* ---- MAIN CONTENT PADDING ---- */
+@media (max-width: 768px) {
+  .main { padding: 16px !important; }
+  .page-hdr { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+  .page-hdr h1 { font-size: 18px !important; }
+  .ph-right { width: 100%; }
+  .ph-right .btn { flex: 1; justify-content: center; }
+}
+
+/* ---- GRIDS → SINGLE COLUMN ---- */
+@media (max-width: 768px) {
+  .main-grid,
+  .main-grid-3,
+  .detail-grid,
+  .detail-grid-3,
+  .home-grid,
+  .plan-cards,
+  .stats-grid,
+  .aa-grid,
+  .two-col,
+  .form-grid { 
+    grid-template-columns: 1fr !important; 
+  }
+  .preview-col,
+  .right-col,
+  .home-right,
+  .checklist-panel { 
+    position: static !important; 
+    width: 100% !important;
+  }
+}
+
+/* ---- CARDS ---- */
+@media (max-width: 768px) {
+  .form-card, .card, .usage-card, .score-widget,
+  .admin-actions, .advisor-hero { 
+    border-radius: 12px !important; 
+    padding: 16px !important; 
+  }
+}
+
+/* ---- HERO SECTIONS ---- */
+@media (max-width: 768px) {
+  /* Plan hero (D10) */
+  .plan-hero { 
+    flex-direction: column !important; 
+    padding: 18px !important; 
+    gap: 14px !important;
+  }
+  .ph-right-block { width: 100% !important; }
+  .ph-plan-name { font-size: 22px !important; }
+
+  /* Advisor hero (AD2) */
+  .ah-inner { flex-direction: column !important; gap: 14px !important; align-items: flex-start !important; }
+  .ah-actions { flex-direction: row !important; flex-wrap: wrap !important; width: 100% !important; }
+  .ah-btn { flex: 1 !important; justify-content: center !important; min-width: 100px !important; }
+
+  /* Profile header */
+  .prh-top { flex-direction: column !important; gap: 12px !important; }
+  .prof-stats { gap: 10px !important; flex-wrap: wrap !important; }
+  .pss-right { flex-direction: column !important; gap: 6px !important; }
+  .pss-left { gap: 8px !important; }
+
+  /* Admin hero */
+  .advisor-hero { border-radius: 16px !important; }
+}
+
+/* ---- STATS GRID ---- */
+@media (max-width: 768px) {
+  .stats-grid { 
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .stat-card { padding: 14px !important; }
+  .sc-val { font-size: 22px !important; }
+}
+
+/* ---- TABLES → CARD-STYLE ---- */
+@media (max-width: 768px) {
+  .adv-table, .invoice-table, .bill-table, .it-head, .at-head { display: none !important; }
+  .mobile-table-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+.mobile-table-cards { display: none; }
+
+/* ---- PROFILE TABS → HORIZONTAL SCROLL ---- */
+@media (max-width: 768px) {
+  .prof-tabs, .detail-tabs { 
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .prof-tabs::-webkit-scrollbar,
+  .detail-tabs::-webkit-scrollbar { display: none; }
+  .ptab, .dtab { 
+    padding: 11px 14px !important; 
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ---- PREVIEW TOOLBAR (D11) ---- */
+@media (max-width: 768px) {
+  .preview-toolbar { flex-wrap: wrap !important; gap: 8px !important; padding: 10px 14px !important; }
+  .pt-url { display: none !important; }
+  .pt-spacer { display: none !important; }
+  .preview-area { padding: 12px !important; }
+  .preview-frame { border-radius: 14px !important; }
+  /* hide checklist panel on mobile — show as collapsible below */
+  .checklist-panel { display: none !important; }
+}
+
+/* ---- PLAN COMPARISON (D10) ---- */
+@media (max-width: 768px) {
+  .plan-cards { gap: 10px !important; }
+  .pc-name { font-size: 14px !important; }
+  .pc-price { font-size: 20px !important; }
+}
+
+/* ---- LOGIN SPLIT (A1) ---- */
+@media (max-width: 768px) {
+  .login-wrap { flex-direction: column !important; min-height: auto !important; }
+  .login-left { display: none !important; }
+  .login-right { width: 100% !important; min-height: 100vh !important; padding: 24px 20px !important; }
+}
+
+/* ---- SIGNUP STEPS (A2) ---- */
+@media (max-width: 768px) {
+  .signup-wrap { flex-direction: column !important; }
+  .signup-left { width: 100% !important; padding: 16px !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; }
+  .signup-right { width: 100% !important; padding: 20px 16px !important; }
+  .step-item { min-width: 80px !important; flex-direction: column !important; align-items: center !important; text-align: center !important; }
+}
+
+/* ---- DIRECTORY (P3) ---- */
+@media (max-width: 768px) {
+  .dir-layout { flex-direction: column !important; }
+  .dir-filters { width: 100% !important; position: static !important; height: auto !important; }
+  .dir-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---- LANDING PAGE (P1) ---- */
+@media (max-width: 768px) {
+  .hero-section { padding: 40px 20px 30px !important; }
+  .hero-title { font-size: 28px !important; line-height: 1.3 !important; }
+  .hero-subtitle { font-size: 14px !important; }
+  .hero-btns { flex-direction: column !important; gap: 10px !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  .pricing-grid { grid-template-columns: 1fr !important; }
+  .lp-nav-links { display: none !important; }
+}
+
+/* ---- SCORE PAGE (D9) ---- */
+@media (max-width: 768px) {
+  .score-hero { padding: 20px !important; }
+  .score-hero-inner { flex-direction: column !important; align-items: center !important; gap: 14px !important; }
+}
+
+/* ---- GALLERY GRID (D6) ---- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ---- MISC UTILITIES ---- */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+  br.hide-mobile { display: none !important; }
+  .text-center-mobile { text-align: center !important; }
+}
+.show-mobile { display: none; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="topnav">
+  <div class="tn-logo"><svg viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/><line x1="12" y1="7" x2="12" y2="17"/></svg>YVITY</div>
+  <div class="tn-mid">
+    <div class="tn-bc">
+      <span class="tbc">Dashboard</span><span class="tbs">›</span>
+      <span class="tbc">Account</span><span class="tbs">›</span>
+      <span class="tba">Subscription & Billing</span>
+    </div>
+  </div>
+  <div class="tn-right">
+    <div class="tn-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+    <div class="tn-profile">
+      <div class="tn-av"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face" alt=""></div>
+      <div><div class="tn-name">Krishna Mohan</div><div class="tn-plan">Silver Plan</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="body-wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-section">
+      <div class="sb-sec-title">Overview</div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Dashboard</span></div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Edit Profile</div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Header & About</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Professional Journey</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg><span>Achievements</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg><span>Gallery</span></div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Credibility</div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Testimonials</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/></svg><span>Recommendations</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg><span>YVITY Score</span></div>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-section">
+      <div class="sb-sec-title">Account</div>
+      <div class="sb-item on"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Subscription</span></div>
+      <div class="sb-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-hdr">
+      <div class="ph-left">
+        <h1>Subscription & Billing</h1>
+        <p>Manage your plan, view invoices, and update payment details</p>
+      </div>
+      <div class="ph-right">
+        <button class="btn btn-outline">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download All Invoices
+        </button>
+      </div>
+    </div>
+
+    <!-- CURRENT PLAN HERO — showing Silver state -->
+    <div class="plan-hero">
+      <div class="ph-ring"></div><div class="ph-ring2"></div>
+      <div class="ph-left-block">
+        <div class="ph-badge"><span class="ph-badge-ico">🥈</span><span class="ph-badge-txt">SILVER PLAN — ACTIVE</span></div>
+        <div class="ph-plan-name">Silver Plan</div>
+        <div class="ph-plan-price"><strong>₹999</strong> / year · Billed annually</div>
+        <div class="ph-meta">
+          <div class="ph-meta-item"><div class="ph-meta-label">Member Since</div><div class="ph-meta-val">15 Jan 2025</div></div>
+          <div class="ph-meta-item"><div class="ph-meta-label">Next Renewal</div><div class="ph-meta-val">15 Jan 2026</div></div>
+          <div class="ph-meta-item"><div class="ph-meta-label">Days Remaining</div><div class="ph-meta-val">308 days</div></div>
+          <div class="ph-meta-item"><div class="ph-meta-label">Payment</div><div class="ph-meta-val">Auto-renew ON</div></div>
+        </div>
+      </div>
+      <div class="ph-right-block">
+        <div class="ph-renew-card">
+          <div class="ph-renew-label">Renewal Date</div>
+          <div class="ph-renew-date">15 Jan 2026</div>
+          <div class="ph-renew-sub">308 days remaining</div>
+          <div class="ph-renew-bar"><div class="ph-renew-fill"></div></div>
+          <div style="margin-top:8px;">
+            <div class="ph-status"><div class="ph-status-dot"></div>Active & Renewing</div>
+          </div>
+        </div>
+        <button style="width:100%;padding:12px;background:linear-gradient(135deg,var(--gold-dk),var(--gold));color:white;border:none;border-radius:12px;font-size:13.5px;font-weight:800;cursor:pointer;font-family:'Playfair Display',serif;box-shadow:0 4px 14px rgba(184,134,11,0.3);letter-spacing:0.3px;">
+          👑 Upgrade to Gold — ₹2,999/yr
+        </button>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="left-col">
+
+        <!-- PLAN COMPARISON -->
+        <div class="form-card">
+          <div class="fc-title">
+            <div class="fc-title-left"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Compare Plans</div>
+          </div>
+          <div class="fc-sub">You're on Silver. Upgrade to Gold to unlock Video Testimonials, Recommendations, Intro Video, and unlimited features.</div>
+
+          <div class="plan-cards">
+
+            <!-- FREE -->
+            <div class="plan-card pc-free">
+              <div class="pc-icon">🆓</div>
+              <div class="pc-name">Free</div>
+              <div class="pc-price">₹0 <span>/ year</span></div>
+              <div class="pc-price-sub">Basic profile only</div>
+              <div class="pc-features">
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Public profile</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>3 achievements</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>5 text testimonials</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>3 gallery photos</div>
+                <div class="pcf pcf-no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>No verified badge</div>
+                <div class="pcf pcf-no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>No QR code</div>
+                <div class="pcf pcf-no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>No audio testimonials</div>
+              </div>
+              <button class="pc-btn pcb-downgrade">Downgrade to Free</button>
+            </div>
+
+            <!-- SILVER — CURRENT -->
+            <div class="plan-card pc-silver pc-current">
+              <div class="pc-badge pcb-current">✓ Current Plan</div>
+              <div class="pc-icon">🥈</div>
+              <div class="pc-name">Silver</div>
+              <div class="pc-price">₹999 <span>/ year</span></div>
+              <div class="pc-price-sub">₹83/month billed annually</div>
+              <div class="pc-features">
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>10 achievements</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited text testimonials</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Audio testimonials</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>15 gallery photos</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Identity Verified badge</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>QR code for visiting card</div>
+                <div class="pcf pcf-no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>No video testimonials</div>
+                <div class="pcf pcf-no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>No recommendations</div>
+              </div>
+              <button class="pc-btn pcb-active">✓ Active Plan</button>
+            </div>
+
+            <!-- GOLD -->
+            <div class="plan-card pc-gold">
+              <div class="pc-badge pcb-popular">👑 Most Popular</div>
+              <div class="pc-icon">👑</div>
+              <div class="pc-name">Gold</div>
+              <div class="pc-price">₹2,999 <span>/ year</span></div>
+              <div class="pc-price-sub">₹250/month billed annually</div>
+              <div class="pc-features">
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited achievements</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Video testimonials 🎬</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Recommendations feature</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Unlimited gallery photos</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Intro video on profile</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Directory priority listing</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>'Recommend this Pro' button</div>
+                <div class="pcf pcf-yes"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Gold badge on profile</div>
+              </div>
+              <button class="pc-btn pcb-upgrade-gold">👑 Upgrade — ₹2,999/yr</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- BILLING HISTORY -->
+        <div class="form-card">
+          <div class="fc-title">
+            <div class="fc-title-left"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Billing History</div>
+            <div style="font-size:12px;color:var(--muted);">Powered by Razorpay</div>
+          </div>
+          <div class="fc-sub">All payments are processed securely via Razorpay. Download individual invoices for tax records.</div>
+          <table class="invoice-table">
+            <thead class="it-head">
+              <tr>
+                <th>Invoice</th>
+                <th>Plan</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Download</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="it-row">
+                <td style="font-weight:600;color:var(--teal-dk);">INV-2025-001</td>
+                <td>Silver Plan</td>
+                <td>15 Jan 2025</td>
+                <td class="it-amount">₹999</td>
+                <td><span class="it-status its-paid"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Paid</span></td>
+                <td><div class="it-dl"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</div></td>
+              </tr>
+              <tr class="it-row">
+                <td style="font-weight:600;color:var(--teal-dk);">INV-2024-001</td>
+                <td>Silver Plan</td>
+                <td>15 Jan 2024</td>
+                <td class="it-amount">₹999</td>
+                <td><span class="it-status its-paid"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Paid</span></td>
+                <td><div class="it-dl"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</div></td>
+              </tr>
+              <tr class="it-row">
+                <td style="font-weight:600;color:var(--teal-dk);">INV-2023-001</td>
+                <td>Free → Silver</td>
+                <td>15 Jan 2023</td>
+                <td class="it-amount">₹999</td>
+                <td><span class="it-status its-paid"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Paid</span></td>
+                <td><div class="it-dl"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAYMENT METHOD -->
+        <div class="form-card">
+          <div class="fc-title">
+            <div class="fc-title-left"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payment Method</div>
+          </div>
+          <div class="fc-sub">Your saved payment methods for renewals. Payments are processed via Razorpay — we do not store card details.</div>
+
+          <div class="toggle-row">
+            <div class="tr-left">
+              <div class="tr-title">Auto-Renew</div>
+              <div class="tr-sub">Automatically renew on 15 Jan 2026. Cancel anytime before renewal date.</div>
+            </div>
+            <div class="toggle"><div class="toggle-knob"></div></div>
+          </div>
+
+          <div class="payment-card">
+            <div class="pm-icon">💳</div>
+            <div class="pm-info">
+              <div class="pm-name">HDFC Credit Card •••• 4832</div>
+              <div class="pm-sub">Expires 08/2027 · Visa</div>
+            </div>
+            <div class="pm-default">Default</div>
+            <button class="pm-edit">Edit</button>
+          </div>
+          <div class="payment-card" style="margin-bottom:14px;">
+            <div class="pm-icon">📱</div>
+            <div class="pm-info">
+              <div class="pm-name">UPI — krishnamohan@upi</div>
+              <div class="pm-sub">Google Pay · Linked</div>
+            </div>
+            <div style="width:14px;"></div>
+            <button class="pm-edit">Edit</button>
+          </div>
+          <button class="add-pm">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add New Payment Method
+          </button>
+          <div class="razorpay-badge" style="margin-top:12px;">
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Secured by Razorpay · PCI-DSS Compliant · Card details never stored</span>
+          </div>
+        </div>
+
+        <!-- CANCEL ZONE -->
+        <div class="form-card">
+          <div class="fc-title"><div class="fc-title-left"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Cancel Subscription</div></div>
+          <div class="fc-sub">Cancelling will downgrade your account to Free at the end of your current billing period. Your profile data is never deleted.</div>
+          <div class="cancel-zone">
+            <div class="cz-title">⚠️ Before You Cancel</div>
+            <div class="cz-sub">If you cancel Silver, the following will be restricted on 15 Jan 2026. Your profile remains live on Free plan.</div>
+            <div class="cz-warn">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p>Audio testimonials will be hidden · Gallery limited to 3 photos · Achievements limited to 3 · Identity Verified badge removed · QR Code removed · IRDAI license display removed</p>
+            </div>
+            <button class="btn btn-danger">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              Cancel Subscription
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT PREVIEW -->
+      <div class="preview-col">
+
+        <!-- Usage Summary -->
+        <div class="usage-card">
+          <div class="uc-title"><svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>Your Usage — Silver Plan</div>
+          <div class="usage-row">
+            <div class="ur-top"><span class="ur-label">Achievements</span><span class="ur-val">3 / 10</span></div>
+            <div class="ur-bar"><div class="ur-fill urf-teal" style="width:30%;"></div></div>
+            <div class="ur-note">7 slots remaining</div>
+          </div>
+          <div class="usage-row">
+            <div class="ur-top"><span class="ur-label">Gallery Photos</span><span class="ur-val">7 / 15</span></div>
+            <div class="ur-bar"><div class="ur-fill urf-teal" style="width:47%;"></div></div>
+            <div class="ur-note">8 slots remaining</div>
+          </div>
+          <div class="usage-row">
+            <div class="ur-top"><span class="ur-label">Text Testimonials</span><span class="ur-val">50 / ∞</span></div>
+            <div class="ur-bar"><div class="ur-fill urf-green" style="width:100%;"></div></div>
+            <div class="ur-note">Unlimited on Silver ✓</div>
+          </div>
+          <div class="usage-row" style="margin-bottom:0;">
+            <div class="ur-top"><span class="ur-label">Audio Testimonials</span><span class="ur-val">18 / ∞</span></div>
+            <div class="ur-bar"><div class="ur-fill urf-green" style="width:100%;"></div></div>
+            <div class="ur-note">Unlimited on Silver ✓</div>
+          </div>
+        </div>
+
+        <!-- What Gold unlocks -->
+        <div style="background:linear-gradient(160deg,#FFFBF0,#FFF8E6);border-radius:16px;padding:20px;border:1.5px solid rgba(201,168,76,0.25);box-shadow:0 2px 8px rgba(184,134,11,0.08);">
+          <div style="font-size:13px;font-weight:700;color:var(--gold-dk);margin-bottom:12px;display:flex;align-items:center;gap:6px;">👑 What Gold Unlocks</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;gap:8px;font-size:12.5px;color:var(--navy);"><span style="color:var(--gold-dk);font-weight:700;flex-shrink:0;">+</span>🎬 Video Testimonials from clients</div>
+            <div style="display:flex;gap:8px;font-size:12.5px;color:var(--navy);"><span style="color:var(--gold-dk);font-weight:700;flex-shrink:0;">+</span>👍 Recommendations panel</div>
+            <div style="display:flex;gap:8px;font-size:12.5px;color:var(--navy);"><span style="color:var(--gold-dk);font-weight:700;flex-shrink:0;">+</span>🎥 Intro video on your profile</div>
+            <div style="display:flex;gap:8px;font-size:12.5px;color:var(--navy);"><span style="color:var(--gold-dk);font-weight:700;flex-shrink:0;">+</span>🏆 Unlimited achievements & photos</div>
+            <div style="display:flex;gap:8px;font-size:12.5px;color:var(--navy);"><span style="color:var(--gold-dk);font-weight:700;flex-shrink:0;">+</span>📍 Priority listing in directory</div>
+            <div style="display:flex;gap:8px;font-size:12.5px;color:var(--navy);"><span style="color:var(--gold-dk);font-weight:700;flex-shrink:0;">+</span>🤝 'Recommend this Professional' button</div>
+          </div>
+          <button style="width:100%;margin-top:16px;padding:12px;background:linear-gradient(135deg,var(--gold-dk),var(--gold));color:white;border:none;border-radius:11px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Playfair Display',serif;box-shadow:0 4px 14px rgba(184,134,11,0.28);">
+            👑 Upgrade to Gold — ₹2,999/yr
+          </button>
+          <div style="text-align:center;font-size:11.5px;color:#92640E;margin-top:8px;">Less than ₹250/month · Cancel anytime</div>
+        </div>
+
+        <!-- Security note -->
+        <div style="background:white;border-radius:14px;padding:16px;border:1px solid rgba(11,123,123,0.08);">
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--green);font-weight:700;flex-shrink:0;">🔒</span>256-bit SSL encryption on all payments</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--green);font-weight:700;flex-shrink:0;">🔒</span>Card details stored by Razorpay, not YVITY</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--green);font-weight:700;flex-shrink:0;">🔒</span>Cancel anytime — no lock-in</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--green);font-weight:700;flex-shrink:0;">🔒</span>Profile & data preserved on Free after cancel</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
