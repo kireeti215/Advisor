@@ -861,5 +861,118 @@ body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;displa
   </div>
 </div>
 
+
+<script>
+// YVITY Navigation — auto-link all nav buttons
+(function(){
+  var map = {
+    // Auth
+    'login':            'YVITY_A1_Login.html',
+    'sign in':          'YVITY_A1_Login.html',
+    'log in':           'YVITY_A1_Login.html',
+    'register':         'YVITY_A2_Signup.html',
+    'sign up':          'YVITY_A2_Signup.html',
+    'get started':      'YVITY_A2_Signup.html',
+    'join yvity':       'YVITY_A2_Signup.html',
+    'create profile':   'YVITY_A2_Signup.html',
+    'start free':       'YVITY_A2_Signup.html',
+    'claim your profile':'YVITY_A2_Signup.html',
+    'join free':        'YVITY_A2_Signup.html',
+
+    // Public pages
+    'pricing':          'YVITY_P4_Pricing.html',
+    'view pricing':     'YVITY_P4_Pricing.html',
+    'see pricing':      'YVITY_P4_Pricing.html',
+    'directory':        'YVITY_P3_Directory.html',
+    'find advisors':    'YVITY_P3_Directory.html',
+    'browse advisors':  'YVITY_P3_Directory.html',
+
+    // Dashboard
+    'dashboard':        'YVITY_D1_Dashboard.html',
+    'go to dashboard':  'YVITY_D1_Dashboard.html',
+    'edit profile':     'YVITY_D2_EditProfile.html',
+    'edit as admin':    'YVITY_AD2_AdvisorDetail.html',
+    'services':         'YVITY_D3_Services.html',
+    'professional journey': 'YVITY_D4_Journey.html',
+    'achievements':     'YVITY_D5_Achievements.html',
+    'gallery':          'YVITY_D6_Gallery.html',
+    'testimonials':     'YVITY_D7_Testimonials.html',
+    'recommendations':  'YVITY_D8_Recommendations.html',
+    'yvity score':      'YVITY_D9_Score.html',
+    'score details':    'YVITY_D9_Score.html',
+    'subscription':     'YVITY_D10_Subscription.html',
+    'billing':          'YVITY_D10_Subscription.html',
+    'profile preview':  'YVITY_D11_ProfilePreview.html',
+    'view profile':     'YVITY_P2_Public_Profile.html',
+    'view live profile':'YVITY_P2_Public_Profile.html',
+    'open live':        'YVITY_P2_Public_Profile.html',
+    'settings':         'YVITY_D10_Subscription.html',
+
+    // Admin
+    'admin':            'YVITY_AD1_AdminDashboard.html',
+    'all advisors':     'YVITY_AD2_AdvisorDetail.html',
+    'view all':         'YVITY_AD2_AdvisorDetail.html',
+
+    // Upgrade
+    'upgrade to gold':  'YVITY_D10_Subscription.html',
+    'upgrade':          'YVITY_D10_Subscription.html',
+  };
+
+  function navigate(el) {
+    var txt = el.innerText.trim().toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/,' ');
+    // exact match
+    if (map[txt]) { window.location.href = map[txt]; return; }
+    // partial match
+    for (var key in map) {
+      if (txt.indexOf(key) !== -1 || key.indexOf(txt) !== -1) {
+        if (txt.length > 2) { window.location.href = map[key]; return; }
+      }
+    }
+  }
+
+  // Fix all <a href="#"> links
+  document.querySelectorAll('a[href="#"], a[href=""]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      navigate(a);
+    });
+  });
+
+  // Fix sidebar items (div.sb-item)
+  document.querySelectorAll('.sb-item').forEach(function(el){
+    el.addEventListener('click', function(){ navigate(el); });
+  });
+
+  // Fix top nav items
+  document.querySelectorAll('.tn-btn, .topnav button').forEach(function(el){
+    el.addEventListener('click', function(){ navigate(el); });
+  });
+
+  // Fix mobile bottom nav items
+  document.querySelectorAll('.mbn-item').forEach(function(el){
+    el.addEventListener('click', function(){ navigate(el); });
+  });
+
+  // Fix all buttons with onclick=""
+  document.querySelectorAll('button[onclick=""], button:not([onclick])').forEach(function(el){
+    el.addEventListener('click', function(){ navigate(el); });
+  });
+
+  // Fix profile nav tabs
+  document.querySelectorAll('.ptab, .dtab').forEach(function(el){
+    el.addEventListener('click', function(){
+      document.querySelectorAll('.ptab, .dtab').forEach(function(t){ t.classList.remove('on'); });
+      el.classList.add('on');
+    });
+  });
+
+  // Back button
+  document.querySelectorAll('.back-row').forEach(function(el){
+    el.addEventListener('click', function(){ window.history.back(); });
+  });
+
+})();
+</script>
+
 </body>
 </html>
